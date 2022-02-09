@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Imports
+use App\Http\Controllers\TestController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::prefix('test')->name('test.')->group(function(){
+    Route::get('/', [TestController::class, 'index']);
 });
 
 Auth::routes();
