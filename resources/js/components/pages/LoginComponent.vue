@@ -72,13 +72,15 @@ export default {
     },
     methods: {
         onSubmit(event) {
-            event.preventDefault();
+            // event.preventDefault();
             const email = this.form.email;
             const pass = this.form.pass;
 
             const arr = JSON.parse(this.data);
 
             let loggedIn = false;
+            let self = this;
+            
             arr.map((item, index) => {
                 if (item.email == email && item.password == pass) {
                     loggedIn = true;
@@ -87,7 +89,8 @@ export default {
 
             if (loggedIn == false) {
                 alert("Credentials does not match");
-            } else {
+            } 
+            else {
                 axios
                     .post("/sign-in/", {
                         params: {
@@ -96,7 +99,7 @@ export default {
                         },
                     })
                     .then((response) => {
-                        console.log(response.data);
+                        console.log(response.data.response.status);
                     });
             }
         },

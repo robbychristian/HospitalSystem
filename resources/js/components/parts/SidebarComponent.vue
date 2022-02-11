@@ -37,13 +37,13 @@
                 </a>
 
 
-                <a href="#" :class="[{ active: active == 'calendar' ? true : false }, 'sidebar-menu']">
+                <a href="/test/calendar" :class="[{ active: active == 'calendar' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-calendar-days"></i>
                     <h6>Calendar</h6>
                 </a>
 
 
-                <a href="#" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
+                <a href="/test/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
                     <h6>Inquiry</h6>
                 </a>

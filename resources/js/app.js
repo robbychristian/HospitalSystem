@@ -36,6 +36,9 @@ Vue.component('topbar', require('./components/parts/TopbarComponent.vue').defaul
 
 // Pages
 Vue.component('patient-component', require('./components/pages/PatientComponent.vue').default);
+Vue.component('announcement-component', require('./components/pages/AnnouncementComponent.vue').default);
+Vue.component('calendar-component', require('./components/pages/CalendarComponent.vue').default);
+Vue.component('inquiry-component', require('./components/pages/InquiryComponent.vue').default);
 Vue.component('login-component', require('./components/pages/LoginComponent.vue').default);
 
 Vue.use(BootstrapVue)

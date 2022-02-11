@@ -38,12 +38,12 @@ class LoginController extends Controller
         $page = "Home Page";
         $active = "home";
 
-        return view('test')->with('data', $data)->with('page', $page)->with('active', $active);
+        return view('pages.login')->with('data', $data)->with('page', $page)->with('active', $active);
     }
 
     //LOGIN FUNCTION
     public function Login(Request $request)
     {
-        return redirect('test/');
+        return redirect('/test');
     }
 }
