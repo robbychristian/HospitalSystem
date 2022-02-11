@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <login-component data="{{$data}}"></login-component>
+    @if (Session::get('Error'))
+        <login-component data="{{ $data }}" csrf="{{ csrf_token() }}" error="{{ Session::get('Error') }}">
+        </login-component>
+
+    @else
+        <login-component data="{{ $data }}" csrf="{{ csrf_token() }}" error="{{ Session::get('Error') }}">
+        </login-component>
+    @endif
 @endsection

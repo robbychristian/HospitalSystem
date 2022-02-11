@@ -44,6 +44,25 @@ class LoginController extends Controller
     //LOGIN FUNCTION
     public function Login(Request $request)
     {
-        return redirect('/test');
+        $firestore = app('firebase.firestore');
+        $database = $firestore->database();
+        $datas = $database->collection('Doctors')->documents()->rows(); //array
+        $users = [];
+        foreach ($datas as $data) {
+            array_push($users, $data->data());
+        }
+
+        foreach ($users as $user) {
+            if ($user['email'] != $request->email) {
+                return redirect('/')->with("Error", "Credentials does not match anything in the records");
+            } else {
+                return redirect('test/');
+            }
+        }
+    }
+
+    public function DebuggerPage()
+    {
+        return view('debugger');
     }
 }
