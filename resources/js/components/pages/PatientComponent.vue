@@ -32,7 +32,6 @@
 </template>
 
 <script>
-    import moment from 'moment';
     export default {
         
         props:['patient'],
@@ -92,16 +91,11 @@
 
             toItems(item, index){
 
-                // {
-                //     name: "Robby Christian De Leon",
-                //     birtdate: "June 02, 2022",
-                //     age: "22",
-                // },
 
                 let data = {
                     name: item.fname + " " + item.lname,
                     birtdate: item.birtdate,
-                    age: moment().diff(item.birtdate, 'years'),
+                    age: item.age,
                 }
 
                 this.static.push(data)
