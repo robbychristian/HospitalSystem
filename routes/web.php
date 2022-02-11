@@ -26,7 +26,7 @@ Route::prefix('test')->name('test.')->group(function () {
 });
 
 Route::get('/', [LoginController::class, 'LoginScreen']);
-Route::post('/login', [LoginCotnroller::class, 'Login']);
+Route::post('/login', [LoginController::class, 'Login']);
 
 Auth::routes();
 
