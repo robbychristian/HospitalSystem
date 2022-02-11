@@ -30,6 +30,10 @@ window.Vue = require('vue').default;
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('test-component', require('./components/test/TestComponent.vue').default);
 
+// Parts
+Vue.component('sidebar', require('./components/parts/SidebarComponent.vue').default);
+Vue.component('topbar', require('./components/parts/TopbarComponent.vue').default);
+
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 

@@ -1,0 +1,193 @@
+.sidebar{ 
+    height: 100vh;
+    
+    background-color: $dark-green;
+    // padding: .25rem;
+    box-shadow: .35rem 0rem .5rem rgba($color: #000000, $alpha: .15);
+    //transition: .5s ease;
+    padding-bottom: 30px;
+    overflow: auto;
+    margin-right: 35px;
+
+    .sidebar-content{
+        width: 100%;
+        height: 100%;
+        min-height: 460px;
+        max-height: 650px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        
+        .sidebar-logo-holder{
+            width: 100%;
+
+            background-color: white;
+            .sidebar-logo{
+                width: 90px;
+                height: 90px;
+                // width: 100px;
+                // height: 100px;
+                content: url($logo-png);
+            }
+        }
+        
+        .sidebar-menu-holder{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            width: 90px;
+
+            .active{
+                background-color: white !important;
+                color: $dark-green !important;
+            }
+
+            .sidebar-menu{
+                width: 100%;
+                height: auto;
+                //margin: 10px 0 10px 0;
+                padding: .5rem;
+                
+                text-decoration: none;
+        
+                display: block;
+        
+                text-align: center;
+        
+                color: $gray-400;
+        
+                h6{ font-size: .8rem; }
+            }
+            
+            .sidebar-menu:hover{
+                color: WHITE;
+            }
+        }
+        
+        .sidebar-divider {
+            width: 100%;
+            height: 0px;
+            margin: 10px 0 10px 0;
+            transition: .5s ease-out;
+
+            border-top: 2px solid rgba($color: $gray-100, $alpha: .55);
+        }
+
+        .collapse-button{
+            background: transparent;
+            border: none;
+            color: $gray-400;
+            font-size: 25px;
+        }
+
+        .sidebar-setting{
+            height: 100vh;
+            width: 100vw;
+            max-width: 230px;
+
+            overflow: auto;
+            background-color: white;
+            position: fixed;
+            left: 90px;
+
+            box-shadow: .25rem 0rem .5rem rgba($color: #000000, $alpha: .15);
+
+            .close-btn{
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+
+                button{
+                    color: $gray-400;
+                }
+
+                button:hover{
+                    color: $gray-600;
+                }
+            }
+
+            .settings-content{
+                width: 230px;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                text-align: center;
+
+                .profile-img{
+                    width: 130px;
+                    height: 130px;
+                    border-radius: 100%;
+                    border: 1px solid #000000;
+                }
+
+                
+                a{
+                    align-self: flex-start !important;
+                    text-align: start;
+                    text-decoration: none;
+                    color: black;
+                    margin: 15px 0px 15px 15px;
+                }
+
+                h6{
+                    margin: 15px 0px 15px 0px;
+                }
+            }
+        }
+    }
+
+}
+
+$second-breakpoint: 420px;
+
+@media screen and (min-width: ($first-breakpoint + 1)) {
+    .sidebar{
+        width: 90px !important;
+    }
+}
+
+@media screen and (min-width: $second-breakpoint) and (max-width: ($first-breakpoint)) {
+    .sidebar{
+        width: 0px;
+        margin-right: 0px;
+    }
+}
+
+@media screen and /* (min-width: $second-breakpoint)  and */ (max-width: $second-breakpoint) {
+    .sidebar{
+        position: fixed;
+        width: 0px;
+        margin-right: 0px;
+
+        .sidebar-setting{
+            left: 0px !important;
+            z-index: 2;
+        }
+    }
+}
+
+
+// .sidebar:hover{
+//     width: 200px;
+
+//     .sidebar-divider {
+//         width: 80%;
+//         height: 0px;
+//         margin: .5rem 0rem 1rem 0rem;
+//         border-radius: 80%;
+//     }
+
+//     .sidebar-menu{
+        
+//         // text-decoration: none;
+
+//         display: flex;
+//         i{ margin-right: .25rem; }
+
+//         text-align: center;
+//     }
+// }

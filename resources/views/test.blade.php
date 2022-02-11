@@ -1,5 +1,5 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
-@section('content')
-    <test-component data="{{json_encode($data)}}"></test-component>
+@section('page')
+    <test-component></test-component>
 @endsection

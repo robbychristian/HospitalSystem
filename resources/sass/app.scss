@@ -10,3 +10,22 @@
 // Import
 @import 'bootstrap/dist/css/bootstrap.css';
 @import 'bootstrap-vue/dist/bootstrap-vue.css';
+
+@import 'test/test.scss';
+
+// Parts
+@import 'parts/topbar.scss';
+@import 'parts/sidebar.scss';
+
+.main-page{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+
+    .main-content{
+        flex-grow: 1;
+        overflow: auto;
+    }
+
+}

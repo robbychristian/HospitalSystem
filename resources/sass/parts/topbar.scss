@@ -1,0 +1,26 @@
+.topbar{
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px $dark-green solid;
+    box-shadow: .25rem .25rem .5rem rgba($color: $dark-green, $alpha: .30);
+    height: 100px;
+    padding: 0px 30px 20px 30px;
+    
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    color: $dark-green;
+    h2{ margin: 0px;}
+    
+    .btn-holder{ display: none; }
+}
+
+$first-breakpoint: 750px;
+
+@media screen and (max-width: $first-breakpoint) {
+    .topbar{
+        z-index: 1;
+        .btn-holder{ display: block; }
+    }
+}

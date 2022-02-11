@@ -1,21 +1,14 @@
 <template>
-
-    <div class="p-5">
-        
-        <li v-for="item in test">
-            {{item['name']}}
-        </li>
-
+    <div class="test-page">
     </div>
 </template>
 
 <script>
     export default {
-        props:['data'],
+        props:[],
 
         data() {
             return { 
-                test: JSON.parse(this.data), 
             }
         },
 

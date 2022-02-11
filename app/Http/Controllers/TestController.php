@@ -21,6 +21,8 @@ class TestController extends Controller
             array_push($arr, $item->data());
         }
 
-        return view('test')->with('data', $arr);
+        $page="Test Page";
+
+        return view('test')->with('page', $page);
     }
 }

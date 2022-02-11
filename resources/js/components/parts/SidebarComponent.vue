@@ -1,0 +1,100 @@
+<style>
+    .slide-fade-enter-active {
+        transition: all 0.3s ease-out;
+    }
+
+    .slide-fade-leave-active {
+        transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+    }
+
+    .slide-fade-enter-from,
+    .slide-fade-leave-to {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+</style>
+
+<template>
+    <div class="sidebar" id="sidebar">
+
+        <div class="sidebar-content">
+            <div class="sidebar-logo-holder">
+                <img class="sidebar-logo" alt="">
+            </div>
+            <div class="sidebar-menu-holder">
+                
+                <div class="sidebar-divider"></div>
+                <a href="#" class="sidebar-menu">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <h6>Home</h6>
+                </a>
+
+                <a href="#" class="sidebar-menu">
+                    <i class="fa-solid fa-hospital-user"></i>
+                    <h6>Patient</h6>
+                </a>
+
+                <a href="#" class="sidebar-menu">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <h6>Calendar</h6>
+                </a>
+
+                <a href="#" class="sidebar-menu">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <h6>Inquiry</h6>
+                </a>
+
+                <div class="sidebar-divider"></div>
+            </div>
+
+            <button @click="openSettings()" class="collapse-button">
+                <i class="fa-solid fa-gear"></i>
+                <!-- <i class="fa-solid fa-circle-arrow-right"></i> -->
+            </button>
+
+            <Transition name="slide-fade">
+                <div class="sidebar-setting" v-show="showSettings">
+                    <div class="close-btn">
+                        <button @click="closeSettings()" class="btn"><i class="fa-solid fa-xmark fa-lg"></i></button>
+                    </div>
+
+                    <div class="settings-content">
+                        <div class="profile-img"></div>
+
+                        <h5> JOHN ANDREW F. DACUMOS</h5>
+
+                        <a href="#">Patient</a>
+                        <a href="#">Calendar</a>
+                        <a href="#">Inquiry</a>
+                    </div>
+                </div>
+            </Transition>
+        </div>
+
+
+    </div>
+</template>
+
+<script>
+    export default {
+
+        data() {
+            return { 
+                showSettings: false,
+            }
+        },
+
+        methods:{
+
+            openSettings(){
+                this.showSettings = true
+            },
+
+            closeSettings(){
+                this.showSettings = false
+            },
+
+        },
+        
+    }
+</script>
