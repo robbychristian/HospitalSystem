@@ -25318,9 +25318,6 @@ textarea.form-control-lg {
   background-color: #D9D9D9;
   padding: 0.5rem;
 }
-.patient-page .text-dark-green {
-  color: #48898C !important;
-}
 .patient-page .patient-content {
   background-color: white;
 }
@@ -25332,6 +25329,19 @@ textarea.form-control-lg {
 }
 .patient-page .patient-content .search-holder label {
   margin: 0px 15px 0px 0px;
+}
+
+.inquiry-page {
+  padding: 1rem;
+}
+.inquiry-page .inquiry-content {
+  width: 100%;
+  height: 100%;
+  background-color: #D9D9D9;
+}
+
+.text-dark-green {
+  color: #48898C !important;
 }
 
 .main-page {

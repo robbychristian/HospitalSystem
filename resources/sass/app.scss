@@ -19,6 +19,12 @@
 
 // Pages
 @import "pages/patient.scss";
+@import "pages/calendar.scss";
+@import "pages/inquiry.scss";
+@import "pages/announcement.scss";
+
+.text-dark-green{ color: $dark-green !important; }
+
 
 .main-page {
     display: flex;

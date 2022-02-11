@@ -1,6 +1,8 @@
 <template>
     <div class="inquiry-page">
-        Inquiry
+        <div class="inquiry-content">
+
+        </div>
     </div>
 </template>
 
