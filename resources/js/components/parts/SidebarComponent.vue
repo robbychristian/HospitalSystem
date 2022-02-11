@@ -24,22 +24,26 @@
             <div class="sidebar-menu-holder">
                 
                 <div class="sidebar-divider"></div>
-                <a href="#" class="sidebar-menu">
+            
+                <a href="/test" :class="[{ active: active == 'home' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-house-chimney"></i>
                     <h6>Home</h6>
                 </a>
 
-                <a href="#" class="sidebar-menu">
+
+                <a href="/patient" :class="[{ active: active == 'patient' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-hospital-user"></i>
                     <h6>Patient</h6>
                 </a>
 
-                <a href="#" class="sidebar-menu">
+
+                <a href="#" :class="[{ active: active == 'calendar' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-calendar-days"></i>
                     <h6>Calendar</h6>
                 </a>
 
-                <a href="#" class="sidebar-menu">
+
+                <a href="#" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
                     <h6>Inquiry</h6>
                 </a>
@@ -77,6 +81,7 @@
 
 <script>
     export default {
+        props:['active'],
 
         data() {
             return { 

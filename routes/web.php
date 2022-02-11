@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 // Imports
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PatientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,11 @@ Route::prefix('test')->name('test.')->group(function () {
 
 Route::get('/', [LoginController::class, 'LoginScreen']);
 Route::post('/login', [LoginController::class, 'Login']);
+
+Route::prefix('patient')->name('patient.')->group(function(){
+    Route::get('/', [PatientController::class, 'index']);
+});
+
 
 Auth::routes();
 

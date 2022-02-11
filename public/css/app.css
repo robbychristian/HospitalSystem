@@ -25157,13 +25157,6 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-.test-page {
-  height: 1000px;
-  width: 100%;
-  margin-top: 10px;
-  background-color: black;
-}
-
 .topbar {
   width: 100%;
   background-color: white;
@@ -25184,9 +25177,6 @@ textarea.form-control-lg {
 }
 
 @media screen and (max-width: 750px) {
-  .topbar {
-    z-index: 1;
-  }
   .topbar .btn-holder {
     display: block;
   }
@@ -25324,6 +25314,26 @@ textarea.form-control-lg {
     z-index: 2;
   }
 }
+.patient-page {
+  background-color: #D9D9D9;
+  padding: 0.5rem;
+}
+.patient-page .text-dark-green {
+  color: #48898C !important;
+}
+.patient-page .patient-content {
+  background-color: white;
+}
+.patient-page .patient-content .search-holder {
+  padding: 0.25rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.patient-page .patient-content .search-holder label {
+  margin: 0px 15px 0px 0px;
+}
+
 .main-page {
   display: flex;
   width: 100vw;
@@ -25332,5 +25342,12 @@ textarea.form-control-lg {
 }
 .main-page .main-content {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.test-page, .patient-page {
+  flex-grow: 1;
   overflow: auto;
+  margin-top: 10px;
 }

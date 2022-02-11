@@ -34,6 +34,9 @@ Vue.component('test-component', require('./components/test/TestComponent.vue').d
 Vue.component('sidebar', require('./components/parts/SidebarComponent.vue').default);
 Vue.component('topbar', require('./components/parts/TopbarComponent.vue').default);
 
+// Pages
+Vue.component('patient-component', require('./components/pages/PatientComponent.vue').default);
+
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 

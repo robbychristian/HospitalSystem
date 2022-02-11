@@ -20,7 +20,6 @@ $first-breakpoint: 750px;
 
 @media screen and (max-width: $first-breakpoint) {
     .topbar{
-        z-index: 1;
         .btn-holder{ display: block; }
     }
 }

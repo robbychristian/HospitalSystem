@@ -1,0 +1,23 @@
+.patient-page{
+    background-color: #D9D9D9;
+    padding: .5rem;
+
+    .text-dark-green{ color: $dark-green !important; }
+
+    .patient-content{
+
+        background-color: white;
+
+         .search-holder{
+             
+            padding: .25rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            label{ margin: 0px 15px 0px 0px; }
+         }
+
+
+    }
+}

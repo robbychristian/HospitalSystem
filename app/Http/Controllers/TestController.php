@@ -22,7 +22,19 @@ class TestController extends Controller
         }
 
         $page="Test Page";
+        $active="home";
 
-        return view('test')->with('page', $page);
+        return view('test')->with('page', $page)->with('active', $active);
+    }
+
+    public function insert(){
+
+        $firestore = $this->firestore->database()->collection('Patients')->newDocument();
+
+        $firestore->set([
+            'fname' => 'John',
+            'lname' => 'Dacumos ',
+            'type' => 'Pogi',
+        ]);
     }
 }

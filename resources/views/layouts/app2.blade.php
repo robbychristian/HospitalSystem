@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="main-page">
-        <sidebar></sidebar>
+        <sidebar active="{{$active}}"></sidebar>
         
         <div class="main-content">
             

@@ -17,6 +17,9 @@
 @import 'parts/topbar.scss';
 @import 'parts/sidebar.scss';
 
+// Pages
+@import 'pages/patient.scss';
+
 .main-page{
     display: flex;
     width: 100vw;
@@ -25,7 +28,15 @@
 
     .main-content{
         flex-grow: 1;
-        overflow: auto;
+        display: flex;
+        flex-direction: column;
     }
+
+}
+
+.test-page, .patient-page{
+    flex-grow: 1;
+    overflow: auto;
+    margin-top: 10px;
 
 }
