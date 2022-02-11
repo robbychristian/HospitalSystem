@@ -18,6 +18,12 @@
                 <template  #cell(icon)>
                     <i class="fa-solid fa-face-grin-beam"></i>
                 </template>
+
+                <template  #cell(action)>
+                    <button class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-secondary"><i class="fa-solid fa-pen"></i></button>
+                </template>
+
             </b-table>
         </div>
         
@@ -33,6 +39,15 @@
 
         mounted(){
 
+            console.log(this.user.isAdmin)
+
+            if(this.user.isAdmin){
+                console.log(this.fields)
+                this.fields.push(
+                    {key: 'action', label: 'Action'}
+                )
+            }
+
             let data = JSON.parse(this.patient)
             
             data.forEach(this.toItems)
@@ -41,6 +56,10 @@
 
         data() {
             return { 
+                user: {
+                    isAdmin: false,
+                },
+
                 keyword: '',
 
                 static: [],
@@ -92,11 +111,11 @@
 
         computed: {
             items () {
-            return this.keyword
-                ? this.static.filter(
-                    item => item.name.toLowerCase().includes(this.keyword.toLowerCase()) 
-                )
-                : this.static
+                return this.keyword
+                    ? this.static.filter(
+                        item => item.name.toLowerCase().includes(this.keyword.toLowerCase()) 
+                    )
+                    : this.static
             }
         }
 

@@ -34,18 +34,19 @@ class TestController extends Controller
         $firestore = $this->firestore->database()->collection('Patients')->newDocument();
 
         $firestore->set([
-            'fname' => 'Pedro',
-            'lname' => 'Reyes',
+            'fname' => 'Rhasta',
+            'lname' => 'Man',
             'phone' => '09999999',
             'joindate' => now(),
             'gender' => 0,
             'nationality' => 'Philippines',
             'email' => 'some@gmail.com',
-            'address' => 'sa pinas sa maynila',
-            'blood type' => 'AB',
-            'birtdate' => Carbon::parse('february 19, 1888')->format('F d, Y'),
+            'address' => 'Underground',
+            'blood type' => 'B',
+            'birtdate' => Carbon::parse('february 19, 2000')->format('F d, Y'),
             'takenTableService' => null,
         ]);
+        
     }
 
     public function calendar(){
