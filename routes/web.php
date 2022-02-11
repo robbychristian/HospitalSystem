@@ -20,6 +20,9 @@ use App\Http\Controllers\PatientController;
 
 Route::prefix('test')->name('test.')->group(function () {
     Route::get('/', [TestController::class, 'index']);
+    Route::get('/inquiry', [TestController::class, 'inquiry']);
+    Route::get('/calendar', [TestController::class, 'calendar']);
+    //Route::get('/insert', [TestController::class, 'insert']);
 });
 
 Route::get('/', [LoginController::class, 'LoginScreen']);

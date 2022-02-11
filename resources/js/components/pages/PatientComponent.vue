@@ -5,7 +5,7 @@
             <div class="search-holder">
 
                 <label>Search: </label>
-                <input type="text" name="" id="">
+                <input type="text" v-model="keyword" placeholder="Search by name">
 
             </div>
             
@@ -26,25 +26,24 @@
 </template>
 
 <script>
+    import moment from 'moment';
     export default {
-        props:[],
+        
+        props:['patient'],
+
+        mounted(){
+
+            let data = JSON.parse(this.patient)
+            
+            data.forEach(this.toItems)
+
+        },
 
         data() {
             return { 
-                items: [
-                    {
-                        icon: '',
-                        name: "John Andrew F. Dacumos",
-                        birtday: "June 30, 2022",
-                        age: "22",
-                    },
-                    
-                    {
-                        name: "Robby Christian De Leon",
-                        birtday: "June 02, 2022",
-                        age: "22",
-                    },
-                ],
+                keyword: '',
+
+                static: [],
 
                 fields: [
                     {key: 'icon', label: ' '},
@@ -61,7 +60,7 @@
                     },
 
                     {
-                        key: 'birtday', 
+                        key: 'birtdate', 
                         label: 'Birthdate', 
                         sortable: true,
                     },
@@ -71,7 +70,35 @@
         },
 
         methods: {
+
+            toItems(item, index){
+
+                // {
+                //     name: "Robby Christian De Leon",
+                //     birtdate: "June 02, 2022",
+                //     age: "22",
+                // },
+
+                let data = {
+                    name: item.fname + " " + item.lname,
+                    birtdate: item.birtdate,
+                    age: moment().diff(item.birtdate, 'years'),
+                }
+
+                this.static.push(data)
+            },
+
         },
+
+        computed: {
+            items () {
+            return this.keyword
+                ? this.static.filter(
+                    item => item.name.toLowerCase().includes(this.keyword.toLowerCase()) 
+                )
+                : this.static
+            }
+        }
 
     }
 </script>

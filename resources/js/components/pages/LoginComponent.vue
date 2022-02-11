@@ -105,13 +105,15 @@ export default {
     },
     methods: {
         onSubmit(event) {
-            //event.preventDefault();
+            // event.preventDefault();
             const email = this.form.email;
             const pass = this.form.pass;
 
             const arr = JSON.parse(this.data);
 
             let loggedIn = false;
+            let self = this;
+
             arr.map((item, index) => {
                 if (item.email == email && item.password == pass) {
                     loggedIn = true;
