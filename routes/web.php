@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Imports
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +21,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('test')->name('test.')->group(function(){
+Route::prefix('test')->name('test.')->group(function () {
     Route::get('/', [TestController::class, 'index']);
 });
+
+Route::get('/', [LoginController::class, 'LoginScreen']);
+Route::post('/login', [LoginCotnroller::class, 'Login']);
 
 Auth::routes();
 
