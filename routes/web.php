@@ -18,20 +18,18 @@ use App\Http\Controllers\PatientController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::prefix('test')->name('test.')->group(function () {
     Route::get('/', [TestController::class, 'index']);
 });
 
 Route::get('/', [LoginController::class, 'LoginScreen']);
-Route::post('/login', [LoginController::class, 'Login']);
+
+Route::post('/sign-in', [LoginController::class, 'Login']);
 
 Route::prefix('patient')->name('patient.')->group(function(){
     Route::get('/', [PatientController::class, 'index']);
 });
+
 
 
 Auth::routes();

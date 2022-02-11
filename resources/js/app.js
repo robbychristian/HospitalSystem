@@ -36,6 +36,7 @@ Vue.component('topbar', require('./components/parts/TopbarComponent.vue').defaul
 
 // Pages
 Vue.component('patient-component', require('./components/pages/PatientComponent.vue').default);
+Vue.component('login-component', require('./components/pages/LoginComponent.vue').default);
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

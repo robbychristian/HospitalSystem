@@ -1,5 +1,5 @@
-@extends('layouts.app2')
+@extends('layouts.app')
 
-@section('page')
-    <test-component></test-component>
+@section('content')
+    <login-component data="{{$data}}"></login-component>
 @endsection

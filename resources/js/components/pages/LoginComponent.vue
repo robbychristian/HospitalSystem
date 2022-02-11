@@ -59,7 +59,7 @@
 
 <script>
 export default {
-    props: ["data", "route"],
+    props: ["data"],
     data() {
         return {
             form: {
@@ -89,7 +89,7 @@ export default {
                 alert("Credentials does not match");
             } else {
                 axios
-                    .post("/sign-in", {
+                    .post("/sign-in/", {
                         params: {
                             email: this.form.email,
                             pass: this.form.pass,

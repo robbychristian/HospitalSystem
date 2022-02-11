@@ -35,7 +35,10 @@ class LoginController extends Controller
         }
         $data = json_encode($r);
 
-        return view('test')->with('data', $data);
+        $page = "Home Page";
+        $active = "home";
+
+        return view('test')->with('data', $data)->with('page', $page)->with('active', $active);
     }
 
     //LOGIN FUNCTION
