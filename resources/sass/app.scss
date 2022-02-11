@@ -1,42 +1,59 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 
 // Import
-@import 'bootstrap/dist/css/bootstrap.css';
-@import 'bootstrap-vue/dist/bootstrap-vue.css';
+@import "bootstrap/dist/css/bootstrap.css";
+@import "bootstrap-vue/dist/bootstrap-vue.css";
 
-@import 'test/test.scss';
+@import "test/test.scss";
 
 // Parts
-@import 'parts/topbar.scss';
-@import 'parts/sidebar.scss';
+@import "parts/topbar.scss";
+@import "parts/sidebar.scss";
 
 // Pages
-@import 'pages/patient.scss';
+@import "pages/patient.scss";
 
-.main-page{
+.main-page {
     display: flex;
     width: 100vw;
     height: 100vh;
     overflow: auto;
 
-    .main-content{
+    .main-content {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
     }
-
 }
 
-.test-page, .patient-page{
+.test-page,
+.patient-page {
     flex-grow: 1;
     overflow: auto;
     margin-top: 10px;
+}
 
+.login-bg {
+    background: url("../../public/img/login1.jpg"), rgba(0, 0, 0, 0.8);
+    background-position: 0%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.login-bg::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
 }

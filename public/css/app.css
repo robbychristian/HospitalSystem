@@ -25346,8 +25346,27 @@ textarea.form-control-lg {
   flex-direction: column;
 }
 
-.test-page, .patient-page {
+.test-page,
+.patient-page {
   flex-grow: 1;
   overflow: auto;
   margin-top: 10px;
+}
+
+.login-bg {
+  background: url(/images/login1.jpg?fac57d421507ee89bb75b4e0ae42de5a), rgba(0, 0, 0, 0.8);
+  background-position: 0%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+
+.login-bg::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
