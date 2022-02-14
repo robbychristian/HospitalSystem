@@ -73,7 +73,11 @@ export default {
     methods: {
         onSubmit(event) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             // event.preventDefault();
+=======
+            event.preventDefault();
+>>>>>>> parent of 5434b79 (Polished Login)
 =======
             event.preventDefault();
 >>>>>>> parent of 5434b79 (Polished Login)
