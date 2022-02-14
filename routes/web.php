@@ -26,11 +26,10 @@ Route::prefix('test')->name('test.')->group(function () {
 });
 
 Route::get('/', [LoginController::class, 'LoginScreen']);
-Route::get('/debugger', [LoginController::class, 'DebuggerPage']);
 
 Route::post('/sign-in', [LoginController::class, 'Login']);
 
-Route::prefix('patient')->name('patient.')->group(function () {
+Route::prefix('patient')->name('patient.')->group(function(){
     Route::get('/', [PatientController::class, 'index']);
 });
 

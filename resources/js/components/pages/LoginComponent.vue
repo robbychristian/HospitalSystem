@@ -3,41 +3,23 @@
         <div class="row justify-content-center">
             <div
                 class="col-xl-12 d-flex align-items-center justify-content-center login-bg"
+                style="background-color: #004f91; height: 94.2vh"
             >
                 <b-card
-                    img-src="../../../../public/img/logo1.png"
+                    img-src=""
                     img-alt="Image"
                     img-top
                     tag="article"
                     style="max-width: 30rem"
                     class="mb-2"
                 >
-                    <b-alert :show="showAlert" variant="danger">{{
-                        error
-                    }}</b-alert>
-                    <b-form
-                        @submit="onSubmit"
-                        v-if="show"
-                        action="/sign-in"
-                        method="POST"
-                        v-bind:value="csrf"
-                    >
-                        <input
-                            type="hidden"
-                            name="_token"
-                            v-bind:value="csrf"
-                        />
+                    <b-form @submit="onSubmit" v-if="show">
                         <b-form-group
                             id="input-group-1"
                             label="Email:"
                             label-for="input-1"
                             class="mb-2"
                         >
-                            <input
-                                type="hidden"
-                                name="email"
-                                v-bind:value="this.form.email"
-                            />
                             <b-form-input
                                 id="input-1"
                                 v-model="form.email"
@@ -51,16 +33,6 @@
                             label="Password:"
                             label-for="input-2"
                         >
-                            <input
-                                type="hidden"
-                                name="data"
-                                v-bind:value="JSON.parse(this.data)"
-                            />
-                            <input
-                                type="hidden"
-                                name="pass"
-                                v-bind:value="this.form.pass"
-                            />
                             <b-form-input
                                 id="input-2"
                                 v-model="form.pass"
@@ -87,13 +59,8 @@
 
 <script>
 export default {
-    props: ["data", "csrf", "error"],
+    props: ["data"],
     data() {
-        if (this.error != "") {
-            this.showAlert = true;
-        } else {
-            this.showAlert = false;
-        }
         return {
             form: {
                 email: "",
@@ -105,7 +72,11 @@ export default {
     },
     methods: {
         onSubmit(event) {
+<<<<<<< HEAD
             // event.preventDefault();
+=======
+            event.preventDefault();
+>>>>>>> parent of 5434b79 (Polished Login)
             const email = this.form.email;
             const pass = this.form.pass;
 
@@ -124,14 +95,14 @@ export default {
                 alert("Credentials does not match");
             } else {
                 axios
-                    .post("/sign-in", {
+                    .post("/sign-in/", {
                         params: {
                             email: this.form.email,
                             pass: this.form.pass,
                         },
                     })
                     .then((response) => {
-                        console.log(response);
+                        console.log(response.data);
                     });
             }
         },
