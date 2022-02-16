@@ -18,10 +18,28 @@
 @import 'parts/sidebar.scss';
 
 // Pages
+@import 'pages/patient.scss';
+@import 'pages/inquiry.scss';
+// @import 'pages/announcement.scss';
+// @import 'pages/calendar.scss';
+
+
+
 
 .text-dark-green{ color: $dark-green !important; }
+.bg-dark-green{ background-color: $dark-green !important; }
+.bg-aiai{ background-color: #a1a1a1 !important; }
 
-@import 'pages/patient.scss';
+.alert-top{
+    position:fixed !important; 
+    top: 20px !important; 
+    left: 0px;
+    z-index:9999 !important; 
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .main-page{
     display: flex;
@@ -37,7 +55,7 @@
 
 }
 
-.test-page, .patient-page{
+.test-page, .patient-page, .inquiry-page{
     flex-grow: 1;
     overflow: auto;
     margin-top: 10px;
@@ -45,7 +63,7 @@
 }
 
 .login-bg {
-    background: url("../../public/img/login1.jpg"), rgba(0, 0, 0, 0.8);
+    background: url("/img/login1.jpg"), rgba(0, 0, 0, 0.8);
     background-position: 0%;
     background-repeat: no-repeat;
     background-size: cover;

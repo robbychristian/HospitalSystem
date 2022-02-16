@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
-
+use App\Http\Controllers\InquiryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,7 +20,6 @@ use App\Http\Controllers\PatientController;
 
 Route::prefix('test')->name('test.')->group(function () {
     Route::get('/', [TestController::class, 'index']);
-    Route::get('/inquiry', [TestController::class, 'inquiry']);
     Route::get('/calendar', [TestController::class, 'calendar']);
     // Route::get('/insert', [TestController::class, 'insert']);
 });
@@ -33,6 +32,9 @@ Route::prefix('patient')->name('patient.')->group(function(){
     Route::get('/', [PatientController::class, 'index']);
 });
 
+Route::prefix('inquiry')->name('inquiry.')->group(function(){
+    Route::get('/', [InquiryController::class, 'index']);
+});
 
 
 Auth::routes();

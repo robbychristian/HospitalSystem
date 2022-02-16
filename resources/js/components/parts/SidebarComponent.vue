@@ -43,7 +43,7 @@
                 </a>
 
 
-                <a href="/test/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
+                <a href="/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
                     <h6>Inquiry</h6>
                 </a>

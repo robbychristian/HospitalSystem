@@ -1,9 +1,50 @@
 .inquiry-page{
+    background-color: #D9D9D9;
     padding: 1rem;
+    overflow: auto;
 
     .inquiry-content{
-        width: 100%;
-        height: 100%;
-        background-color: #D9D9D9;
+        min-height: 100%;
+        background-color: white;
+        padding: 1rem;
+        
+        .divider {
+            width: 100%;
+            height: 0px;
+            margin: 10px 0 10px 0;
+            transition: .5s ease-out;
+            border-radius: 100%;
+            border-top: 2px solid rgba($color: $dark-green, $alpha: .8);
+        }
+
+        .file-box{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: .5rem;
+            
+            .input-file{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 80px;
+                background-color: $dark-green;
+                color: white;
+                padding: 15px;
+                cursor: pointer;
+                margin-right: .25rem;
+                transition: .5s ease;
+
+            }
+
+            .input-file:hover{
+                background-color: #2c5d5f;
+            }
+
+
+
+        }
     }
+
+
 }

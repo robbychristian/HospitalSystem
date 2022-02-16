@@ -26,7 +26,7 @@ class PatientController extends Controller
             $data = $document->data();
             $data['id'] = $document->id();
             $data['joindate'] = Carbon::parse($data['joindate'])->format('F d, Y');
-            $data['age'] = Carbon::parse($data['birtdate'])->diff(Carbon::now())->y;
+            $data['age'] = Carbon::parse($data['birthdate'])->diff(Carbon::now())->y;
 
             array_push(
                 $patient,

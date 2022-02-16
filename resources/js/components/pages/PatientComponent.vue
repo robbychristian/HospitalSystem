@@ -4,8 +4,8 @@
         <div class="patient-content text-dark-green">
             <div class="search-holder">
 
-                <label>Search: </label>
-                <input type="text" v-model="keyword" placeholder="Search by name">
+                <label class="d-none d-sm-block">Search: </label>
+                <input class="col-12 col-sm-3" type="text" v-model="keyword" placeholder="Search by name">
 
             </div>
             
@@ -78,7 +78,7 @@
                     },
 
                     {
-                        key: 'birtdate', 
+                        key: 'birthdate', 
                         label: 'Birthdate', 
                         sortable: true,
                     },
@@ -89,12 +89,12 @@
 
         methods: {
 
-            toItems(item, index){
+            toItems(item){
 
 
                 let data = {
                     name: item.fname + " " + item.lname,
-                    birtdate: item.birtdate,
+                    birthdate: item.birthdate,
                     age: item.age,
                 }
 
