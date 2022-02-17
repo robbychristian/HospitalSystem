@@ -28,6 +28,8 @@ Route::get('/', [LoginController::class, 'LoginScreen']);
 
 Route::post('/sign-in', [LoginController::class, 'Login']);
 
+Route::post('/offline', [LoginController::class, 'offline']);
+
 Route::prefix('patient')->name('patient.')->group(function(){
     Route::get('/', [PatientController::class, 'index']);
 });

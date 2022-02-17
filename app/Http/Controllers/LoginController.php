@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function __construct(){ 
-        $this->middleware('guest');
+        $this->middleware('guest')->except('offline');
     }
 
 
@@ -43,40 +43,17 @@ class LoginController extends Controller
     }
 
     //LOGIN FUNCTION
-    public function Login(Request $request)
-    {
-        $firestore = app('firebase.firestore');
-        $database = $firestore->database();
-        $datas = $database->collection('Doctors')->documents()->rows(); //array
-        $users = [];
-        foreach ($datas as $data) {
-            $user = $data->data();
-            $user['id'] = $data->id();
-            array_push($users, $user);
+    public function Login(Request $request){
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->pass,
+        ];
+        
+        if( Auth::guard()->attempt($credentials) ){
+            $request->session()->regenerate();
+            return redirect('test/');
         }
 
-        // yung unang user lang yung macoconsider ma login kaya dapat sa labas yung redirect '/' with error
-        // foreach ($users as $user) {
-        //     if ($user['email'] != $request->email) {
-        //         return redirect('/')->with("Error", "Credentials does not match anything in the records");
-        //     } else {
-                
-        //         return redirect('test/');
-        //     }
-        // }
-
-        // ito dapat
-
-        foreach ($users as $user) {
-            if ($user['email'] == $request->email && $user['password'] == $request->pass) {
-
-                $data = $this->create($user);
-
-                Auth::guard()->login($data);
-
-                return redirect('test/');
-            }
-        }
         return redirect('/')->with("Error", "Credentials does not match anything in the records");
     }
 
@@ -85,28 +62,14 @@ class LoginController extends Controller
         return view('debugger');
     }
 
-    public function create($user){
-        return User::create([
-            'id_fb' => $user['id'],
-            'fname' => $user['fName'],
-            'lname' => $user['lName'],
-            'phone' => $user['phone'],
-            'email' => $user['email'],
-            'about' => $user['about'],
-            'clinicAddress' => $user['clinicAddress'],
-            'joinDate' => $user['joinDate'],
-            'isVerified' => $user['isVerified'],
-            'gender' => $user['gender'] == "" ? null : $user['gender'],
-            'specialization' => $user['specialization'],
-            'degree' => $user['degree'],
-            'consultFee' => $user['consultFee'],
-            'teleconsultFee' => $user['teleconsultFee'],
-            'isAdmin' => $user['isAdmin'],
-            'photoUrl' => $user['photoUrl'],
-            'totalPrescribe' => $user['totalPrescribe'],
-            'totalEarnings' => $user['totalEarnings'],
-            'provideTeleService' => $user['provideTeleService'],
-            'password' => Hash::make($user['password']),
-        ]);
+    public function offline(Request $request){
+        Auth::guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
+
 }
