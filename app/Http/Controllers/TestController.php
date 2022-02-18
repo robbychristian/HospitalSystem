@@ -9,9 +9,9 @@ use Carbon\Carbon;
 
 class TestController extends Controller
 {
-    public function __construct(Firestore $firestore)
-    {
-        $this->firestore = $firestore;
+    public function __construct(Firestore $firestore){ 
+        $this->firestore = $firestore; 
+        $this->middleware('auth');
     }
 
     public function index(){

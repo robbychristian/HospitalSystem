@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\AppointmentController;
 
+use App\Http\Controllers\InquiryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,15 +22,15 @@ use App\Http\Controllers\AppointmentController;
 
 Route::prefix('test')->name('test.')->group(function () {
     Route::get('/', [TestController::class, 'index']);
-    Route::get('/inquiry', [TestController::class, 'inquiry']);
     Route::get('/calendar', [TestController::class, 'calendar']);
     // Route::get('/insert', [TestController::class, 'insert']);
 });
 
 Route::get('/', [LoginController::class, 'LoginScreen']);
-Route::get('/debugger', [LoginController::class, 'DebuggerPage']);
 
 Route::post('/sign-in', [LoginController::class, 'Login']);
+
+Route::post('/offline', [LoginController::class, 'offline']);
 
 Route::prefix('patient')->name('patient.')->group(function () {
     Route::get('/', [PatientController::class, 'index']);
@@ -38,6 +39,9 @@ Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::get('/', [PatientController::class, 'index']);
 });
 
+Route::prefix('inquiry')->name('inquiry.')->group(function () {
+    Route::get('/', [InquiryController::class, 'index']);
+});
 
 
 Auth::routes();

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="main-page">
-        <sidebar active="{{$active}}"></sidebar>
+        <sidebar active="{{$active}}" token="{{ csrf_token() }}"></sidebar>
         
         <div class="main-content">
             

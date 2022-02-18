@@ -18,9 +18,26 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'id_fb',
+        'fname',
+        'lname',
+        'phone',
+        'about',
+        'clinicAddress',
+        'joinDate',
+        'isVerified',
+        'gender',
+        'specialization',
+        'degree',
+        'consultFee',
+        'teleconsultFee',
+        'photoUrl',
+        'totalPrescribe',
+        'totalEarnings',
+        'provideTeleService',
+        'isAdmin',
     ];
 
     /**

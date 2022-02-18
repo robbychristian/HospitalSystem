@@ -43,7 +43,7 @@
                 </a>
 
 
-                <a href="/test/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
+                <a href="/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
                     <h6>Inquiry</h6>
                 </a>
@@ -70,6 +70,12 @@
                         <a href="#">Patient</a>
                         <a href="#">Calendar</a>
                         <a href="#">Inquiry</a>
+
+
+                        <form action="/offline" method="POST">
+                            <input type="hidden" name="_token" v-bind:value="token">
+                            <button class="btn btn-link" type="submit">Log out</button>
+                        </form>
                     </div>
                 </div>
             </Transition>
@@ -81,7 +87,7 @@
 
 <script>
     export default {
-        props:['active'],
+        props:['active', 'token'],
 
         data() {
             return { 

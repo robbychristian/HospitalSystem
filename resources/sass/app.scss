@@ -1,56 +1,69 @@
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Nunito");
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
-@import "variables";
+@import 'variables';
 
 // Bootstrap
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';
 
 // Import
-@import "bootstrap/dist/css/bootstrap.css";
-@import "bootstrap-vue/dist/bootstrap-vue.css";
+@import 'bootstrap/dist/css/bootstrap.css';
+@import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-@import "test/test.scss";
+@import 'test/test.scss';
 
 // Parts
-@import "parts/topbar.scss";
-@import "parts/sidebar.scss";
+@import 'parts/topbar.scss';
+@import 'parts/sidebar.scss';
 
 // Pages
-@import "pages/patient.scss";
-@import "pages/calendar.scss";
-@import "pages/inquiry.scss";
-@import "pages/announcement.scss";
+@import 'pages/patient.scss';
+@import 'pages/inquiry.scss';
+// @import 'pages/announcement.scss';
+// @import 'pages/calendar.scss';
+
+
+
 
 .text-dark-green{ color: $dark-green !important; }
+.bg-dark-green{ background-color: $dark-green !important; }
+.bg-aiai{ background-color: #a1a1a1 !important; }
 
+.alert-top{
+    position:fixed !important; 
+    top: 20px !important; 
+    left: 0px;
+    z-index:9999 !important; 
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-.main-page {
+.main-page{
     display: flex;
     width: 100vw;
     height: 100vh;
     overflow: auto;
 
-    .main-content {
+    .main-content{
         flex-grow: 1;
         display: flex;
         flex-direction: column;
     }
+
 }
 
-.test-page,
-.patient-page,
-.inquiry-page,
-.announcement-page,
-.calendar-page {
+.test-page, .patient-page, .inquiry-page{
     flex-grow: 1;
     overflow: auto;
     margin-top: 10px;
+
 }
 
 .login-bg {
-    background: url("../../public/img/login1.jpg"), rgba(0, 0, 0, 0.8);
+    background: url("/img/login1.jpg"), rgba(0, 0, 0, 0.8);
     background-position: 0%;
     background-repeat: no-repeat;
     background-size: cover;

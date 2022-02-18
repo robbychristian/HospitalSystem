@@ -1,5 +1,5 @@
 @extends('layouts.app2')
 
 @section('page')
-    <inquiry-component></inquiry-component>
+    <inquiry-component patient="{{$patient}}"></inquiry-component>
 @endsection

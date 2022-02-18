@@ -7,21 +7,23 @@ use Illuminate\Http\Request;
 use Firebase;
 //firebase for construct()
 use Kreait\Firebase\Contract\Firestore;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function __construct(Firestore $firestore)
+    public function __construct()
     {
-        $this->firestore = $firestore;
+        $this->middleware('guest')->except('offline');
     }
+
 
     public function index()
     {
         $data = Firebase::firestore()->database()->collection('Test')->documents();
         dd($data);
     }
-
-
 
     //LOGIN SCREEN ONLY
     public function LoginScreen()
@@ -44,23 +46,32 @@ class LoginController extends Controller
     //LOGIN FUNCTION
     public function Login(Request $request)
     {
-        $firestore = app('firebase.firestore');
-        $database = $firestore->database();
-        $datas = $database->collection('Doctors')->documents()->rows(); //array
-        $users = [];
-        foreach ($datas as $data) {
-            array_push($users, $data->data());
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->pass,
+        ];
+
+        if (Auth::guard()->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect('test/');
         }
 
-        foreach ($users as $user) {
-            if ($user['email'] == $request->email && $user['password'] == $request->pass) {
-                return redirect('test/')->with('Admin', 'Admin');
-            }
-        }
+        return redirect('/')->with("Error", "Credentials does not match anything in the records");
     }
 
     public function DebuggerPage()
     {
         return view('debugger');
+    }
+
+    public function offline(Request $request)
+    {
+        Auth::guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
