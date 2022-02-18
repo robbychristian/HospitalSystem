@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\AppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::get('/debugger', [LoginController::class, 'DebuggerPage']);
 Route::post('/sign-in', [LoginController::class, 'Login']);
 
 Route::prefix('patient')->name('patient.')->group(function () {
+    Route::get('/', [PatientController::class, 'index']);
+});
+Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::get('/', [PatientController::class, 'index']);
 });
 

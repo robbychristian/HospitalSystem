@@ -53,10 +53,8 @@ class LoginController extends Controller
         }
 
         foreach ($users as $user) {
-            if ($user['email'] != $request->email) {
-                return redirect('/')->with("Error", "Credentials does not match anything in the records");
-            } else {
-                return redirect('test/');
+            if ($user['email'] == $request->email && $user['password'] == $request->pass) {
+                return redirect('test/')->with('Admin', 'Admin');
             }
         }
     }
