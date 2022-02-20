@@ -7,6 +7,9 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,6 +26,16 @@ Route::prefix('test')->name('test.')->group(function () {
     Route::get('/calendar', [TestController::class, 'calendar']);
     // Route::get('/insert', [TestController::class, 'insert']);
 });
+
+Route::prefix('dashboard')->name('dashboard.')->group(function(){
+    Route::get('/', [DashboardController::class, 'index']);
+});
+
+Route::prefix('doctor')->name('doctor.')->group(function(){
+    Route::post('/add', [DoctorController::class, 'add']);
+    Route::post('/delete', [DoctorController::class, 'delete']);
+});
+
 
 Route::get('/', [LoginController::class, 'LoginScreen']);
 

@@ -15,16 +15,9 @@ class TestController extends Controller
     }
 
     public function index(){
-        $data = $this->firestore->database()->collection('Test')->documents()->rows();
-        
-        $arr = array();
 
-        foreach($data as $item){
-            array_push($arr, $item->data());
-        }
-
-        $page="Test Page";
-        $active="home";
+        $page="Test page";
+        $active="";
 
         return view('test')->with('page', $page)->with('active', $active);
     }

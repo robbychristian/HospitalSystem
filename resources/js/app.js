@@ -33,13 +33,15 @@ Vue.component('test-component', require('./components/test/TestComponent.vue').d
 // Parts
 Vue.component('sidebar', require('./components/parts/SidebarComponent.vue').default);
 Vue.component('topbar', require('./components/parts/TopbarComponent.vue').default);
+Vue.component('doctor-component', require('./components/parts/DoctorComponent.vue').default);
+Vue.component('announcement-component', require('./components/parts/AnnouncementComponent.vue').default);
 
 // Pages
 Vue.component('patient-component', require('./components/pages/PatientComponent.vue').default);
-Vue.component('announcement-component', require('./components/pages/AnnouncementComponent.vue').default);
 Vue.component('calendar-component', require('./components/pages/CalendarComponent.vue').default);
 Vue.component('inquiry-component', require('./components/pages/InquiryComponent.vue').default);
 Vue.component('login-component', require('./components/pages/LoginComponent.vue').default);
+Vue.component('dashboard-component', require('./components/pages/DashboardComponent.vue').default);
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

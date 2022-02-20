@@ -25,7 +25,7 @@
                 
                 <div class="sidebar-divider"></div>
             
-                <a href="/test" :class="[{ active: active == 'home' ? true : false }, 'sidebar-menu']">
+                <a href="/dashboard" :class="[{ active: active == 'home' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-house-chimney"></i>
                     <h6>Home</h6>
                 </a>

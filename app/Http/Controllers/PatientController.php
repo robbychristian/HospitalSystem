@@ -9,9 +9,9 @@ use Carbon\Carbon;
 
 class PatientController extends Controller
 {
-    public function __construct(Firestore $firestore)
-    {
-        $this->firestore = $firestore;
+    public function __construct(Firestore $firestore){ 
+        $this->firestore = $firestore; 
+        $this->middleware('auth');
     }
 
     public function index(){
@@ -37,5 +37,10 @@ class PatientController extends Controller
         $patient = json_encode($patient);
         
         return view('pages.patient')->with('page', $page)->with('active', $active)->with('patient', $patient);
+    }
+
+    public function show(Request $request){
+        dd($id);
+
     }
 }

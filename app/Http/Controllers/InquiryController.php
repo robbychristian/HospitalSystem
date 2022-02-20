@@ -8,7 +8,10 @@ use Carbon\Carbon;
 
 class InquiryController extends Controller
 {
-    public function __construct(Firestore $firestore){ $this->firestore = $firestore; }
+    public function __construct(Firestore $firestore){ 
+        $this->firestore = $firestore; 
+        $this->middleware('auth');
+    }
 
     public function index(){
         $page="Laboratory Request & Prescription";

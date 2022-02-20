@@ -51,7 +51,7 @@ class LoginController extends Controller
         
         if( Auth::guard()->attempt($credentials) ){
             $request->session()->regenerate();
-            return redirect('test/');
+            return redirect('/dashboard');
         }
 
         return redirect('/')->with("Error", "Credentials does not match anything in the records");

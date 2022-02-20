@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
     
     public function create($user){
         User::create([
+            'name' => $user['fName'] . ' ' . $user['lName'],
             'id_fb' => $user['id'],
             'fname' => $user['fName'],
             'lname' => $user['lName'],
@@ -43,15 +44,15 @@ class DatabaseSeeder extends Seeder
             'clinicAddress' => $user['clinicAddress'],
             'joinDate' => $user['joinDate'],
             'isVerified' => $user['isVerified'],
-            'gender' => $user['gender'] == "" ? null : $user['gender'],
+            'gender' => $user['gender']  == 'true' ? true : false,
             'specialization' => $user['specialization'],
             'degree' => $user['degree'],
-            'consultFee' => $user['consultFee'],
-            'teleconsultFee' => $user['teleconsultFee'],
+            'consultFee' => $user['consultFee'] == '' ? 0 : $user['consultFee'],
+            'teleconsultFee' => $user['teleconsultFee'] == '' ? 0 : $user['teleconsultFee'],
             'isAdmin' => $user['isAdmin'],
             'photoUrl' => $user['photoUrl'],
-            'totalPrescribe' => $user['totalPrescribe'],
-            'totalEarnings' => $user['totalEarnings'],
+            'totalPrescribe' => $user['totalPrescribe'] == '' ? 0 : $user['totalPrescribe'],
+            'totalEarnings' => $user['totalEarnings'] == '' ? 0 : $user['totalEarnings'],
             'provideTeleService' => $user['provideTeleService'],
             'password' => Hash::make($user['password']),
         ]);

@@ -20,6 +20,7 @@
 // Pages
 @import 'pages/patient.scss';
 @import 'pages/inquiry.scss';
+@import 'pages/dashboard.scss';
 // @import 'pages/announcement.scss';
 // @import 'pages/calendar.scss';
 
@@ -28,7 +29,17 @@
 
 .text-dark-green{ color: $dark-green !important; }
 .bg-dark-green{ background-color: $dark-green !important; }
+.bg-dark-blue{ background-color: $darker-blue !important; }
 .bg-aiai{ background-color: #a1a1a1 !important; }
+
+.modal-head{
+    button{
+        border: none;
+        padding: .25rem .5rem .25rem .5rem;
+        background-color: transparent !important;
+        color: white !important;
+    }
+}
 
 .alert-top{
     position:fixed !important; 
@@ -45,7 +56,6 @@
     display: flex;
     width: 100vw;
     height: 100vh;
-    overflow: auto;
 
     .main-content{
         flex-grow: 1;
@@ -55,11 +65,15 @@
 
 }
 
-.test-page, .patient-page, .inquiry-page{
+.test-page, .patient-page, .inquiry-page, .dashboard-page{
     flex-grow: 1;
     overflow: auto;
     margin-top: 10px;
 
+}
+
+.dashboard-page::-webkit-scrollbar {
+    display: none !important;
 }
 
 .login-bg {
