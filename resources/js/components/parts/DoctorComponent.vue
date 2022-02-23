@@ -12,7 +12,7 @@
             <h4> Manage <b>Doctors</b></h4>
 
             <div class="tab-action">
-                <b-button type="button" @click="showAddModal(true)" class="btn btn-add"> <i class="fa-solid fa-plus"></i> Doctor</b-button>
+                <b-button type="button" @click="showModal(true, 'Add', 0)" class="btn btn-add"> <i class="fa-solid fa-plus"></i> Doctor</b-button>
 
                 <input type="text" v-model="keyword">
                 <select v-model="filterBy">
@@ -34,7 +34,7 @@
         >
         
         <template #cell(action)="data">
-            <button class="btn bg-warning" @click="updateDoctor(data.item.id, data.item.id_fb, data.item.name)"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn bg-warning" @click="showModal(true, 'Update', data.item.id)"><i class="fa-solid fa-pencil"></i></button>
             <button class="btn bg-danger" @click="deleteDoctor(data.item.id, data.item.id_fb, data.item.name)"><i class="fa-solid fa-trash"></i></button>
         </template>
 
@@ -61,24 +61,28 @@
                         key: 'name', 
                         label: 'Name', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
                         key: 'specialization', 
                         label: 'Specialization', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
                         key: 'clinicAddress', 
                         label: 'Address', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
                         key: 'email', 
                         label: 'Email', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
                     
                     {
@@ -90,28 +94,28 @@
         },
 
         methods:{
-            showAddModal(isDoctor){
-                this.$parent.showAddModal(isDoctor);
+            showModal(isDoctor, operation, id){
+                this.$parent.showModal(isDoctor, operation, id);
             },
 
             showUpdateModal(isDoctor){
                 this.$parent.showUpdateModal(isDoctor);
             },
 
-            addDoctor(addForm){
+            addDoctor(doctorForm){
 
                 const filePhoto = new FormData();
-                filePhoto.append('degree', addForm.degree)
-                filePhoto.append('photo', addForm.photo)
-                filePhoto.append('firstName', addForm.firstName)
-                filePhoto.append('lastName', addForm.lastName)
-                filePhoto.append('clinicAddress', addForm.clinicAddress)
-                filePhoto.append('specialization', addForm.specialization)
-                filePhoto.append('gender', addForm.gender)
-                filePhoto.append('phone', addForm.phone)
-                filePhoto.append('consultFee', addForm.consultFee)
-                filePhoto.append('email', addForm.email)
-                filePhoto.append('about', addForm.about)
+                filePhoto.append('degree', doctorForm.degree)
+                filePhoto.append('photo', doctorForm.photo)
+                filePhoto.append('firstName', doctorForm.firstName)
+                filePhoto.append('lastName', doctorForm.lastName)
+                filePhoto.append('clinicAddress', doctorForm.clinicAddress)
+                filePhoto.append('specialization', doctorForm.specialization)
+                filePhoto.append('gender', doctorForm.gender)
+                filePhoto.append('phone', doctorForm.phone)
+                filePhoto.append('consultFee', doctorForm.consultFee)
+                filePhoto.append('email', doctorForm.email)
+                filePhoto.append('about', doctorForm.about)
 
                 return axios.post('/doctor/add/', filePhoto)
                 .then( function (response){
@@ -143,7 +147,39 @@
 
             },
 
-            updateDoctor(id, id_fb, name){},
+            updateDoctor(doctorForm){
+                let withEmail = 0;
+                let length = this.doctors.length
+                for(var i = 0; i < length; i++){
+                    if(this.doctors[i].id == doctorForm.id){
+                        if(this.doctors[i].email != doctorForm.email) withEmail = 1
+                        break;
+                    }
+                }
+
+                const filePhoto = new FormData();
+                filePhoto.append('degree', doctorForm.degree)
+                filePhoto.append('photo', doctorForm.photo)
+                filePhoto.append('firstName', doctorForm.firstName)
+                filePhoto.append('lastName', doctorForm.lastName)
+                filePhoto.append('clinicAddress', doctorForm.clinicAddress)
+                filePhoto.append('specialization', doctorForm.specialization)
+                filePhoto.append('gender', doctorForm.gender)
+                filePhoto.append('phone', doctorForm.phone)
+                filePhoto.append('consultFee', doctorForm.consultFee)
+                filePhoto.append('email', doctorForm.email)
+                filePhoto.append('about', doctorForm.about)
+                filePhoto.append('id', doctorForm.id)
+                filePhoto.append('withEmail', withEmail)
+
+                return axios.post('/doctor/update/', filePhoto)
+                .then( function (response){
+                    return response.data
+                })
+                .catch( function (error){
+                    console.log(error);
+                });
+            },
         },
 
         computed:{

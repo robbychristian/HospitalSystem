@@ -34,6 +34,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function(){
 Route::prefix('doctor')->name('doctor.')->group(function(){
     Route::post('/add', [DoctorController::class, 'add']);
     Route::post('/delete', [DoctorController::class, 'delete']);
+    Route::post('/update', [DoctorController::class, 'update']);
 });
 
 

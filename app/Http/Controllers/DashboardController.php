@@ -24,6 +24,20 @@ class DashboardController extends Controller
         $page="Dashboard";
         $active="home";
 
+        // $documents = $this->firestore->database()->collection('Doctors')->documents()->rows();
+        // $doctors = [];
+        // foreach ($documents as $document) {
+            
+        //     $data = $document->data();
+
+        //     if(!$data['isAdmin']){
+        //         $data['id'] = $document->id();
+        //         $data['joindate'] = Carbon::parse($data['joindate'])->format('F d, Y');
+    
+        //         array_push( $doctors, $data );
+        //     }
+        // }
+
         $doctors = User::where('isAdmin', false)->get();
         
         $documents = $this->firestore->database()->collection('Announcements')->documents()->rows();
@@ -33,7 +47,7 @@ class DashboardController extends Controller
             $data['id'] = $document->id();
             $data['joindate'] = Carbon::parse($data['joindate'])->format('F d, Y');
 
-            array_push( $doctors, $data );
+            array_push( $announcements, $data );
         }
 
         $doctors = json_encode($doctors);

@@ -3,23 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Kreait\Firebase\Contract\Firestore;
 use Carbon\Carbon;
+
+use Kreait\Firebase\Contract\Firestore;
+use Kreait\Firebase\Contract\Storage;
+use Kreait\Firebase\Contract\Auth;
 
 
 class TestController extends Controller
 {
-    public function __construct(Firestore $firestore){ 
+    
+    public function __construct(Firestore $firestore, Storage $storage, Auth $auth){ 
         $this->firestore = $firestore; 
-        $this->middleware('auth');
+        $this->storage = $storage;
+        $this->auth = $auth;
+        // $this->middleware('auth');
     }
 
     public function index(){
-
+        
         $page="Test page";
         $active="";
 
         return view('test')->with('page', $page)->with('active', $active);
+        
     }
 
     public function insert(){
@@ -55,4 +62,13 @@ class TestController extends Controller
 
         return view('pages.inquiry')->with('page', $page)->with('active', $active);
     }
+    
+    // Create user in auth
+    // $userProperties = [
+    //     'email' => 'user@example.com',
+    //     'password' => 'secretPassword',
+    //     'uid' => '861ea705c8fe4535be86',
+    // ];
+    
+    // $createdUser = $this->auth->createUser($userProperties);
 }

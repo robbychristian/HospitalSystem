@@ -23,8 +23,8 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                // Palitan to dashboard
-                return redirect('/test');
+                
+                return redirect('/dashboard');
             }
         }
 

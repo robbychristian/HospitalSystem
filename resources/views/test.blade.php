@@ -2,5 +2,5 @@
 
 
 @section('page')
-    <login-component></login-component>
+    <test-component></test-component>
 @endsection

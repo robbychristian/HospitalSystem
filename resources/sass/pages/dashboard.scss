@@ -25,13 +25,16 @@
 }
 
 .dashboard-page{
-    max-height: 700px;
 
     .manage-table{
+        min-width: 800px;
+        padding: .5rem;
+
         .tab{
             display: flex;
             justify-content: space-between;
             padding: .75rem;
+            width: 100%;
             
             h4{ 
                 margin: 0px;
@@ -77,4 +80,11 @@
             background-color: $warning;
         }
     }
+}
+
+.text-hidden-ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 50px;
 }

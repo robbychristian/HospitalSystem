@@ -27,25 +27,25 @@
             
                 <a href="/dashboard" :class="[{ active: active == 'home' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-house-chimney"></i>
-                    <h6>Home</h6>
+                    <h6 class="mb-0">Home</h6>
                 </a>
 
 
                 <a href="/patient" :class="[{ active: active == 'patient' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-hospital-user"></i>
-                    <h6>Patient</h6>
+                    <h6 class="mb-0" >Patient</h6>
                 </a>
 
 
                 <a href="/test/calendar" :class="[{ active: active == 'calendar' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-calendar-days"></i>
-                    <h6>Calendar</h6>
+                    <h6 class="mb-0" >Calendar</h6>
                 </a>
 
 
                 <a href="/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
-                    <h6>Inquiry</h6>
+                    <h6 class="mb-0">Inquiry</h6>
                 </a>
 
                 <div class="sidebar-divider"></div>
@@ -65,7 +65,7 @@
                     <div class="settings-content">
                         <div class="profile-img"></div>
 
-                        <h5> JOHN ANDREW F. DACUMOS</h5>
+                        <h5 class="text-uppercase"> {{name ? 'ADMIN' : name}}</h5>
 
                         <a href="#">Patient</a>
                         <a href="#">Calendar</a>
@@ -87,7 +87,7 @@
 
 <script>
     export default {
-        props:['active', 'token'],
+        props:['active', 'token', 'name'],
 
         data() {
             return { 

@@ -1,0 +1,83 @@
+
+
+$first-breakpoint: 750px;
+$second-breakpoint: 420px;
+
+
+@media screen and (max-width: $first-breakpoint) {
+    .topbar{
+        .btn-holder{ display: block; }
+    }
+}
+
+@media screen and (min-width: ($first-breakpoint + 1)) {
+    .sidebar{
+        width: 90px !important;
+    }
+
+    .main-page{
+
+        .main-content{
+            max-width: calc(100% - 125px) !important;
+        }
+
+    }
+}
+
+@media screen and (min-width: $second-breakpoint) and (max-width: ($first-breakpoint)) {
+    .sidebar{
+        width: 0px;
+        margin-right: 0px;
+    }
+
+    .main-page{
+
+        .main-content{
+
+            .dashboard-page{
+                .manage-table{
+                    .tab{
+                        flex-direction: column;
+                        
+                        .tab-action{
+                            justify-content: flex-end;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and /* (min-width: $second-breakpoint)  and */ (max-width: $second-breakpoint) {
+    .sidebar{
+        position: fixed;
+        width: 0px;
+        margin-right: 0px;
+        z-index: 99;
+
+        .sidebar-setting{
+            left: 0px !important;
+        }
+    }
+
+    
+    .main-page{
+
+        .main-content{
+
+            .dashboard-page{
+                .manage-table{
+                    .tab{
+                        flex-direction: column;
+                        
+                        .tab-action{
+                            justify-content: flex-end;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

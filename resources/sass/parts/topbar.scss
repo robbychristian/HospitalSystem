@@ -15,11 +15,3 @@
     
     .btn-holder{ display: none; }
 }
-
-$first-breakpoint: 750px;
-
-@media screen and (max-width: $first-breakpoint) {
-    .topbar{
-        .btn-holder{ display: block; }
-    }
-}
