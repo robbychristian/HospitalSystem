@@ -1,0 +1,16 @@
+.calendar-page {
+  background-color: #d9d9d9;
+  padding: 0.5rem;
+}
+.calendar-page .calendar-content {
+  background-color: white;
+}
+.calendar-page .calendar-content .search-holder {
+  padding: 0.25rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.calendar-page .calendar-content .search-holder label {
+  margin: 0px 15px 0px 0px;
+}

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
-use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\CalendarController;
 
 use App\Http\Controllers\InquiryController;
 /*
@@ -22,7 +22,8 @@ use App\Http\Controllers\InquiryController;
 
 Route::prefix('test')->name('test.')->group(function () {
     Route::get('/', [TestController::class, 'index']);
-    Route::get('/calendar', [TestController::class, 'calendar']);
+    Route::get('/calendar', [CalendarController::class, 'index']);
+    Route::post('/addappointment', [CalendarController::class, 'store']);
     // Route::get('/insert', [TestController::class, 'insert']);
 });
 
@@ -36,7 +37,7 @@ Route::prefix('patient')->name('patient.')->group(function () {
     Route::get('/', [PatientController::class, 'index']);
 });
 Route::prefix('calendar')->name('calendar.')->group(function () {
-    Route::get('/', [PatientController::class, 'index']);
+    Route::get('/', [CalendarController::class, 'index']);
 });
 
 Route::prefix('inquiry')->name('inquiry.')->group(function () {
