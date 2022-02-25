@@ -12,6 +12,7 @@ class PatientController extends Controller
     public function __construct(Firestore $firestore){ 
         $this->firestore = $firestore; 
         $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     public function index(){

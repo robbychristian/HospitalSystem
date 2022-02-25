@@ -18,6 +18,6 @@ class isEmailVerified
     {
         if($request->user()->isVerified)
             return $next($request);
-        return redirect()->route('email.show');
+        return redirect()->route('email.index');
     }
 }

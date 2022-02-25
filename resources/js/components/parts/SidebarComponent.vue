@@ -18,7 +18,7 @@
     <div class="sidebar" id="sidebar">
 
         <div class="sidebar-content">
-            <div class="sidebar-logo-holder">
+            <div class="sidebar-logo-holder" >
                 <img class="sidebar-logo" alt="">
             </div>
             <div class="sidebar-menu-holder">
@@ -63,9 +63,9 @@
                     </div>
 
                     <div class="settings-content">
-                        <div class="profile-img"></div>
+                        <div class="profile-img" :style="{ backgroundImage: 'url(' + profilePicture + ')' }"></div>
 
-                        <h5 class="text-uppercase"> {{name ? 'ADMIN' : name}}</h5>
+                        <h5 class="text-uppercase"> {{name == '' ? 'ADMIN' : name}}</h5>
 
                         <a href="#">Patient</a>
                         <a href="#">Calendar</a>
@@ -87,7 +87,7 @@
 
 <script>
     export default {
-        props:['active', 'token', 'name'],
+        props:['active', 'token', 'name', 'profilePicture'],
 
         data() {
             return { 

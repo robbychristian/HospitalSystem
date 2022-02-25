@@ -20,6 +20,7 @@ class DoctorController extends Controller
         $this->auth = $auth;
         $this->middleware('auth');
         $this->middleware('admin');
+        $this->middleware('verified');
     }
     
     public function deleteObject($objectName){ $this->storage->getBucket()->object($objectName)->delete(); }

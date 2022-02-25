@@ -8,6 +8,7 @@
 import Vue from 'vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
+
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -38,6 +39,7 @@ Vue.component('announcement-component', require('./components/parts/Announcement
 
 // Pages
 Vue.component('patient-component', require('./components/pages/PatientComponent.vue').default);
+Vue.component('email-verification', require('./components/pages/EmailVerificationComponent.vue').default);
 Vue.component('calendar-component', require('./components/pages/CalendarComponent.vue').default);
 Vue.component('inquiry-component', require('./components/pages/InquiryComponent.vue').default);
 Vue.component('login-component', require('./components/pages/LoginComponent.vue').default);

@@ -9,6 +9,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\EmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +29,17 @@ Route::prefix('test')->name('test.')->group(function () {
 });
 
 Route::prefix('dashboard')->name('dashboard.')->group(function(){
-    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
 });
+
+
+Route::prefix('email')->name('email.')->group(function(){
+    Route::get('/', [EmailController::class, 'index'])->name('index');
+    Route::post('/request', [EmailController::class, 'request']);
+    Route::post('/resend', [EmailController::class, 'resend']);
+    Route::post('/verify', [EmailController::class, 'verify']);
+});
+
 
 Route::prefix('doctor')->name('doctor.')->group(function(){
     Route::post('/add', [DoctorController::class, 'add']);

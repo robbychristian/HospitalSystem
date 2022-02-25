@@ -1,0 +1,182 @@
+.email-verify{
+    min-width: 350px;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 600px !important;
+    overflow: hidden;
+
+    background-color: #69c9cd;
+    background-image: linear-gradient(135deg, #69c9cd 0%, #48898c 100%);
+
+    .welcome-teledocs{
+        text-align: center;
+        max-width: 300px;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: rgba($color: #000000, $alpha: .15);
+        border-radius: 5px;
+        color: $dark-green;
+
+        h1{
+            margin-bottom: 1rem;
+        }
+        button{
+            background-color: $darker-blue;
+            color: white !important;
+            margin-top: 1rem;
+        }
+        button:hover{
+            background-color: #0b3650;
+        }
+    }
+
+    
+    .email-verify-content{
+
+        margin-right: 1rem;
+        margin-left: 1rem;
+        position: absolute;
+        padding: 30px;
+        box-shadow: .0rem .0rem .45rem rgba($color: #000000, $alpha: .15);
+        color: $darker-blue;
+        background-color: white;
+        z-index: 2;
+        max-width: 600px;
+        h2{
+            // font-family: $gotham-b;
+        }
+        h3{
+            // font-family: $gotham-l;
+            font-size: 22.2px;
+        }
+
+        .code-box{
+            margin-top: 30px;
+            display: flex;
+            h3{ 
+                // font-family: $gotham-l;
+                margin: 0;
+            }
+            justify-content: center;
+            align-items: center;
+            input[type=text]{
+                background-color: whitesmoke;
+                border: none;
+                border-bottom: 1px solid black;
+                text-transform: uppercase;
+                text-align: center;
+                font-size: 34px;
+                margin-right: .25rem;
+                margin-left: .25rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            input[type=text]:focus{
+                border: $blue solid 1px !important;
+                outline: $blue;
+                background-color: rgba($color: blue, $alpha: .15);
+            }
+        }
+
+        .btn-verify{
+            margin-top: 30px;
+            color: white;
+            background-color: $blue;
+            border: none;
+            width: 100%;
+            height: 45px;
+            font-size: 28px;
+            transition: .2s ease-in;
+        }
+        .btn-verify:enabled{
+            box-shadow: .25rem .25rem .25rem rgba($color: #000000, $alpha: .15);
+        }
+        .btn-verify:disabled{
+            background-color: rgb(185, 185, 185);
+            color: white;
+        }
+        .btn-verify:hover:enabled{
+            background-color: #0073bb;
+        }
+
+
+        .backout-box{
+            width: 100%;
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            a{
+                margin-right: .35rem;
+                margin-left: .35rem;
+                font-size: 13px;
+            }
+
+            .btn-popover{
+                font-size: 13px;
+                background-color: $red;
+            }
+        }
+    }
+
+    .wave{
+        position: absolute;
+        bottom: 0;
+        z-index: 1;
+        height: 300px;
+    }
+
+
+}
+
+@media screen and(max-width: 768px) {
+    .email-verify{
+        .email-verify-content{
+            padding: 20px;
+            
+            button{
+                height: 35px;
+                font-size: 22px;
+            }
+        }
+
+        h2{
+            font-size: 24px;
+        }
+        h3{
+            font-size: 18.72px;
+        }
+
+        .code-box{
+            h3{
+                margin: 0;
+                font-size: 14px;
+            }
+            input[type=text]{
+                font-size: 24px !important;
+                width: 28px !important;
+                height: 28px !important;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 492px) {
+    .email-verify{
+        .backout-box{
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+
+            a{
+                margin-top: .35rem;
+            }
+        }
+    }
+}
