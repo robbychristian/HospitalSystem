@@ -18,34 +18,34 @@
     <div class="sidebar" id="sidebar">
 
         <div class="sidebar-content">
-            <div class="sidebar-logo-holder">
+            <div class="sidebar-logo-holder" >
                 <img class="sidebar-logo" alt="">
             </div>
             <div class="sidebar-menu-holder">
                 
                 <div class="sidebar-divider"></div>
             
-                <a href="/test" :class="[{ active: active == 'home' ? true : false }, 'sidebar-menu']">
+                <a href="/dashboard" :class="[{ active: active == 'home' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-house-chimney"></i>
-                    <h6>Home</h6>
+                    <h6 class="mb-0">Home</h6>
                 </a>
 
 
                 <a href="/patient" :class="[{ active: active == 'patient' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-hospital-user"></i>
-                    <h6>Patient</h6>
+                    <h6 class="mb-0" >Patient</h6>
                 </a>
 
 
                 <a href="/test/calendar" :class="[{ active: active == 'calendar' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-calendar-days"></i>
-                    <h6>Calendar</h6>
+                    <h6 class="mb-0" >Calendar</h6>
                 </a>
 
 
                 <a href="/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
-                    <h6>Inquiry</h6>
+                    <h6 class="mb-0">Inquiry</h6>
                 </a>
 
                 <div class="sidebar-divider"></div>
@@ -63,9 +63,9 @@
                     </div>
 
                     <div class="settings-content">
-                        <div class="profile-img"></div>
+                        <div class="profile-img" :style="{ backgroundImage: 'url(' + profilePicture + ')' }"></div>
 
-                        <h5> JOHN ANDREW F. DACUMOS</h5>
+                        <h5 class="text-uppercase"> {{name == '' ? 'ADMIN' : name}}</h5>
 
                         <a href="#">Patient</a>
                         <a href="#">Calendar</a>
@@ -87,7 +87,7 @@
 
 <script>
     export default {
-        props:['active', 'token'],
+        props:['active', 'token', 'name', 'profilePicture'],
 
         data() {
             return { 

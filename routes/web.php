@@ -9,6 +9,10 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\CalendarController;
 
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\EmailController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +30,26 @@ Route::prefix('test')->name('test.')->group(function () {
     Route::post('/addappointment', [CalendarController::class, 'store']);
     // Route::get('/insert', [TestController::class, 'insert']);
 });
+
+Route::prefix('dashboard')->name('dashboard.')->group(function(){
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
+});
+
+
+Route::prefix('email')->name('email.')->group(function(){
+    Route::get('/', [EmailController::class, 'index'])->name('index');
+    Route::post('/request', [EmailController::class, 'request']);
+    Route::post('/resend', [EmailController::class, 'resend']);
+    Route::post('/verify', [EmailController::class, 'verify']);
+});
+
+
+Route::prefix('doctor')->name('doctor.')->group(function(){
+    Route::post('/add', [DoctorController::class, 'add']);
+    Route::post('/delete', [DoctorController::class, 'delete']);
+    Route::post('/update', [DoctorController::class, 'update']);
+});
+
 
 Route::get('/', [LoginController::class, 'LoginScreen']);
 

@@ -16,12 +16,12 @@
                     <i class="fa-solid fa-face-grin-beam"></i>
                 </template>
 
-                <template #cell(action)>
-                    <button class="btn btn-danger">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                    <button class="btn btn-secondary">
-                        <i class="fa-solid fa-pen"></i>
+                <template #cell(action)="data">
+                    <button
+                        class="btn bg-dark-green text-white"
+                        @click="viewPatient(data.item.id)"
+                    >
+                        <i class="fa-solid fa-hospital-user"></i>
                     </button>
                 </template>
             </b-table>
@@ -31,13 +31,17 @@
 
 <script>
 export default {
-    props: ["patient"],
+    props: ["patient", "userData"],
 
     mounted() {
-        console.log(this.user.isAdmin);
+        let userData = JSON.parse(this.userData);
+        this.user = {
+            id: userData.id_fb,
+            email: userData.email,
+            isDoctor: !userData.isAdmin,
+        };
 
-        if (this.user.isAdmin) {
-            console.log(this.fields);
+        if (this.user.isDoctor) {
             this.fields.push({ key: "action", label: "Action" });
         }
 
@@ -48,9 +52,7 @@ export default {
 
     data() {
         return {
-            user: {
-                isAdmin: false,
-            },
+            user: "",
 
             keyword: "",
 
@@ -85,9 +87,14 @@ export default {
                 name: item.fname + " " + item.lname,
                 birthdate: item.birthdate,
                 age: item.age,
+                id: item.id,
             };
 
             this.static.push(data);
+        },
+
+        viewPatient(id) {
+            alert("view: " + id);
         },
     },
 

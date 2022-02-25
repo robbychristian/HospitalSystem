@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('id_fb')->nullable();
+            $table->string('name')->nullable();
             $table->string('fname')->nullable();
             $table->string('lname')->nullable();
             $table->string('phone')->nullable();
@@ -23,20 +24,20 @@ class CreateUsersTable extends Migration
             $table->string('about')->nullable();
             $table->string('clinicAddress')->nullable();
             $table->string('joinDate')->nullable();
-            $table->boolean('isVerified')->nullable();
+            $table->boolean('isVerified')->default(false);
             $table->boolean('gender')->nullable();
             $table->string('specialization')->nullable();
             $table->string('degree')->nullable();
-            $table->string('consultFee')->nullable();
-            $table->string('teleconsultFee')->nullable();
+            $table->integer('consultFee')->nullable();
+            $table->integer('teleconsultFee')->default(0);
             $table->string('photoUrl')->nullable();
-            $table->string('totalPrescribe')->nullable();
-            $table->string('totalEarnings')->nullable();
-            $table->boolean('provideTeleService')->nullable();
-            $table->boolean('isAdmin')->nullable();
+            $table->integer('totalPrescribe')->default(0);
+            $table->integer('totalEarnings')->default(0);
+            $table->boolean('provideTeleService')->default(true);
+            $table->boolean('isAdmin')->default(false);
             $table->string('password');
             $table->rememberToken();
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

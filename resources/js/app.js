@@ -7,7 +7,7 @@
 // Imports
 import Vue from "vue";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-import moment from "moment";
+
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -45,6 +45,14 @@ Vue.component(
     "topbar",
     require("./components/parts/TopbarComponent.vue").default
 );
+Vue.component(
+    "doctor-component",
+    require("./components/parts/DoctorComponent.vue").default
+);
+Vue.component(
+    "announcement-component",
+    require("./components/parts/AnnouncementComponent.vue").default
+);
 
 // Pages
 Vue.component(
@@ -52,8 +60,8 @@ Vue.component(
     require("./components/pages/PatientComponent.vue").default
 );
 Vue.component(
-    "announcement-component",
-    require("./components/pages/AnnouncementComponent.vue").default
+    "email-verification",
+    require("./components/pages/EmailVerificationComponent.vue").default
 );
 Vue.component(
     "calendar-component",
@@ -66,6 +74,10 @@ Vue.component(
 Vue.component(
     "login-component",
     require("./components/pages/LoginComponent.vue").default
+);
+Vue.component(
+    "dashboard-component",
+    require("./components/pages/DashboardComponent.vue").default
 );
 
 Vue.use(BootstrapVue);

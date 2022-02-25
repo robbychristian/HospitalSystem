@@ -1,0 +1,90 @@
+
+.form{
+    .form-input{
+        display: flex;
+        width: 100%;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    h6{ margin: 10px 0px 10px 0px;}
+    
+    input[type=text], input[type=email]{
+        height: 40px;
+        padding: .25rem;
+        border-radius: 3px;
+        margin: 0px;
+        border: solid 1px rgb(59, 59, 59);
+        outline: none;
+        width: 100%;
+    }
+    input.error::placeholder, .error { color: white; }
+    .error{ background-color: rgba(255, 0, 0, 0.5) !important; }
+
+}
+
+.dashboard-page{
+
+    .manage-table{
+        min-width: 800px;
+        padding: .5rem;
+
+        .tab{
+            display: flex;
+            justify-content: space-between;
+            padding: .75rem;
+            width: 100%;
+            
+            h4{ 
+                margin: 0px;
+                display: flex;
+                align-items: center;
+            }
+
+            .tab-action{
+                display: flex;
+                align-items: center;
+
+                input[type=text]{
+                    padding: .25rem;
+                    border-radius: 3px;
+                    margin: 0px;
+                    border: solid 1px rgb(59, 59, 59);
+                    outline: none;
+                }
+
+                select{
+                    padding: .25rem;
+                }
+
+                .btn-add{
+                    background-color: #28a745;
+                    margin-right: 15px;
+                    color: white;
+                }
+    
+                .btn-add:hover{
+                    background-color: #156b29;
+                }
+    
+            }
+            
+        }
+        .doctor-tab{
+            background-color: $darker-blue;
+            color: white;
+        }
+
+        .announcement-tab{
+            background-color: $warning;
+        }
+    }
+}
+
+.text-hidden-ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 50px;
+}
