@@ -16,9 +16,9 @@
 
         <div class="inquiry-content">
 
-<!--             
+            
             <div class="patient-box">
-                <div class="option-box">
+                <!-- <div class="option-box">
                     <label> Search patients: </label>
                     <input type="text" v-model="keyword">
                     <h6> Patient chosen: {{email.name}}</h6>
@@ -32,9 +32,43 @@
                         <img :src="data.avatar" :alt="data.name">
                         <h6> {{data.name}}</h6>
                     </div>
+                </div> -->
+
+                
+                <div class="form">
+                    
+                    <h6>Patients's Name: </h6>
+
+                    <div class="form-input">
+                        
+                        <input :class="['mt-2']" type="text" placeholder="Patient Name">
+                    </div>
+
+                    <h6>Title: </h6>
+
+                    <div class="form-input">
+                        
+                        <input :class="['mt-2']" type="text" placeholder="Patient Name">
+                    </div>
+
+                    <h6>Subject: </h6>
+
+                    <div class="form-input">
+                        
+                        <input :class="['mt-2']" type="text" placeholder="Patient Name">
+                    </div>
+                    
+                    <h6>Body: </h6>
+
+                    <div class="form-input">
+                        
+                        <textarea :class="['mt-2']" type="text" placeholder="Patient Name"> </textarea>
+                    </div>
                 </div>
+                    
             </div>
-             -->
+            
+
 
             <div class="divider"></div>
 
@@ -55,6 +89,8 @@
                     <span class="text-dark-green font-bold"> File uploaded: </span> {{file ? file.name : "" }} 
                 </h6>
             </div>
+
+            <button class="btn btn-success">Send!</button>
 
         </div>
     </div>

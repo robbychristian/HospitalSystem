@@ -1,7 +1,6 @@
 <template>
 
     <div class="email-verify">
-        
         <div class="alert-top">
             <b-alert
                 :show="dismissCountDown"

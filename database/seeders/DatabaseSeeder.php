@@ -34,17 +34,17 @@ class DatabaseSeeder extends Seeder
     
     public function create($user){
         User::create([
-            'name' => $user['fName'] . ' ' . $user['lName'],
+            'name' => $user['fname'] . ' ' . $user['lname'],
             'id_fb' => $user['id'],
-            'fname' => $user['fName'],
-            'lname' => $user['lName'],
+            'fname' => $user['fname'],
+            'lname' => $user['lname'],
             'phone' => $user['phone'],
             'email' => $user['email'],
             'about' => $user['about'],
             'clinicAddress' => $user['clinicAddress'],
             'joinDate' => $user['joinDate'],
-            'isVerified' => $user['isVerified'],
-            'gender' => $user['gender']  == 'true' ? true : false,
+            'isVerified' => $user['isVerified'] == 'OK' ? 1 : 0,
+            'gender' => $user['gender'] == "Female" ? 0 : 1,
             'specialization' => $user['specialization'],
             'degree' => $user['degree'],
             'consultFee' => $user['consultFee'] == '' ? 0 : $user['consultFee'],

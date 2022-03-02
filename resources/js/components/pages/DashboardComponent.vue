@@ -28,8 +28,8 @@
 
             <div class="form" v-if="modal.isDoctor">
                 <h6>Doctor's Name: </h6>
-                <p class="text-danger" v-for="error in doctorFormError.firstName"> {{error}}</p>
-                <p class="text-danger" v-for="error in doctorFormError.lastName"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.firstName" :key="'d0'+index"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.lastName" :key="'d1'+index"> {{error}}</p>
 
                 <div class="form-input">
                     <input :class="[{ 'error': doctorFormError.firstName  }]" type="text" placeholder="First Name" v-model="doctorForm.firstName">
@@ -38,7 +38,7 @@
                 
                 <h6>Clinic's Address: </h6>
 
-                <p class="text-danger" v-for="error in doctorFormError.clinicAddress"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.clinicAddress" :key="'d2'+index"> {{error}}</p>
 
                 <div class="form-input">
                     <input :class="[{ 'error': doctorFormError.clinicAddress }]" type="text" placeholder="Clinic Address" v-model="doctorForm.clinicAddress">
@@ -46,18 +46,18 @@
 
                 <h6>Doctor's Specialization and degree: </h6>
                 
-                <p class="text-danger" v-for="error in doctorFormError.specialization"> {{error}}</p>
-                <p class="text-danger" v-for="error in doctorFormError.degree"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.specialization" :key="'d3'+index"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.degree" :key="'d4'+index"> {{error}}</p>
 
                 <div class="form-input flex-column">
                     <input :class="[{ 'error': doctorFormError.specialization}]" type="text" placeholder="Specialization" v-model="doctorForm.specialization">
-                    <input accept=".pdf, .doc, .docx, .pptx"  :class="[{ 'error': doctorFormError.degree }, 'form-control mt-2']" type="file" ref="degree" @change="addDoctorFile('degree', true)">
+                    <input :class="[{ 'error': doctorFormError.degree }, 'form-control mt-2']" type="text" placeholder="Degree" v-model="doctorForm.degree">
                 </div>
 
                 <h6> Doctor's Phone and Picture</h6>
                 
-                <p class="text-danger" v-for="error in doctorFormError.phone"> {{error}}</p>
-                <p class="text-danger" v-for="error in doctorFormError.photo"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.phone" :key="'d5'+index"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.photo" :key="'d6'+index"> {{error}}</p>
 
                 <div class="form-input flex-column">
                     <input :class="[{ 'error': doctorFormError.phone }, 'w-100']" type="text" placeholder="Phone number" v-model="doctorForm.phone">
@@ -66,7 +66,7 @@
 
                 <h6> Doctor's Gender and Consult Fee</h6>
                 
-                <p class="text-danger" v-for="error in doctorFormError.consultFee"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.consultFee" :key="'d7'+index"> {{error}}</p>
 
                 <div class="form-input">
                     <div class='d-flex align-items-center'>
@@ -79,7 +79,7 @@
 
                 <h6> Doctor's Email</h6>
 
-                <p class="text-danger" v-for="error in doctorFormError.email"> {{error}}</p>
+                <p class="text-danger" v-for="(error, index) in doctorFormError.email" :key="'d8'+index"> {{error}}</p>
                 
                 <div class="form-input">
                     <input :class="[{ 'error': doctorFormError.email }]" type="email" placeholder="Doctor's Email" v-model="doctorForm.email">
@@ -102,11 +102,38 @@
             </div>
 
             <div class="form" v-else>
-                Announcement Form here
+
+                <h6>Title: </h6>
+                <p class="text-danger" v-for="(error, index) in announceFormError.title" :key="'a0'+index"> {{error}}</p>
+                <div class="form-input">
+                    <input :class="[{ 'error': announceFormError.title  }]" type="text" placeholder="Title" v-model="announceForm.title">
+                </div>
+                
+                <h6>Category: </h6>
+                <p class="text-danger" v-for="(error, index) in announceFormError.category" :key="'a1'+index"> {{error}}</p>
+                <div class="form-input">
+                    <input :class="[{ 'error': announceFormError.category  }]" type="text" placeholder="Category" v-model="announceForm.category">
+                </div>
+
+                <h6>Picture (optional): </h6>
+
+                <p class="text-danger" v-for="(error, index) in announceFormError.photoUrl" :key="'a2'+index"> {{error}}</p>
+                <div class="form-input">
+                    <input accept=".png, .jpeg, .jpg,"  :class="[{ 'error': announceFormError.photoUrl }, 'form-control']" type="file" ref="photoUrl" @change="announcePhoto()">
+                </div>
+
+
+                <h6>Body: </h6>
+                <p class="text-danger" v-for="(error, index) in announceFormError.body" :key="'a3'+index"> {{error}}</p>
+                <div class="form-input">
+                    <textarea :class="[{ 'error': announceFormError.body  }]" v-model="announceForm.body" cols="30" rows="10" class="w-100" style="resize: none;"></textarea>
+                </div>
+
+
             </div>
 
-            <template #modal-footer="ok">
-                <b-button size="md" variant="outline-success" @click="addOrUpdate()"> {{modal.operation}} Doctor </b-button>
+            <template #modal-footer>
+                <b-button size="md" variant="outline-success" @click="addOrUpdate()"> {{modal.operation}} {{ modal.isDoctor ? 'Doctor' : 'Announcement' }} </b-button>
             </template>
 
         </b-modal>
@@ -143,6 +170,22 @@
                     operation: '',
                 },
 
+                announceForm: {
+                    title: '',
+                    category: '',
+                    photoUrl: '',
+                    body: '',
+                    id: '',
+                    oldPhoto: '',
+                },
+
+                announceFormError: {
+                    title: '',
+                    category: '',
+                    photoUrl: '',
+                    body: '',
+                },
+                
                 doctorForm: {
                     firstName: '',
                     lastName: '',
@@ -179,10 +222,43 @@
         methods:{
 
             // Update Announcement Methods
-                updateAnnouncement(){ alert("update Announcement")},
+                updateAnnouncement(){ 
+                    let self = this
+                    let response = this.$refs['announcement-component'].updateAnnouncement(this.announceForm)
+                    
+                    response.then( function (data){
+                        if(data.hasError){
+                            self.populateError(data)
+                        }
+                        else if (data.error){
+                            self.$refs['modal'].hide()
+                            self.error = data.error;
+                            self.alertBackground = "danger"
+                            self.showAlert()
+                        }
+                        else{
+
+                            let length = self.announcementsData.length
+
+                            for(var i = 0; i < length; i++){
+                                if(self.announcementsData[i].id == self.announceForm.id){
+                                    self.announcementsData.splice(i, 1, JSON.parse(data.announce));
+                                    break;
+                                }
+                            }
+                            
+                            self.$refs['modal'].hide()
+                            self.error = data.success;
+                            self.alertBackground = "success"
+                            self.neutralizeAnnounceForm()
+                            self.showAlert()
+                        }
+                    })
+                },
             // End
 
             // Update Announcement Methods
+                
                 updateDoctor(){
                     
                     let self = this
@@ -221,9 +297,56 @@
 
             // Add Announcement Methods
                 addAnnouncement(){
-                    // let response = this.$refs['announcement-component'].addAnnouncement(this.announcementForm)
-                    // this.$refs['announcement-component'].addAnnouncement()
-                    alert("ADD announcement")
+                    let self = this
+                    let response = this.$refs['announcement-component'].addAnnouncement(this.announceForm)
+
+                    response.then( function (data){
+                        if(data.hasError){
+                            self.populateError(data)
+                        }
+                        else if (data.error){
+                            self.$refs['modal'].hide()
+                            self.error = data.error;
+                            self.alertBackground = "danger"
+                            self.showAlert()
+                        }
+                        else{
+                            self.announcementsData.push( JSON.parse(data.announce) )
+                            self.$refs['modal'].hide()
+                            self.error = data.success;
+                            self.alertBackground = "success"
+                            self.neutralizeAnnounceForm()
+                            self.showAlert()
+                        }
+                    })
+                },
+
+                announcePhoto(){
+                    this.announceForm.photoUrl = this.$refs['photoUrl'].files[0]
+                },
+
+                neutralizeAnnounceForm(){
+                    this.announceForm = {
+                        title: '',
+                        category: '',
+                        photoUrl: '',
+                        body: '',
+                        id: '',
+                    }
+
+                    this.announceFormError = {
+                        title: '',
+                        category: '',
+                        photoUrl: '',
+                        body: '',
+                    }
+                },
+
+                populateError(data){
+                    this.announceFormError.title = data.title 
+                    this.announceFormError.category = data.category
+                    this.announceFormError.photoUrl = data.photo
+                    this.announceFormError.body = data.body
                 },
             // End
 
@@ -243,9 +366,8 @@
                             self.showAlert()
                         }
                         else{
-                            console.log( JSON.parse(data.doctor) )
+                            
                             self.doctorData.push( JSON.parse(data.doctor) )
-                            console.log(self.doctorData)
                             self.$refs['modal'].hide()
                             self.error = data.success;
                             self.alertBackground = "success"
@@ -324,15 +446,31 @@
                 this.showAlert()
                 
             },
+
+            successDeleteAnnounce(message, id){
+                let length = this.announcementsData.length
+
+                for(var i = 0; i < length; i++){
+                    if(this.announcementsData[i].id == id){
+                        this.announcementsData.splice(i, 1);
+                        break;
+                    }
+                }
+                
+                this.error = message
+                this.alertBackground = "success"
+                this.showAlert()
+                
+            },
  
             showModal(isDoctor, operation, id){
                 if( operation == "Update"){
                     if (isDoctor) this.populateDoctorForm(id)
-                    // else this.populateAnnouncementForm(id)
+                    else this.populateAnnouncementForm(id)
                 }
                 else if(operation != this.modal.operation){
                     if (isDoctor) this.neutralizeDoctorForm()
-                    // else this.neutralizeAnouncementForm()
+                    else this.neutralizeAnnounceForm()
                 }
 
                 if(isDoctor){
@@ -367,7 +505,26 @@
                 this.doctorForm.consultFee = data.consultFee
                 this.doctorForm.email = data.email
                 this.doctorForm.id = id
+                this.doctorForm.degree = data.degree
                 
+            },
+
+            populateAnnouncementForm(id){
+                let length = this.announcementsData.length
+                let data = ''
+
+                for(var i = 0; i < length; i++){
+                    if(this.announcementsData[i].id == id){
+                        data = this.announcementsData[i]
+                        break;
+                    }
+                }  
+
+                this.announceForm.title = data.title
+                this.announceForm.category = data.category
+                this.announceForm.body = data.body
+                this.announceForm.id = id     
+                this.announceForm.oldPhoto = data.photoUrl
             },
 
             addOrUpdate(){
@@ -380,9 +537,9 @@
             showAlert() { this.dismissCountDown = this.dismissSecs },
         },
 
-        mouted(){
-            console.log(this.announcements)
-        },
+        // mouted(){
+        //     console.log(this.announcements)
+        // },
         
     }
 </script>

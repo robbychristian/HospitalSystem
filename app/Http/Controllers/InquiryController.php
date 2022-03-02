@@ -28,7 +28,7 @@ class InquiryController extends Controller
         foreach ($documents as $document) {
             $data = $document->data();
             $data['id'] = $document->id();
-            $data['joindate'] = Carbon::parse($data['joindate'])->format('F d, Y');
+            $data['joindate'] = Carbon::parse($data['joinDate'])->format('F d, Y');
             $data['age'] = Carbon::parse($data['birthdate'])->diff(Carbon::now())->y;
 
             array_push(

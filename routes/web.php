@@ -12,6 +12,7 @@ use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\AnnouncementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,12 @@ use App\Http\Controllers\EmailController;
 |
 */
 
+Route::prefix('announce')->name('announce.')->group(function(){
+    Route::post('/add', [AnnouncementController::class, 'add']);
+    Route::post('/delete', [AnnouncementController::class, 'delete']);
+    Route::post('/update', [AnnouncementController::class, 'update']);
+});
+
 Route::prefix('test')->name('test.')->group(function () {
     Route::get('/', [TestController::class, 'index']);
     Route::get('/calendar', [CalendarController::class, 'index']);
@@ -34,7 +41,6 @@ Route::prefix('test')->name('test.')->group(function () {
 Route::prefix('dashboard')->name('dashboard.')->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('index');
 });
-
 
 Route::prefix('email')->name('email.')->group(function(){
     Route::get('/', [EmailController::class, 'index'])->name('index');
@@ -59,6 +65,9 @@ Route::post('/offline', [LoginController::class, 'offline']);
 
 Route::prefix('patient')->name('patient.')->group(function () {
     Route::get('/', [PatientController::class, 'index']);
+    Route::post('/add', [PatientController::class, 'add']);
+    Route::post('/delete', [PatientController::class, 'delete']);
+    Route::post('/update', [PatientController::class, 'update']);
 });
 Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::get('/', [CalendarController::class, 'index']);

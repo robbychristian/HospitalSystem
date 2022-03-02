@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Firestore;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 use Kreait\Firebase\Contract\Storage;
 
@@ -39,14 +40,23 @@ class DashboardController extends Controller
         //     }
         // }
 
-        $doctors = User::where('isAdmin', false)->get();
-        
-        $documents = $this->firestore->database()->collection('Announcements')->documents()->rows();
+        $doctors = [];
+        // ->where('doctor_id', '==', Auth::user()->id_fb)
+        $documents = $this->firestore->database()->collection("Announcements");
+
+        if( Auth::user()->isAdmin){
+            $documents = $documents->documents()->rows();
+            $doctors = User::where('isAdmin', false)->get();
+        }
+        else{
+            $documents = $documents->where('author_id', '==', Auth::user()->id_fb)->documents()->rows();
+        }
+
         $announcements = [];
         foreach ($documents as $document) {
             $data = $document->data();
             $data['id'] = $document->id();
-            $data['joindate'] = Carbon::parse($data['joindate'])->format('F d, Y');
+            $data['date'] = Carbon::parse($data['date'])->format('F d, Y');
 
             array_push( $announcements, $data );
         }

@@ -140,6 +140,10 @@ class EmailController extends Controller
         $user->isVerified = true;
         $user->save();
 
+        $this->firestore->database()->collection('Doctors')->document($user->id_fb)->update([
+            ['path' => 'isVerified', 'value' => true],
+        ]);
+
         return [ 'success' => 'yes' ] ;
     }
 }

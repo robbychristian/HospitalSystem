@@ -97,11 +97,7 @@
             showModal(isDoctor, operation, id){
                 this.$parent.showModal(isDoctor, operation, id);
             },
-
-            showUpdateModal(isDoctor){
-                this.$parent.showUpdateModal(isDoctor);
-            },
-
+            
             addDoctor(doctorForm){
 
                 const filePhoto = new FormData();

@@ -5,17 +5,15 @@
             <h4> Manage <b>Announcement</b></h4>
 
             <div class="tab-action">
-                <b-button type="button" @click="showAddModal(false)" class="btn btn-add"> <i class="fa-solid fa-plus"></i> Post</b-button>
+                <b-button type="button" @click="showModal(false, 'Add', 0)" class="btn btn-add"> <i class="fa-solid fa-plus"></i> Post</b-button>
 
                 <input type="text" v-model="keyword">
-
-                <!-- <select v-model="filterBy">
-                    <option value="name">Name</option>
-                    <option value="clinicAddress">Address</option>
-                    <option value="email">Email</option>
-                    <option value="specialization">Specialization</option>
-                </select> -->
-
+                <select v-model="filterBy">
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                    <option value="date">Date</option>
+                    <option value="category">Category</option>
+                </select>
             </div>
         </div>
 
@@ -29,8 +27,8 @@
         >
         
         <template #cell(action)="data">
-            <button class="btn bg-warning" @click="updateDoctor(data.item.id, data.item.id_fb, data.item.name)"><i class="fa-solid fa-pencil"></i></button>
-            <button class="btn bg-danger" @click="deleteDoctor(data.item.id, data.item.id_fb, data.item.name)"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn bg-warning" @click="showModal(false, 'Update', data.item.id)"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn bg-danger" @click="deleteAnnouncement(data.item.id, data.item.photoUrl, data.item.title)"><i class="fa-solid fa-trash"></i></button>
         </template>
 
 
@@ -49,33 +47,36 @@
                 currentPage: 1,
                 
                 keyword: '',
-                filterBy: 'name',
-
-                announcements: this.announcementData == '' ? [] : this.announcementData,
+                filterBy: 'title',
+                announcements: this.announcementData,
                 
                 fields: [
                     {
-                        key: 'name', 
-                        label: 'Name', 
+                        key: 'title', 
+                        label: 'Title', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
-                        key: 'specialization', 
-                        label: 'Specialization', 
+                        key: 'author', 
+                        label: 'Author', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
-                        key: 'clinicAddress', 
-                        label: 'Address', 
+                        key: 'date', 
+                        label: 'Date', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
-                        key: 'email', 
-                        label: 'Email', 
+                        key: 'category', 
+                        label: 'Category', 
                         sortable: true,
+                        tdClass: 'text-hidden-ellipsis',
                     },
                     
                     {
@@ -87,56 +88,64 @@
         },
 
         methods:{
-            showAddModal(isDoctor){
-                this.$parent.showAddModal(isDoctor);
+            showModal(isDoctor, operation, id){
+                this.$parent.showModal(isDoctor, operation, id);
             },
 
-            addAnnouncement(){
-                alert("HAHAHA")
-                // const filePhoto = new FormData();
-                // filePhoto.append('degree', addForm.degree)
-                // filePhoto.append('photo', addForm.photo)
-                // filePhoto.append('firstName', addForm.firstName)
-                // filePhoto.append('lastName', addForm.lastName)
-                // filePhoto.append('clinicAddress', addForm.clinicAddress)
-                // filePhoto.append('specialization', addForm.specialization)
-                // filePhoto.append('gender', addForm.gender)
-                // filePhoto.append('phone', addForm.phone)
-                // filePhoto.append('consultFee', addForm.consultFee)
-                // filePhoto.append('email', addForm.email)
-                // filePhoto.append('about', addForm.about)
+            addAnnouncement(announceForm){
+               const filePhoto = new FormData();
+                filePhoto.append('title', announceForm.title)
+                filePhoto.append('body', announceForm.body)
+                filePhoto.append('category', announceForm.category)
+                filePhoto.append('photo', announceForm.photoUrl)
+    
 
-                // return axios.post('/doctor/add/', filePhoto)
-                // .then( function (response){
-                //     return response.data
-                // })
-                // .catch( function (error){
-                //     console.log(error);
-                // });
+                return axios.post('/announce/add/', filePhoto)
+                .then( function (response){
+                    return response.data
+                })
+                .catch( function (error){
+                    console.log(error);
+                });
             },
 
-            deleteAnnouncement(id, id_fb, title){
+            deleteAnnouncement(id, photoUrl, title){
                 if( confirm("Do you really want to delete? " + title) ){
-                    // let self = this 
-                    // axios.post('/doctor/delete/', {
-                    //     params:{
-                    //         id: id,
-                    //         id_fb: id_fb,
-                    //     },
-                    // })
-                    // .then( function (response){
-                    //     if(response.data.success){
-                    //         self.$parent.successDeleteDoctor( response.data.success, id)
-                    //     }
-                    // })
-                    // .catch( function (error){
-                    //     console.log(error);
-                    // });
+                    let self = this 
+                    axios.post('/announce/delete/', {
+                            id: id,
+                            photoUrl: photoUrl, 
+                    })
+                    .then( function (response){
+                        if(response.data.success){
+                            self.$parent.successDeleteAnnounce( response.data.success, id)
+                        }
+                    })
+                    .catch( function (error){
+                        console.log(error);
+                    });
                 }
 
             },
 
-            updateAnnouncement(id, id_fb, name){},
+            updateAnnouncement(announceForm){
+
+                const filePhoto = new FormData();
+                filePhoto.append('title', announceForm.title)
+                filePhoto.append('body', announceForm.body)
+                filePhoto.append('category', announceForm.category)
+                filePhoto.append('photo', announceForm.photoUrl)
+                filePhoto.append('id', announceForm.id)
+                filePhoto.append('oldPhoto', announceForm.oldPhoto)
+
+                return axios.post('/announce/update/', filePhoto)
+                .then( function (response){
+                    return response.data
+                })
+                .catch( function (error){
+                    console.log(error);
+                });
+            },
         },
 
         computed:{
@@ -152,6 +161,10 @@
                 return this.items.length
             },
         },
+
+        // mounted(){
+        //     console.log(this.announcements)
+        // }
 
     }
 </script>
