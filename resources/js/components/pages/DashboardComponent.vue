@@ -140,10 +140,6 @@
 
         <doctor-component ref="doctor-component" v-if="user.isAdmin" :doctor-data="doctorData">
         </doctor-component>
-
-        <announcement-component ref="announcement-component" :announcement-data="announcementsData">
-        </announcement-component>
-
     </div>
 </template>
 

@@ -49,12 +49,14 @@ Vue.component(
     "doctor-component",
     require("./components/parts/DoctorComponent.vue").default
 );
-Vue.component(
-    "announcement-component",
-    require("./components/parts/AnnouncementComponent.vue").default
-);
 
 // Pages
+
+Vue.component(
+    "announcement-component",
+    require("./components/pages/AnnouncementComponent.vue").default
+);
+
 Vue.component(
     "patient-component",
     require("./components/pages/PatientComponent.vue").default

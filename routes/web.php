@@ -26,6 +26,7 @@ use App\Http\Controllers\AnnouncementController;
 */
 
 Route::prefix('announce')->name('announce.')->group(function(){
+    Route::get('/', [AnnouncementController::class, 'index']);
     Route::post('/add', [AnnouncementController::class, 'add']);
     Route::post('/delete', [AnnouncementController::class, 'delete']);
     Route::post('/update', [AnnouncementController::class, 'update']);

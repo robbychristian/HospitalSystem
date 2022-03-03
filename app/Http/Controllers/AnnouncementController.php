@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Firestore;
 use Kreait\Firebase\Contract\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Validator;
 
@@ -17,6 +18,36 @@ class AnnouncementController extends Controller
         $this->storage = $storage;
         $this->middleware('auth');
         $this->middleware('verified');
+    }
+
+    public function index(){
+
+        $page="Announcement";
+        $active="announcement";
+
+        $documents = $this->firestore->database()->collection("Announcements");
+
+        if( Auth::user()->isAdmin){
+            $documents = $documents->documents()->rows();
+        }
+        else{
+            $documents = $documents->where('author_id', '==', Auth::user()->id_fb)->documents()->rows();
+        }
+
+        $announcements = [];
+        foreach ($documents as $document) {
+            $data = $document->data();
+            $data['id'] = $document->id();
+            $data['date'] = Carbon::parse($data['date'])->format('F d, Y');
+
+            array_push( $announcements, $data );
+        }
+
+        $announcements = json_encode($announcements);
+
+        
+        return view('pages.announcement')->with('page', $page)->with('active', $active)
+                                    ->with('announcements', $announcements);
     }
     
     public function create($data, $uid){
@@ -33,7 +64,7 @@ class AnnouncementController extends Controller
             'like' => null,
             'share' => null,
             'reference' => "Optional Link",
-            'state' => 'pending',
+            'state' => 'approved', // pending
             'timeStamp' => (string) now()->timestamp,
             'author' => $uid->name,
             'authorPhoto' => $uid->photoUrl,

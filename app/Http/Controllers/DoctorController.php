@@ -104,7 +104,7 @@ class DoctorController extends Controller
                 'lastName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255', ],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'degree' => ['required', 'string', 'max:255', ],
-                'photo' => ['nullable ', 'image', 'mimes:jpg,png,jpeg', ],
+                'photo' => ['required ', 'image', 'mimes:jpg,png,jpeg', ],
                 'phone' => ['required', 'numeric', 'digits_between:9,11', ],
                 // 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);

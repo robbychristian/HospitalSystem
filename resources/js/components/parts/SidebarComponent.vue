@@ -30,6 +30,11 @@
                     <h6 class="mb-0">Home</h6>
                 </a>
 
+                <a href="/announcement" :class="[{ active: active == 'announcement' ? true : false }, 'sidebar-menu']">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <h6 class="mb-0" >Announcement</h6>
+                </a>
+
 
                 <a href="/patient" :class="[{ active: active == 'patient' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-hospital-user"></i>
@@ -42,10 +47,9 @@
                     <h6 class="mb-0" >Calendar</h6>
                 </a>
 
-
                 <a href="/inquiry" :class="[{ active: active == 'inquiry' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
-                    <h6 class="mb-0">Inquiry</h6>
+                    <h6 class="mb-0">Lab request or Prescription</h6>
                 </a>
 
                 <div class="sidebar-divider"></div>
