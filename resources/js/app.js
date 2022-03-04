@@ -52,9 +52,15 @@ Vue.component(
 
 // Pages
 Vue.component(
+    "announcement-component",
+    require("./components/pages/AnnouncementComponent.vue").default
+);
+
+Vue.component(
     "patient-component",
     require("./components/pages/PatientComponent.vue").default
 );
+
 Vue.component(
     "email-verification",
     require("./components/pages/EmailVerificationComponent.vue").default

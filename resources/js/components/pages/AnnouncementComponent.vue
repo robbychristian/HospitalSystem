@@ -115,6 +115,12 @@
                 </form>
             </b-modal>
 
+            <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+                aria-controls="my-table"
+            ></b-pagination>
             <!--TABLE HEADER-->
             <div class="row mx-2">
                 <div class="col-lg-6 col-xl-6 col-md-7 col-sm-8">
@@ -193,6 +199,10 @@ export default {
 
     data() {
         return {
+            // PAGIANATION
+            perPage: 5,
+            currentPage: 1,
+
             //add announcement form
             title: "",
             body: "",
