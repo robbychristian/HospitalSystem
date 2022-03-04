@@ -1,5 +1,6 @@
 <template>
-    <div class="test-page">
+    <div class="doctor-page">
+
     </div>
 </template>
 

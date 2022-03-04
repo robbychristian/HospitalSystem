@@ -1,88 +1,116 @@
 <template>
     <div class="dashboard-page">
-        
-        <div class="alert-top">
-            <b-alert
-                :show="dismissCountDown"
-                :variant="alertBackground"
-                @dismissed="dismissCountDown=0"
-                @dismiss-count-down="countDownChanged"
-                fade
-            >
-                {{ error }} 
-            </b-alert>
-        </div>
 
         <b-modal 
-            ref="modal"
+            ref="modal-add"
             scrollable 
-            :header-class="modal.headerClass"
+            header-class="bg-dark-blue text-white modal-head"
+            size="lg"
         >
             <template #modal-header-close>
                 <i class="fa-solid fa-xmark"></i>
             </template>
         
-            <template #modal-title>
-                {{modal.operation}} <b>{{modal.title}}</b>
-            </template>
+            <template #modal-title> Add <b>Doctor</b> </template>
 
-            <div class="form" v-if="modal.isDoctor">
-                <h6>Doctor's Name: </h6>
-                <p class="text-danger" v-for="(error, index) in doctorFormError.firstName" :key="'d0'+index"> {{error}}</p>
-                <p class="text-danger" v-for="(error, index) in doctorFormError.lastName" :key="'d1'+index"> {{error}}</p>
+            <div class="form">
 
-                <div class="form-input">
-                    <input :class="[{ 'error': doctorFormError.firstName  }]" type="text" placeholder="First Name" v-model="doctorForm.firstName">
-                    <input :class="[{ 'error': doctorFormError.lastName  }, 'mt-2']" type="text" placeholder="Last Name" v-model="doctorForm.lastName">
+                <div class="form-box mt-1">
+                    <h6>Doctor's Name: </h6>
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.firstName" :key="'d0'+index"> {{error}}</p>
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.lastName" :key="'d1'+index"> {{error}}</p>
+
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.firstName  }, 'mr-15px']" type="text" placeholder="First Name" v-model="doctorForm.firstName">
+                        <input  :class="[{ 'error': doctorFormError.lastName  }]" type="text" placeholder="Last Name" v-model="doctorForm.lastName">
+                    </div>
                 </div>
                 
-                <h6>Clinic's Address: </h6>
+                <div class="form-box">
+                    
+                    <h6>Clinic's Address: </h6>
 
-                <p class="text-danger" v-for="(error, index) in doctorFormError.clinicAddress" :key="'d2'+index"> {{error}}</p>
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.clinicAddress" :key="'d2'+index"> {{error}}</p>
 
-                <div class="form-input">
-                    <input :class="[{ 'error': doctorFormError.clinicAddress }]" type="text" placeholder="Clinic Address" v-model="doctorForm.clinicAddress">
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.clinicAddress }]" type="text" placeholder="Clinic Address" v-model="doctorForm.clinicAddress">
+                    </div>
                 </div>
 
-                <h6>Doctor's Specialization and degree: </h6>
-                
-                <p class="text-danger" v-for="(error, index) in doctorFormError.specialization" :key="'d3'+index"> {{error}}</p>
-                <p class="text-danger" v-for="(error, index) in doctorFormError.degree" :key="'d4'+index"> {{error}}</p>
+                <div class="form-box">
 
-                <div class="form-input flex-column">
-                    <input :class="[{ 'error': doctorFormError.specialization}]" type="text" placeholder="Specialization" v-model="doctorForm.specialization">
-                    <input :class="[{ 'error': doctorFormError.degree }, 'form-control mt-2']" type="text" placeholder="Degree" v-model="doctorForm.degree">
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.specialization" :key="'d3'+index"> {{error}}</p>
+
+                    <div class="form-input">
+                        <h6 class="mt-1 mr-15px">Specialization: </h6> 
+                        <select :class="[{ 'error': doctorFormError.specialization}]" v-model="doctorForm.specialization">
+
+                            <option v-for="(option, index) in options" v-bind:value="option" :key="'opt'+index">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-box">
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.degree" :key="'d4'+index"> {{error}}</p>
+                    <div class="form-input">
+                        <h6 class="mr-15px"> Degree: </h6>
+                        <input :class="[{ 'error': doctorFormError.degree }]" type="text" placeholder="Degree" v-model="doctorForm.degree">
+                    </div>
                 </div>
 
-                <h6> Doctor's Phone and Picture</h6>
-                
-                <p class="text-danger" v-for="(error, index) in doctorFormError.phone" :key="'d5'+index"> {{error}}</p>
-                <p class="text-danger" v-for="(error, index) in doctorFormError.photo" :key="'d6'+index"> {{error}}</p>
+                <div class="form-box">
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.phone" :key="'d5'+index"> {{error}}</p>
 
-                <div class="form-input flex-column">
-                    <input :class="[{ 'error': doctorFormError.phone }, 'w-100']" type="text" placeholder="Phone number" v-model="doctorForm.phone">
-                    <input accept=".png, .jpeg, .jpg," :class="[{ 'error': doctorFormError.photo }, 'form-control mt-2']" type="file" ref="picture" @change="addDoctorFile('picture', false)">
+                    <div class="form-input mt-3 mt-lg-0">
+                        <h6 class="mr-15px"> Phone: </h6>
+                        <input :class="[{ 'error': doctorFormError.phone }]" type="text" placeholder="Phone number" v-model="doctorForm.phone">
+                    </div>
                 </div>
-
-                <h6> Doctor's Gender and Consult Fee</h6>
                 
-                <p class="text-danger" v-for="(error, index) in doctorFormError.consultFee" :key="'d7'+index"> {{error}}</p>
+                <div class="form-box">
+                    
+                    <h6>Picture (optional)</h6>
+                    
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.photo" :key="'d6'+index"> {{error}}</p>
 
-                <div class="form-input">
-                    <div class='d-flex align-items-center'>
-                        <input class="'form-check-input' " type="checkbox" id="flexRadioDefault1" value="true" v-model="doctorForm.gender">
-                        <label class="form-check-label mx-3" for="flexRadioDefault1"> Male </label>
+                    <div class="form-input">
+                        <input accept=".png, .jpeg, .jpg," :class="[{ 'error': doctorFormError.photo }, 'form-control']" type="file" ref="picture" @change="addPhotoFile()">
                     </div>
 
-                    <input :class="[{ 'error': doctorFormError.consultFee }, 'mt-2']" type="text" placeholder="Consult Fee" v-model="doctorForm.consultFee">
                 </div>
 
-                <h6> Doctor's Email</h6>
+                <div class="form-box">
+                    
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.consultFee" :key="'d7'+index"> {{error}}</p>
 
-                <p class="text-danger" v-for="(error, index) in doctorFormError.email" :key="'d8'+index"> {{error}}</p>
-                
-                <div class="form-input">
-                    <input :class="[{ 'error': doctorFormError.email }]" type="email" placeholder="Doctor's Email" v-model="doctorForm.email">
+                    <div class="form-input">
+                        <h6 class="mb-0 mr-15px"> Gender: </h6>
+                        <div class='d-flex align-items-center mt-3 mt-lg-0'>
+                            <input class="'form-check-input' " type="checkbox" id="flexRadioDefault1" value="true" v-model="doctorForm.gender">
+                            <label class="form-check-label mx-3" for="flexRadioDefault1"> Male </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-box">
+                    <h6> Doctor's Consult Fee</h6>
+                    
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.consultFee }]" type="text" placeholder="Consult Fee" v-model="doctorForm.consultFee">
+                    </div>
+                </div>
+
+                <div class="form-box">
+                    <h6> Doctor's Email</h6>
+
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.email" :key="'d8'+index"> {{error}}</p>
+                    
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.email }]" type="email" placeholder="Doctor's Email" v-model="doctorForm.email">
+                    </div>
                 </div>
 
                 <!-- <h6>Doctor's Password: </h6>
@@ -95,64 +123,168 @@
                     <input :class="[{ 'error': doctorFormError.password_confirmation != '' }, 'mt-2']" type="password" placeholder="Confirm Password" v-model="doctorForm.password_confirmation">
                 </div> -->
                 
-                <h6> About</h6>
-                <div class="form-input">
-                    <textarea v-model="doctorFormError.about" cols="30" rows="10" class="w-100" style="resize: none;"></textarea>
+                <div class="form-box">
+                    <h6> About</h6>
+                    <div class="form-input">
+                        <textarea v-model="doctorFormError.about" cols="30" rows="10" class="w-100" style="resize: none;"></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="form" v-else>
+            <template #modal-footer> <b-button size="md" variant="outline-success" @click="addDoctor()"> {{modal.operation}} Doctor </b-button> </template>
 
-                <h6>Title: </h6>
-                <p class="text-danger" v-for="(error, index) in announceFormError.title" :key="'a0'+index"> {{error}}</p>
-                <div class="form-input">
-                    <input :class="[{ 'error': announceFormError.title  }]" type="text" placeholder="Title" v-model="announceForm.title">
+        </b-modal>
+
+        
+        <b-modal 
+            ref="doctor-show"
+            scrollable 
+            header-class="modal-head"
+        >
+            <template #modal-header-close>
+                <i class="fa-solid fa-xmark text-dark"></i>
+            </template>
+        
+            <template #modal-title> Dr <b  style="text-transform:uppercase"> {{doctorForm.firstName}} {{ doctorForm.lastName}}</b> </template>
+
+            <div class="form">
+                <div class="form-box mt-1">
+                    <h6>Doctor's Name: </h6>
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.firstName" :key="'d0'+index"> {{error}}</p>
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.lastName" :key="'d1'+index"> {{error}}</p>
+
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.firstName  }, 'mr-15px']" type="text" placeholder="First Name" v-model="doctorForm.firstName">
+                        <input  :class="[{ 'error': doctorFormError.lastName  }]" type="text" placeholder="Last Name" v-model="doctorForm.lastName">
+                    </div>
+                </div>
+                <div class="form-box">
+                    
+                    <h6>Clinic's Address: </h6>
+
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.clinicAddress" :key="'d2'+index"> {{error}}</p>
+
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.clinicAddress }]" type="text" placeholder="Clinic Address" v-model="doctorForm.clinicAddress">
+                    </div>
+                </div>
+
+                <div class="form-box">
+
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.specialization" :key="'d3'+index"> {{error}}</p>
+
+                    <div class="form-input">
+                        <h6 class="mt-1 mr-15px">Specialization: </h6> 
+                        <select :class="[{ 'error': doctorFormError.specialization}]" v-model="doctorForm.specialization">
+
+                            <option v-for="(option, index) in options" v-bind:value="option" :key="'opt'+index">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
                 
-                <h6>Category: </h6>
-                <p class="text-danger" v-for="(error, index) in announceFormError.category" :key="'a1'+index"> {{error}}</p>
-                <div class="form-input">
-                    <input :class="[{ 'error': announceFormError.category  }]" type="text" placeholder="Category" v-model="announceForm.category">
+                <div class="form-box">
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.degree" :key="'d4'+index"> {{error}}</p>
+                    <div class="form-input">
+                        <h6 class="mr-15px"> Degree: </h6>
+                        <input :class="[{ 'error': doctorFormError.degree }]" type="text" placeholder="Degree" v-model="doctorForm.degree">
+                    </div>
                 </div>
 
-                <h6>Picture (optional): </h6>
+                <div class="form-box">
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.phone" :key="'d5'+index"> {{error}}</p>
 
-                <p class="text-danger" v-for="(error, index) in announceFormError.photoUrl" :key="'a2'+index"> {{error}}</p>
-                <div class="form-input">
-                    <input accept=".png, .jpeg, .jpg,"  :class="[{ 'error': announceFormError.photoUrl }, 'form-control']" type="file" ref="photoUrl" @change="announcePhoto()">
+                    <div class="form-input mt-3 mt-lg-0">
+                        <h6 class="mr-15px"> Phone: </h6>
+                        <input :class="[{ 'error': doctorFormError.phone }]" type="text" placeholder="Phone number" v-model="doctorForm.phone">
+                    </div>
+                </div>
+                
+                <div class="form-box">
+                    
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.consultFee" :key="'d7'+index"> {{error}}</p>
+
+                    <div class="form-input">
+                        <h6 class="mb-0 mr-15px"> Gender: </h6>
+                        <div class='d-flex align-items-center mt-3 mt-lg-0'>
+                            <input class="'form-check-input' " type="checkbox" id="flexRadioDefault1" value="true" v-model="doctorForm.gender">
+                            <label class="form-check-label mx-3" for="flexRadioDefault1"> Male </label>
+                        </div>
+                    </div>
+
                 </div>
 
-
-                <h6>Body: </h6>
-                <p class="text-danger" v-for="(error, index) in announceFormError.body" :key="'a3'+index"> {{error}}</p>
-                <div class="form-input">
-                    <textarea :class="[{ 'error': announceFormError.body  }]" v-model="announceForm.body" cols="30" rows="10" class="w-100" style="resize: none;"></textarea>
+                <div class="form-box">
+                    <h6> Doctor's Consult Fee</h6>
+                    
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.consultFee }]" type="text" placeholder="Consult Fee" v-model="doctorForm.consultFee">
+                    </div>
                 </div>
 
+                <div class="form-box">
+                    <h6> Doctor's Email</h6>
 
+                    <p class="text-danger" v-for="(error, index) in doctorFormError.email" :key="'d8'+index"> {{error}}</p>
+                    
+                    <div class="form-input">
+                        <input :class="[{ 'error': doctorFormError.email }]" type="email" placeholder="Doctor's Email" v-model="doctorForm.email">
+                    </div>
+                </div>
+
+                <!-- <h6>Doctor's Password: </h6>
+
+                <p class="text-danger" v-for="error in doctorFormError.password"> {{error}}</p>
+                <p class="text-danger" v-for="error in doctorFormError.password_confirmation"> {{error}}</p>
+
+                <div class="form-input">
+                    <input :class="[{ 'error': doctorFormError.password != '' }]" type="password" placeholder="Password" v-model="doctorForm.password">
+                    <input :class="[{ 'error': doctorFormError.password_confirmation != '' }, 'mt-2']" type="password" placeholder="Confirm Password" v-model="doctorForm.password_confirmation">
+                </div> -->
+                
+                <div class="form-box">
+                    <h6> About</h6>
+                    <div class="form-input">
+                        <textarea v-model="doctorFormError.about" cols="30" rows="10" class="w-100" style="resize: none;"></textarea>
+                    </div>
+                </div>
             </div>
 
-            <template #modal-footer>
-                <b-button size="md" variant="outline-success" @click="addOrUpdate()"> {{modal.operation}} {{ modal.isDoctor ? 'Doctor' : 'Announcement' }} </b-button>
+            <template #modal-footer> 
+                <b-button size="md" variant="danger" @click="deleteDoctor()"> <i class="fa-solid fa-trash"></i>  Delete </b-button> 
+                <b-button size="md" variant="warning" @click="updateDoctor()"> <i class="fa-solid fa-pen-to-square"></i> Update </b-button> 
             </template>
 
         </b-modal>
 
+        <div class="alert-top">
+            <b-alert
+                :show="dismissCountDown"
+                :variant="alertBackground"
+                @dismissed="dismissCountDown=0"
+                @dismiss-count-down="countDownChanged"
+                fade
+            >
+                {{ error }} 
+            </b-alert>
+        </div>
+
         <doctor-component ref="doctor-component" v-if="user.isAdmin" :doctor-data="doctorData">
         </doctor-component>
+
     </div>
 </template>
 
 <script>
     export default {
-        props:['userData', 'doctors', 'announcements'],
+        props:['userData', 'doctors'],
 
         data() {
             return { 
                 user: JSON.parse(this.userData),
 
                 doctorData: JSON.parse(this.doctors),
-                announcementsData: JSON.parse(this.announcements),
 
                 alertBackground: '',
                 error: '',
@@ -160,33 +292,47 @@
                 dismissCountDown: 0,
 
                 modal:{
-                    headerClass: '',
                     title: '',
-                    isDoctor: null,
                     operation: '',
                 },
 
-                announceForm: {
-                    title: '',
-                    category: '',
-                    photoUrl: '',
-                    body: '',
-                    id: '',
-                    oldPhoto: '',
-                },
+                options:[
+                    'Pediatricians' ,
+                    'Cardiologist',
+                    'Lung specialist (Pulmonologists)',
+                    'Cancer Specialist (Oncologist)',
+                    'Endocrinologist',
+                    'Dentistry (Dentist)',
+                    'Dietitian & Nutrition Specialist',
+                    'Eye Specialist (Ophthalmologists)',
+                    'Ears, Nose, Throat (ENT) Specialist',
+                    'Gastroenterologist',
+                    'Gynecologists & Obstetricians',
+                    'Hematologist',
+                    'Homeopathic', //
+                    'Medicine',
+                    'Neuromedicine',
+                    'Neuro-Surgery',
+                    'Oncology (Cancer)',
+                    'Orthopedic Surgeons',
+                    'Physical Medicine',
+                    'Pain Medicine',
+                    'Plastic Surgery',
+                    'Physiotherapists',
+                    'Psychiatrist',
+                    'Sex & Skin VD (Dermatology)',
+                    'Thyroid & Hormone',
+                    'Urology Specialist',
+                    'Urologists (Nephrology)',
+                    'Unani & Ayurveda',
+                    'Vascular Surgery',
+                ],
 
-                announceFormError: {
-                    title: '',
-                    category: '',
-                    photoUrl: '',
-                    body: '',
-                },
-                
                 doctorForm: {
                     firstName: '',
                     lastName: '',
                     clinicAddress: '',
-                    specialization: '',
+                    specialization: 'Pediatricians',
                     phone: '',
                     gender: false,
                     consultFee: '',
@@ -195,6 +341,7 @@
                     photo: '',
                     about: '',
                     id: '',
+                    id_fb: '',
                     // password: '',
                     // password_confirmation: '',
                 },
@@ -217,269 +364,52 @@
 
         methods:{
 
-            // Update Announcement Methods
-                updateAnnouncement(){ 
-                    let self = this
-                    let response = this.$refs['announcement-component'].updateAnnouncement(this.announceForm)
-                    
-                    response.then( function (data){
-                        if(data.hasError){
-                            self.populateError(data)
-                        }
-                        else if (data.error){
-                            self.$refs['modal'].hide()
-                            self.error = data.error;
-                            self.alertBackground = "danger"
-                            self.showAlert()
-                        }
-                        else{
-
-                            let length = self.announcementsData.length
-
-                            for(var i = 0; i < length; i++){
-                                if(self.announcementsData[i].id == self.announceForm.id){
-                                    self.announcementsData.splice(i, 1, JSON.parse(data.announce));
-                                    break;
-                                }
-                            }
-                            
-                            self.$refs['modal'].hide()
-                            self.error = data.success;
-                            self.alertBackground = "success"
-                            self.neutralizeAnnounceForm()
-                            self.showAlert()
-                        }
-                    })
-                },
-            // End
-
-            // Update Announcement Methods
-                
-                updateDoctor(){
-                    
-                    let self = this
-                    let response = this.$refs['doctor-component'].updateDoctor(this.doctorForm)
-
-                    response.then( function (data){
-                        if(data.hasError){
-                            self.populateAddError(data)
-                        }
-                        else if (data.error){
-                            self.$refs['modal'].hide()
-                            self.error = data.error;
-                            self.alertBackground = "danger"
-                            self.showAlert()
-                        }
-                        else{
-
-                            let length = self.doctorData.length
-
-                            for(var i = 0; i < length; i++){
-                                if(self.doctorData[i].id == self.doctorForm.id){
-                                    self.doctorData.splice(i, 1, JSON.parse(data.doctor));
-                                    break;
-                                }
-                            }
-                            
-                            self.$refs['modal'].hide()
-                            self.error = data.success;
-                            self.alertBackground = "success"
-                            self.neutralizeDoctorForm()
-                            self.showAlert()
-                        }
-                    })
-                },
-            // End
-
-            // Add Announcement Methods
-                addAnnouncement(){
-                    let self = this
-                    let response = this.$refs['announcement-component'].addAnnouncement(this.announceForm)
-
-                    response.then( function (data){
-                        if(data.hasError){
-                            self.populateError(data)
-                        }
-                        else if (data.error){
-                            self.$refs['modal'].hide()
-                            self.error = data.error;
-                            self.alertBackground = "danger"
-                            self.showAlert()
-                        }
-                        else{
-                            self.announcementsData.push( JSON.parse(data.announce) )
-                            self.$refs['modal'].hide()
-                            self.error = data.success;
-                            self.alertBackground = "success"
-                            self.neutralizeAnnounceForm()
-                            self.showAlert()
-                        }
-                    })
-                },
-
-                announcePhoto(){
-                    this.announceForm.photoUrl = this.$refs['photoUrl'].files[0]
-                },
-
-                neutralizeAnnounceForm(){
-                    this.announceForm = {
-                        title: '',
-                        category: '',
-                        photoUrl: '',
-                        body: '',
-                        id: '',
-                    }
-
-                    this.announceFormError = {
-                        title: '',
-                        category: '',
-                        photoUrl: '',
-                        body: '',
-                    }
-                },
-
-                populateError(data){
-                    this.announceFormError.title = data.title 
-                    this.announceFormError.category = data.category
-                    this.announceFormError.photoUrl = data.photo
-                    this.announceFormError.body = data.body
-                },
-            // End
-
-            // Add Doctor Methods
-                addDoctor(){
-                    let self = this
-                    let response = this.$refs['doctor-component'].addDoctor(this.doctorForm)
-
-                    response.then( function (data){
-                        if(data.hasError){
-                            self.populateAddError(data)
-                        }
-                        else if (data.error){
-                            self.$refs['modal'].hide()
-                            self.error = data.error;
-                            self.alertBackground = "danger"
-                            self.showAlert()
-                        }
-                        else{
-                            
-                            self.doctorData.push( JSON.parse(data.doctor) )
-                            self.$refs['modal'].hide()
-                            self.error = data.success;
-                            self.alertBackground = "success"
-                            self.neutralizeDoctorForm()
-                            self.showAlert()
-                        }
-                    })
-                },
-
-                addDoctorFile(refName, isDegree){
-                    if(isDegree)
-                        this.doctorForm.degree = this.$refs[refName].files[0]
-                    else
-                        this.doctorForm.photo = this.$refs[refName].files[0]
-                },
-
-                populateAddError(data){
-                    this.doctorFormError.firstName = data.firstName 
-                    this.doctorFormError.lastName = data.lastName
-                    this.doctorFormError.clinicAddress = data.clinicAddress
-                    this.doctorFormError.specialization = data.specialization
-                    this.doctorFormError.phone = data.phone
-                    this.doctorFormError.consultFee = data.consultFee
-                    this.doctorFormError.email = data.email
-                    this.doctorFormError.degree = data.degree
-                    this.doctorFormError.photo = data.photo
-                    // this.doctorFormError.password = data.password
-                    // this.doctorFormError.password_confirmation = data.password_confirmation
-                },
-
-                neutralizeDoctorForm(){
-                    this.doctorForm = {
-                        firstName: '',
-                        lastName: '',
-                        clinicAddress: '',
-                        specialization: '',
-                        phone: '',
-                        gender: false,
-                        consultFee: '',
-                        email: '',
-                        degree: '',
-                        photo: '',
-                        about: '',
-                        // password: '',
-                        // password_confirmation: '',
-                    }
-
-                    this.doctorFormError =  {
-                        firstName: '',
-                        lastName: '',
-                        clinicAddress: '',
-                        specialization: '',
-                        phone: '',
-                        consultFee: '',
-                        email: '',
-                        degree: '',
-                        photo: '',
-                        // password: '',
-                        // password_confirmation: '',
-                    }
-                },
-            // End
-
-            successDeleteDoctor(message, id){
-                let length = this.doctorData.length
-
-                for(var i = 0; i < length; i++){
-                    if(this.doctorData[i].id == id){
-                        this.doctorData.splice(i, 1);
-                        break;
-                    }
-                }
-                
-                this.error = message
-                this.alertBackground = "success"
-                this.showAlert()
-                
+            populateFormError(data){
+                this.doctorFormError.firstName = data.firstName 
+                this.doctorFormError.lastName = data.lastName
+                this.doctorFormError.clinicAddress = data.clinicAddress
+                this.doctorFormError.specialization = data.specialization
+                this.doctorFormError.phone = data.phone
+                this.doctorFormError.consultFee = data.consultFee
+                this.doctorFormError.email = data.email
+                this.doctorFormError.degree = data.degree
+                this.doctorFormError.photo = data.photo
+                // this.doctorFormError.password = data.password
+                // this.doctorFormError.password_confirmation = data.password_confirmation
             },
 
-            successDeleteAnnounce(message, id){
-                let length = this.announcementsData.length
-
-                for(var i = 0; i < length; i++){
-                    if(this.announcementsData[i].id == id){
-                        this.announcementsData.splice(i, 1);
-                        break;
-                    }
-                }
-                
-                this.error = message
-                this.alertBackground = "success"
-                this.showAlert()
-                
-            },
- 
-            showModal(isDoctor, operation, id){
-                if( operation == "Update"){
-                    if (isDoctor) this.populateDoctorForm(id)
-                    else this.populateAnnouncementForm(id)
-                }
-                else if(operation != this.modal.operation){
-                    if (isDoctor) this.neutralizeDoctorForm()
-                    else this.neutralizeAnnounceForm()
+            neutralizeDoctorForm(){
+                this.doctorForm = {
+                    firstName: '',
+                    lastName: '',
+                    clinicAddress: '',
+                    specialization: 'Pediatricians',
+                    phone: '',
+                    gender: false,
+                    consultFee: '',
+                    email: '',
+                    degree: '',
+                    photo: '',
+                    about: '',
+                    id: '',
+                    id_fb: '',
+                    // password: '',
+                    // password_confirmation: '',
                 }
 
-                if(isDoctor){
-                    this.modal.headerClass = "bg-dark-blue text-white modal-head"
-                    this.modal.title = "Doctor"
+                this.doctorFormError =  {
+                    firstName: '',
+                    lastName: '',
+                    clinicAddress: '',
+                    specialization: '',
+                    phone: '',
+                    consultFee: '',
+                    email: '',
+                    degree: '',
+                    photo: '',
+                    // password: '',
+                    // password_confirmation: '',
                 }
-                else{
-                    this.modal.headerClass = "bg-warning modal-head"
-                    this.modal.title = "Announcement"
-                }
-                this.modal.isDoctor = isDoctor
-                this.modal.operation = operation
-                this.$refs['modal'].show()
             },
 
             populateDoctorForm(id){
@@ -501,36 +431,58 @@
                 this.doctorForm.consultFee = data.consultFee
                 this.doctorForm.email = data.email
                 this.doctorForm.id = id
+                this.doctorForm.id_fb = data.id_fb
                 this.doctorForm.degree = data.degree
                 
             },
 
-            populateAnnouncementForm(id){
-                let length = this.announcementsData.length
-                let data = ''
+
+            successDeleteDoctor(message, id){
+                let length = this.doctorData.length
 
                 for(var i = 0; i < length; i++){
-                    if(this.announcementsData[i].id == id){
-                        data = this.announcementsData[i]
+                    if(this.doctorData[i].id == id){
+                        this.doctorData.splice(i, 1);
                         break;
                     }
-                }  
-
-                this.announceForm.title = data.title
-                this.announceForm.category = data.category
-                this.announceForm.body = data.body
-                this.announceForm.id = id     
-                this.announceForm.oldPhoto = data.photoUrl
+                }
+                
+                this.$refs['doctor-show'].hide()
+                this.error = message
+                this.alertBackground = "success"
+                this.showAlert()
+                
+                
             },
 
-            addOrUpdate(){
-                if( this.modal.operation == "Add" && this.modal.isDoctor ){ this.addDoctor() }
-                else if( this.modal.operation == "Update" && this.modal.isDoctor ){ this.updateDoctor() }
-                else if( this.modal.operation == "Add") { this.addAnnouncement() }
-                else { this.updateAnnouncement() }
+            showModal(operation, id){
+                if( operation == "Show"){
+                    this.populateDoctorForm(id)
+                }
+                else if(operation != this.modal.operation){
+                    this.neutralizeDoctorForm()
+                }
+
+                this.modal.operation = operation
+
+                if( operation == "Show"){
+                    this.$refs['doctor-show'].show()
+                }
+                else{
+                    this.$refs['modal-add'].show()
+                }
             },
+
+            
             countDownChanged(dismissCountDown) { this.dismissCountDown = dismissCountDown },
             showAlert() { this.dismissCountDown = this.dismissSecs },
+            addPhotoFile(){ this.doctorForm.photo = this.$refs['picture'].files[0] },
+
+            deleteDoctor(){ 
+                this.$refs['doctor-component'].deleteDoctor(this.doctorForm.id, this.doctorForm.id_fb, this.doctorForm.firstName + " " + this.doctorForm.lastName) 
+            },
+            addDoctor(){ this.$refs['doctor-component'].addDoctor(this.doctorForm) },
+            updateDoctor(){ this.$refs['doctor-component'].updateDoctor(this.doctorForm) },
         },
 
         // mouted(){

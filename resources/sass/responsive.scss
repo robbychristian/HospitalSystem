@@ -12,7 +12,7 @@ $second-breakpoint: 420px;
 
 @media screen and (min-width: ($first-breakpoint + 1)) {
     .sidebar{
-        width: 90px !important;
+        width: 100px !important;
     }
 
     .main-page{
@@ -26,8 +26,10 @@ $second-breakpoint: 420px;
 
 @media screen and (min-width: $second-breakpoint) and (max-width: ($first-breakpoint)) {
     .sidebar{
+        position: fixed;
         width: 0px;
         margin-right: 0px;
+        z-index: 99;
     }
 
     .main-page{
@@ -45,7 +47,33 @@ $second-breakpoint: 420px;
                     }
                 }
             }
+
+            .inquiry-page{
+                .inquiry-content{
+                    .patient-box{
+                        .patient-info{
+                            margin-top: 1.5rem;
+                        }
+                    }
+                }
+            }
         }
+    }
+}
+
+@media screen and (max-width: 999px) {
+    .horizon-group{
+        flex-direction: column !important;
+        
+        .form-input{
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            input[type=text]{
+                margin-right: 0px !important;
+                width: 100% !important;
+            }
+        }
+
     }
 }
 
@@ -73,6 +101,16 @@ $second-breakpoint: 420px;
                         
                         .tab-action{
                             justify-content: flex-end;
+                        }
+                    }
+                }
+            }
+
+            .inquiry-page{
+                .inquiry-content{
+                    .patient-box{
+                        .patient-info{
+                            margin-top: 1.5rem;
                         }
                     }
                 }

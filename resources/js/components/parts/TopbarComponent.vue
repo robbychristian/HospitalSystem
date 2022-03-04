@@ -25,7 +25,7 @@
 
         methods:{
             openSidebar(){
-                document.getElementById('sidebar').style.setProperty( 'width', '90px');
+                document.getElementById('sidebar').style.setProperty( 'width', '100px');
                 this.isOpen = true;
             },
 

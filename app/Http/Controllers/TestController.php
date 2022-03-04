@@ -24,14 +24,19 @@ class TestController extends Controller
     }
 
     public function index(){
-        //http://storage.googleapis.com/[BUCKET_NAME]/[OBJECT_NAME]
-        $nameBucket = $this->storage->getBucket()->name();
-        $object = $this->storage->getBucket()->object(Auth::user()->photoUrl);
+        $page="Test";
+        $active="test";
 
-        dd($object->signedUrl(now()->addDays(1)));
-        dd(
-            "http://storage.googleapis.com/" . $nameBucket .  $object->identity()['object']
-        );
+        return view('test')->with('page', $page)->with('active', $active);
+
+        // http://storage.googleapis.com/[BUCKET_NAME]/[OBJECT_NAME]
+        // $nameBucket = $this->storage->getBucket()->name();
+        // $object = $this->storage->getBucket()->object(Auth::user()->photoUrl);
+
+        // dd($object->signedUrl(now()->addDays(1)));
+        // dd(
+        //     "http://storage.googleapis.com/" . $nameBucket .  $object->identity()['object']
+        // );
         
         // $user = $this->firestore->database()->collection('Doctors')->document('d00af10222d741648e2c');
 

@@ -32,7 +32,10 @@ class DoctorController extends Controller
         $name  = $data['firstName'] . ' ' . $data['lastName'];
         $data['password'] = "Qwerty@123";
         $data['joindate'] = now()->format('d-m-Y');
-        $data['photo'] = $this->addFile($request->photo, $user->id());
+        
+        if($request->hasFile('photo')){
+            $data['photo'] = $this->addFile($request->photo, $user->id());
+        }
 
         $user->set([
             'id' => $user->id(),
@@ -104,7 +107,7 @@ class DoctorController extends Controller
                 'lastName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255', ],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'degree' => ['required', 'string', 'max:255', ],
-                'photo' => ['required ', 'image', 'mimes:jpg,png,jpeg', ],
+                'photo' => ['nullable ', 'image', 'mimes:jpg,png,jpeg', ],
                 'phone' => ['required', 'numeric', 'digits_between:9,11', ],
                 // 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
@@ -203,7 +206,7 @@ class DoctorController extends Controller
         $doctor = User::find($data['id']);
         $data['gender'] = $data['gender'] == 'true' ? true : false;
 
-        if($data['photo'] != null || $data['photo'] != ''){
+        if($request->hasFile('photo')){
             $data['photo'] = $this->addFile($request->photo, $doctor->id_fb);
             $this->deleteObject($doctor->photoUrl);
         }
@@ -214,6 +217,7 @@ class DoctorController extends Controller
         $doctor = $this->updateUser($data, $doctor);
 
         return [
+            'hasError', false,
             'success' => 'Success! Doctor has been updated!',
             'doctor' => json_encode($doctor),
         ];
@@ -227,14 +231,17 @@ class DoctorController extends Controller
         if($validator->fails()){
             return $validator->errors()->add('hasError', true);
         }
-
         $user = $this->create($data, $request);
 
         if($user == null){
-            return ['error' => 'error in database please make sure you have internet or refresh the page!'];
+            return [
+                'hasError' => false,
+                'error' => 'error in database please make sure you have internet or refresh the page!'
+            ];
         }
 
         return [
+            'hasError' => false,
             'success' => 'Success! Doctor has been added!',
             'doctor' => json_encode($user),
         ];
@@ -244,10 +251,14 @@ class DoctorController extends Controller
         $id = $request->params['id'];
         $id_fb = $request->params['id_fb'];
 
+
         $doctor = User::find($id);
 
         $name = $doctor->name;
-        $this->deleteObject($doctor->photoUrl);
+
+        if( $doctor->photoUrl != null){
+            $this->deleteObject($doctor->photoUrl);
+        }
 
         $doctor->delete();
         $this->firestore->database()->collection('Doctors')->document($id_fb)->delete();

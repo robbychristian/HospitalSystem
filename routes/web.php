@@ -25,7 +25,7 @@ use App\Http\Controllers\AnnouncementController;
 |
 */
 
-Route::prefix('announce')->name('announce.')->group(function(){
+Route::prefix('announcement')->name('announce.')->group(function(){
     Route::get('/', [AnnouncementController::class, 'index']);
     Route::post('/add', [AnnouncementController::class, 'add']);
     Route::post('/delete', [AnnouncementController::class, 'delete']);
@@ -76,6 +76,7 @@ Route::prefix('calendar')->name('calendar.')->group(function () {
 
 Route::prefix('inquiry')->name('inquiry.')->group(function () {
     Route::get('/', [InquiryController::class, 'index']);
+    Route::post('/image', [InquiryController::class, 'signedUrl']);
 });
 
 

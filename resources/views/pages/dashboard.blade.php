@@ -3,7 +3,7 @@
 @section('page')
     <dashboard-component 
         user-data="{{ json_encode( Auth::user() )}}" 
-        doctors="{{ $doctors }}" announcements="{{ $announcements }}"
+        doctors="{{ $doctors }}"
     >
     </dashboard-component>
 @endsection
