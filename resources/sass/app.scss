@@ -17,16 +17,47 @@
 @import 'parts/topbar.scss';
 @import 'parts/sidebar.scss';
 
+.form{
+    .form-box{
+        display: flex;
+        flex-direction: column;
+        margin-top: 2rem;
+
+        .form-input{
+            display: flex;
+            width: 100%;
+            align-items: center;
+        }
+        
+        input[type=text], input[type=email], select{
+            height: 40px;
+            padding: .25rem;
+            border-radius: 3px;
+            border: solid 1px rgb(59, 59, 59);
+            outline: none;
+            
+        }
+
+        input[type=text], input[type=email]{ flex-grow: 1; }
+
+    
+        input.error::placeholder, .error { color: white; }
+        .error{ background-color: rgba(255, 0, 0, 0.5) !important; }
+        
+    }
+
+    .mr-15px{
+        margin-right: 15px;
+        margin-bottom: 0px;
+    }
+
+}
+
 // Pages
 @import 'pages/patient.scss';
 @import 'pages/inquiry.scss';
 @import 'pages/dashboard.scss';
 @import 'pages/email-verification.scss';
-// @import 'pages/announcement.scss';
-// @import 'pages/calendar.scss';
-
-
-
 
 .text-dark-green{ color: $dark-green !important; }
 .bg-dark-green{ background-color: $dark-green !important; }
@@ -70,7 +101,7 @@
 
 }
 
-.test-page, .patient-page, .inquiry-page, .dashboard-page{
+.test-page, .patient-page, .inquiry-page, .dashboard-page, .doctor-page{
     width: 100%;
     max-width: 100%;
     margin-top: 10px;

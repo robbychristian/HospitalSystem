@@ -4,174 +4,169 @@
         <div class="alert-top">
             <b-alert
                 :show="dismissCountDown"
-                variant="danger"
+                :variant="variant"
                 @dismissed="dismissCountDown=0"
                 @dismiss-count-down="countDownChanged"
                 fade
                 
             >
-                {{ error }} 
+                {{ message }} 
             </b-alert>
         </div>
 
         <div class="inquiry-content">
 
-            
             <div class="patient-box">
-                <!-- <div class="option-box">
-                    <label> Search patients: </label>
-                    <input type="text" v-model="keyword">
-                    <h6> Patient chosen: {{email.name}}</h6>
-                </div>
 
-                <div class="patient-list">
-                    <div :class="[{ 'bg-dark-green': email.name == data.name ? true : false }, 'patient-info']"
-                        v-for="data in items" :key="data.id" @click="email = data">
+                <div class="patient-pick">
+                    <h5> Patient: </h5>
 
-                        <input type="radio" v-model="email" :value="data">
-                        <img :src="data.avatar" :alt="data.name">
-                        <h6> {{data.name}}</h6>
-                    </div>
-                </div> -->
+                    <div class="patient-dropdown">
 
-                
-                <div class="form">
-                    
-                    <h6>Patients's Name: </h6>
+                        <div class="patient-button" @click="toggleDropdown()">
+                            <h5>{{name}}</h5>
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </div>
 
-                    <div class="form-input">
-                        
-                        <input :class="['mt-2']" type="text" placeholder="Patient Name">
-                    </div>
+                        <div class="patient-select" v-show="showBox">
+                            <div class="search-bar">
+                                <input type="text" v-model="keyword">
+                                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
 
-                    <h6>Title: </h6>
-
-                    <div class="form-input">
-                        
-                        <input :class="['mt-2']" type="text" placeholder="Patient Name">
-                    </div>
-
-                    <h6>Subject: </h6>
-
-                    <div class="form-input">
-                        
-                        <input :class="['mt-2']" type="text" placeholder="Patient Name">
-                    </div>
-                    
-                    <h6>Body: </h6>
-
-                    <div class="form-input">
-                        
-                        <textarea :class="['mt-2']" type="text" placeholder="Patient Name"> </textarea>
+                            <button v-for="(patient, index) in items" class="box-info border-1" :key="index" @click="pickPatient(index)">
+                                <h6>{{patient.name}}</h6>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                    
+
+                <div class="patient-info" v-if="patient_id != -1">
+                    <img :src="patient.imageUrl" alt="Image does not exist" >
+
+                    <div class="patient-details">
+                        <h6>Name: <span class="text-dark-green">{{patient.name}}</span></h6>
+                        <h6>Blood Type: <span class="text-dark-green">{{patient.bloodType}}</span></h6>
+                        <h6>Email: <span class="text-dark-green">{{patient.email}}</span></h6>
+                    </div>
+
+                </div>
+
+
             </div>
-            
-
 
             <div class="divider"></div>
 
-            <div class="file-box">
-                    <div class="input-file"
-                        @click="triggerInputFile"
-                        @drop.prevent="dropFile"
-                        @dragover.prevent
-                        @dragenter="changeDesign(true)"
-                        @dragleave="changeDesign(false)"
-                        id="input-box"
-                    >
-                        <input type="file" id="file-input" @change="addFile" accept=".pdf, .doc, .docx," hidden>
-                        Choose a file or drop it here
+            <div class="form">
+                
+                <div class="form-box">
+                    <h6> Subject (optional): </h6>
+                    <div class="form-input ">
+                        <input type="text">
                     </div>
+                </div>
+                
+                <div class="form-box">
+                    <div class="form-input flex-column align-items-start">
+                        <h6> Body (optional): </h6>
+                        <textarea cols="30" rows="10" class="w-100" style="resize: none;"></textarea>
+                    </div>
+                </div>
 
-                <h6 v-show="file">
-                    <span class="text-dark-green font-bold"> File uploaded: </span> {{file ? file.name : "" }} 
-                </h6>
+                <div class="form-box">
+                    <div class="form-input flex-column align-items-start">
+                        <h6> Prescription / Lab Request File: </h6>
+                        <input  :class="[ 'form-control']" type="file" ref="picture" @change="triggerFile()">
+                    </div>
+                </div>
+                <!-- :class="[{ 'error': doctorFormError.photo }, 'form-control']"  -->
             </div>
 
-            <button class="btn btn-success">Send!</button>
-
+            <button class="btn bg-dark-green text-white mt-3"> Send to the Patient </button>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        props:['patient'],
+        props:['patientData'],
 
         data() {
             return { 
                 file: null,
                 dismissSecs: 5,
                 dismissCountDown: 0,
-                error: '',
+                message: '',
+                variant: '',
+                patients: JSON.parse(this.patientData),
 
+
+                name: '<Select a Patient>',
+                patient: '',
+                patient_id: -1,
+                showBox: false,
                 keyword: '',
-                static: [],
-                email: '',
             }
         },
 
         methods: {
-            triggerInputFile(){ document.getElementById('file-input').click() },
+            pickPatient(ind){
+                
+                this.patient = this.items[ind]
 
-            addFile(event){
-                this.file = event.target.files[0]
-            },
+                let sub = this.patient.imageUrl.substring(0, 5).toLowerCase()
 
-            changeDesign(enter){
-                if(enter) document.getElementById('input-box').classList.add("bg-aiai")
-                else document.getElementById('input-box').classList.remove("bg-aiai")
-            },
-
-            dropFile(event){
-                let file = event.dataTransfer.files[0]
-                let name = file.name
-                let ext = name.substr(name.lastIndexOf('.'))
-
-                if( ".doc .docx .pdf".includes(ext) ){
-                    this.file = file
-                }
-                else{
-                    this.error = "Error only .docx .doc and .pdf extensions are accepted";
-                    this.showAlert()
-                    document.getElementById('input-box').classList.remove("bg-aiai")
-                }
-            },
-            
-            toItems(item){
-
-                let data = {
-                    name: item.fname + " " + item.lname,
-                    email: item.email,
-                    avatar: item.avatar,
-                    id: item.id,
+                if(sub != 'https'){
+                    this.toLinkImage(ind)
                 }
 
-                this.static.push(data)
+                this.name = this.items[ind].name
+                this.patient_id = this.items[ind].id
+
+                this.toggleDropdown()
             },
+
+            toLinkImage(ind){
+                let self = this
+                axios.post('/inquiry/image/', {
+                    image: this.items[ind].imageUrl,
+                })
+                .then( function (response){
+                    let data = response.data
+                    console.log(data)
+                    if(data.hasError){
+                        self.variant = 'danger'
+                        self.message = 'Image does not exist in the database'
+                        self.showAlert()
+                    }
+                    else{
+                        self.patient.imageUrl = data.image
+                    }
+                })
+                .catch( function (error){
+                    console.log(error);
+                });
+            },
+
+            toggleDropdown(){ this.showBox = !this.showBox },
             
             countDownChanged(dismissCountDown) { this.dismissCountDown = dismissCountDown },
             showAlert() { this.dismissCountDown = this.dismissSecs },
         },
 
-        computed: {
-            items () {
+        computed:{
+            items(){
                 return this.keyword
-                    ? this.static.filter(
+                    ? this.patients.filter(
                         item => item.name.toLowerCase().includes(this.keyword.toLowerCase()) 
                     )
-                    : this.static
-            }
+                    : this.patients
+            },
         },
 
-        mounted(){
-            let data = JSON.parse(this.patient)
-            
-            data.forEach(this.toItems)
-            
-        }
+        // mounted(){
+        //     console.log(JSON.parse(this.patientData))
+        // }
 
     }
 </script>

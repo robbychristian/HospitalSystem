@@ -1,5 +1,6 @@
 <template>
     <div class="manage-table">
+        
         <b-pagination
             v-model="currentPage"
             :total-rows="rows"
@@ -12,7 +13,7 @@
             <h4> Manage <b>Doctors</b></h4>
 
             <div class="tab-action">
-                <b-button type="button" @click="showModal(true, 'Add', 0)" class="btn btn-add"> <i class="fa-solid fa-plus"></i> Doctor</b-button>
+                <b-button type="button" @click="showModal('Add', 0)" class="btn btn-add"> <i class="fa-solid fa-plus"></i> Doctor</b-button>
 
                 <input type="text" v-model="keyword">
                 <select v-model="filterBy">
@@ -31,11 +32,11 @@
             :items="items" 
             :per-page="perPage"
             :current-page="currentPage"
+            stacked="sm"
         >
         
         <template #cell(action)="data">
-            <button class="btn bg-warning" @click="showModal(true, 'Update', data.item.id)"><i class="fa-solid fa-pencil"></i></button>
-            <button class="btn bg-danger" @click="deleteDoctor(data.item.id, data.item.id_fb, data.item.name)"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn bg-primary btn-sm text-white" @click="showModal('Show', data.item.id)"><i class="fa-solid fa-eye"></i></button>
         </template>
 
 
@@ -61,28 +62,28 @@
                         key: 'name', 
                         label: 'Name', 
                         sortable: true,
-                        tdClass: 'text-hidden-ellipsis',
+                        // tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
                         key: 'specialization', 
                         label: 'Specialization', 
                         sortable: true,
-                        tdClass: 'text-hidden-ellipsis',
+                        // tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
                         key: 'clinicAddress', 
                         label: 'Address', 
                         sortable: true,
-                        tdClass: 'text-hidden-ellipsis',
+                        // tdClass: 'text-hidden-ellipsis',
                     },
 
                     {
                         key: 'email', 
                         label: 'Email', 
                         sortable: true,
-                        tdClass: 'text-hidden-ellipsis',
+                        // tdClass: 'text-hidden-ellipsis',
                     },
                     
                     {
@@ -112,10 +113,32 @@
                 filePhoto.append('consultFee', doctorForm.consultFee)
                 filePhoto.append('email', doctorForm.email)
                 filePhoto.append('about', doctorForm.about)
+                
+                let self = this
 
-                return axios.post('/doctor/add/', filePhoto)
+                axios.post('/doctor/add/', filePhoto)
                 .then( function (response){
-                    return response.data
+                    let data = response.data
+                    console.log(data)
+                    
+                    if(data.hasError){
+                        self.$parent.populateFormError(data)
+                    }
+                    else if (data.error){
+                        self.$parent.$refs['modal-add'].hide()
+                        self.$parent.error = data.error;
+                        self.$parent.alertBackground = "danger"
+                        self.$parent.showAlert()
+                    }
+                    else{
+                        self.$parent.doctorData.push( JSON.parse(data.doctor) )
+                        self.$parent.$refs['modal-add'].hide()
+                        self.$parent.error = data.success;
+                        self.$parent.alertBackground = "success"
+                        self.$parent.neutralizeDoctorForm()
+                        self.$parent.showAlert()
+                    }
+                    // return response.data
                 })
                 .catch( function (error){
                     console.log(error);
@@ -152,25 +175,53 @@
                         break;
                     }
                 }
+                const form = new FormData();
+                form.append('degree', doctorForm.degree)
+                form.append('photo', doctorForm.photo)
+                form.append('firstName', doctorForm.firstName)
+                form.append('lastName', doctorForm.lastName)
+                form.append('clinicAddress', doctorForm.clinicAddress)
+                form.append('specialization', doctorForm.specialization)
+                form.append('gender', doctorForm.gender)
+                form.append('phone', doctorForm.phone)
+                form.append('consultFee', doctorForm.consultFee)
+                form.append('email', doctorForm.email)
+                form.append('about', doctorForm.about)
+                form.append('id', doctorForm.id)
+                form.append('withEmail', withEmail)
 
-                const filePhoto = new FormData();
-                filePhoto.append('degree', doctorForm.degree)
-                filePhoto.append('photo', doctorForm.photo)
-                filePhoto.append('firstName', doctorForm.firstName)
-                filePhoto.append('lastName', doctorForm.lastName)
-                filePhoto.append('clinicAddress', doctorForm.clinicAddress)
-                filePhoto.append('specialization', doctorForm.specialization)
-                filePhoto.append('gender', doctorForm.gender)
-                filePhoto.append('phone', doctorForm.phone)
-                filePhoto.append('consultFee', doctorForm.consultFee)
-                filePhoto.append('email', doctorForm.email)
-                filePhoto.append('about', doctorForm.about)
-                filePhoto.append('id', doctorForm.id)
-                filePhoto.append('withEmail', withEmail)
+                let self = this
 
-                return axios.post('/doctor/update/', filePhoto)
+                axios.post('/doctor/update/', form)
                 .then( function (response){
-                    return response.data
+                    let data = response.data
+                    
+                    if(data.hasError){
+                        self.populateAddError(data)
+                    }
+                    else if (data.error){
+                        self.$parent.$refs['modal-add'].hide()
+                        self.$parent.error = data.error;
+                        self.$parent.alertBackground = "danger"
+                        self.$parent.showAlert()
+                    }
+                    else{
+
+                        let length = self.$parent.doctorData.length
+
+                        for(var i = 0; i < length; i++){
+                            if(self.$parent.doctorData[i].id == doctorForm.id){
+                                self.$parent.doctorData.splice(i, 1, JSON.parse(data.doctor));
+                                break;
+                            }
+                        }
+                        
+                        self.$parent.$refs['doctor-show'].hide()
+                        self.$parent.error = data.success;
+                        self.$parent.alertBackground = "success"
+                        self.$parent.neutralizeDoctorForm()
+                        self.$parent.showAlert()
+                    }
                 })
                 .catch( function (error){
                     console.log(error);

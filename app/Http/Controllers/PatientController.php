@@ -20,6 +20,31 @@ class PatientController extends Controller
         $this->middleware('verified');
     }
 
+    public function index(){
+        $page="Patient Records";
+        $active="patient";
+
+        $documents = $this->firestore->database()->collection('Patients')->documents()->rows();
+
+        $patient = [];
+
+        foreach ($documents as $document) {
+            $data = $document->data();
+            $data['id'] = $document->id();
+            $data['age'] = (string)Carbon::parse($data['birthdate'])->diff(Carbon::now())->y;
+            $data['name'] = $data['fname'] . ' ' . $data['lname'];
+
+            array_push(
+                $patient,
+                $data
+            );
+        }
+        $patient = json_encode($patient);
+        
+        return view('pages.patient')->with('page', $page)->with('active', $active)->with('patient', $patient);
+    }
+    
+
     public function create($data, $request){
         $user = $this->firestore->database()->collection('Patients')->newDocument();
 
@@ -62,30 +87,6 @@ class PatientController extends Controller
         return $data;
     }
 
-    public function index(){
-        $page="Patient Records";
-        $active="patient";
-
-        $documents = $this->firestore->database()->collection('Patients')->documents()->rows();
-
-        $patient = [];
-
-        foreach ($documents as $document) {
-            $data = $document->data();
-            $data['id'] = $document->id();
-            $data['age'] = (string)Carbon::parse($data['birthdate'])->diff(Carbon::now())->y;
-
-            array_push(
-                $patient,
-                $data
-            );
-        }
-
-        $patient = json_encode($patient);
-        
-        return view('pages.patient')->with('page', $page)->with('active', $active)->with('patient', $patient);
-    }
-    
     public function validation( array $data, $withEmail){
         if($withEmail){
             return Validator::make($data, [

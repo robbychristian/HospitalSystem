@@ -75,6 +75,7 @@ Route::prefix('calendar')->name('calendar.')->group(function () {
 
 Route::prefix('inquiry')->name('inquiry.')->group(function () {
     Route::get('/', [InquiryController::class, 'index']);
+    Route::post('/image', [InquiryController::class, 'signedUrl']);
 });
 
 
