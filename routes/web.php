@@ -25,11 +25,10 @@ use App\Http\Controllers\AnnouncementController;
 |
 */
 
-Route::prefix('announce')->name('announce.')->group(function(){
+Route::prefix('announcement')->name('announcement.')->group(function () {
     Route::get('/', [AnnouncementController::class, 'index']);
-    Route::post('/add', [AnnouncementController::class, 'add']);
+    Route::get('/add', [AnnouncementController::class, 'add']);
     Route::post('/delete', [AnnouncementController::class, 'delete']);
-    Route::post('/update', [AnnouncementController::class, 'update']);
 });
 
 Route::prefix('test')->name('test.')->group(function () {
@@ -39,11 +38,11 @@ Route::prefix('test')->name('test.')->group(function () {
     // Route::get('/insert', [TestController::class, 'insert']);
 });
 
-Route::prefix('dashboard')->name('dashboard.')->group(function(){
+Route::prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
 });
 
-Route::prefix('email')->name('email.')->group(function(){
+Route::prefix('email')->name('email.')->group(function () {
     Route::get('/', [EmailController::class, 'index'])->name('index');
     Route::post('/request', [EmailController::class, 'request']);
     Route::post('/resend', [EmailController::class, 'resend']);
@@ -51,7 +50,7 @@ Route::prefix('email')->name('email.')->group(function(){
 });
 
 
-Route::prefix('doctor')->name('doctor.')->group(function(){
+Route::prefix('doctor')->name('doctor.')->group(function () {
     Route::post('/add', [DoctorController::class, 'add']);
     Route::post('/delete', [DoctorController::class, 'delete']);
     Route::post('/update', [DoctorController::class, 'update']);

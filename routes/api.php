@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AnnouncementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('announcement')->name('announcement.')->group(function () {
+    Route::post('/add', [AnnouncementController::class, 'add']);
+    Route::post('/delete', [AnnouncementController::class, 'delete']);
+    Route::post('/update', [AnnouncementController::class, 'update']);
+});
+
+Route::post('/add', [AnnouncementController::class, 'add']);

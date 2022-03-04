@@ -16,7 +16,7 @@ class Authentication
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->user()){
+        if ($request->user()) {
             return $next($request);
         }
         return redirect('/');
