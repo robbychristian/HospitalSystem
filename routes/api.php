@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CalendarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,6 @@ Route::prefix('announcement')->name('announcement.')->group(function () {
     Route::post('/update', [AnnouncementController::class, 'update']);
 });
 
-Route::post('/add', [AnnouncementController::class, 'add']);
+Route::prefix('calendar')->name('calendar.')->group(function () {
+    Route::post('/delete', [CalendarController::class, 'destroy']);
+});

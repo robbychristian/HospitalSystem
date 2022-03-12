@@ -1,7 +1,36 @@
 <template>
     <div class="calendar-page">
-        <FullCalendar :options="calendarOptions" />
-        <b-button v-b-modal="modalShow" hidden>Add Appointment</b-button>
+        <div class="row">
+            <div
+                class="col d-flex mx-3 justify-content-start"
+                v-if="this.isAdmin == 1"
+            >
+                <b-dropdown
+                    split
+                    split-variant="outline-primary"
+                    variant="primary"
+                    :text="doctorName"
+                    class="m-2"
+                >
+                    <b-dropdown-item-button @click="showAlert"
+                        >Action</b-dropdown-item-button
+                    >
+                    <b-dropdown-item href="#">Another action</b-dropdown-item>
+                    <b-dropdown-item href="#"
+                        >Something else here...</b-dropdown-item
+                    >
+                </b-dropdown>
+            </div>
+            <div class="col d-flex mx-3 justify-content-end">
+                <b-button
+                    @click="addCalendar"
+                    class="btn"
+                    style="background-color: #48898c"
+                    ><i class="fa-solid fa-plus"></i> Add Appointment</b-button
+                >
+            </div>
+        </div>
+        <FullCalendar :options="calendarOptions" class="py-3 px-5" />
 
         <b-modal
             id="addCalendar"
@@ -11,7 +40,7 @@
             ref="addCalendar"
         >
             <form
-                action="addappointment"
+                action="calendar/addappointment"
                 method="post"
                 ref="form"
                 v-bind:value="csrf"
@@ -27,23 +56,33 @@
                     </b-col>
                 </b-row>
                 <b-row>
+                    <b-col sm="2"><label>Date: </label></b-col>
+                    <b-col sm="10">
+                        <b-form-datepicker
+                            id="example-datepicker"
+                            v-model="date"
+                            name="date"
+                        ></b-form-datepicker>
+                    </b-col>
+                </b-row>
+                <b-row>
                     <b-col sm="2"><label>Start: </label></b-col>
                     <b-col sm="10">
-                        <b-form-input
+                        <b-form-timepicker
                             v-model="startTime"
                             name="startTime"
-                            readonly
-                        ></b-form-input>
+                            locale="en"
+                        ></b-form-timepicker>
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col sm="2"><label>End: </label></b-col>
                     <b-col sm="10">
-                        <b-form-input
+                        <b-form-timepicker
                             v-model="endTime"
                             name="endTime"
-                            readonly
-                        ></b-form-input>
+                            locale="en"
+                        ></b-form-timepicker>
                     </b-col>
                 </b-row>
                 <b-row>
@@ -82,8 +121,9 @@ import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { v4 as uuidv4 } from "uuid";
+import swal from "sweetalert";
 export default {
-    props: ["csrf", "patients", "appointments"],
+    props: ["csrf", "patients", "appointments", "isAdmin"],
 
     mounted() {
         let data = JSON.parse(this.patients);
@@ -95,6 +135,8 @@ export default {
         console.log(JSON.parse(this.appointments));
 
         console.log(this.calendarOptions.events);
+
+        console.log("Admin Status: " + this.isAdmin);
     },
 
     components: {
@@ -104,13 +146,23 @@ export default {
         return {
             //form
             text: "",
-            startTime: "",
-            endTime: "",
+            date: moment(new Date()).format("YYYY-MM-DD"),
+            startTime: moment(new Date()).format("HH:mm:ss"),
+            endTime: moment(this.startTime)
+                .add(30, "minutes")
+                .format("HH:mm:ss"),
             description: "",
             selectedPatient: "",
             options: [],
-            //Calendar
             modalShow: "addCalendar",
+
+            //filter
+            doctorName: "Choose a Doctor",
+
+            //choose doctor schedule
+            keyword: "",
+
+            //Calendar
             calendarOptions: {
                 plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
                 headerToolbar: {
@@ -120,37 +172,76 @@ export default {
                 },
                 initialView: "timeGridWeek",
                 aspectRatio: 2.3,
-                dateClick: this.handleDateClick,
                 expandRows: true,
                 selectable: true,
-                events: [],
+                editable: true,
+                events: items,
+                eventClick: this.handleEventClick,
             },
         };
     },
     methods: {
-        submitForm() {
-            this.$refs["form"].submit();
-        },
-        handleDateClick(arg) {
+        addCalendar() {
             this.$refs["addCalendar"].show();
-            this.startTime = moment(arg.dateStr).format("ddd | LL, LT");
-            this.endTime = moment(arg.dateStr)
-                .add(30, "minutes")
-                .format("ddd | LL, LT");
-            console.log(arg);
-            //let calendarApi = arg.view.calendar;
-            //
-            //calendarApi.unselect(); // clear date selection
-            //
-            //if (title) {
-            //    calendarApi.addEvent({
-            //        id: uuidv4(),
-            //        title,
-            //        start: arg.startStr,
-            //        end: arg.endStr,
-            //        allDay: arg.allDay,
-            //    });
-            //}
+            console.log(this.startTime);
+        },
+        submitForm() {
+            if (
+                this.text == "" ||
+                this.date == "" ||
+                this.description == "" ||
+                this.selectedPatient == ""
+            ) {
+                swal({
+                    title: "Error",
+                    text: "Some input fields are empty!",
+                    icon: "error",
+                });
+            } else if (moment(this.startTime).isBefore(this.endTime)) {
+                swal({
+                    title: "Invalid Time",
+                    text: "Time set is invalid!",
+                    icon: "error",
+                });
+            } else {
+                swal({
+                    title: "Appointment Added",
+                    text: "Your new appointment for teleconsultation has been added!",
+                    icon: "success",
+                    buttons: false,
+                });
+                this.$refs["form"].submit();
+            }
+        },
+        showAlert() {
+            alert("test");
+        },
+        handleEventClick(arg) {
+            swal({
+                title: "Delete Appointment?",
+                text: "Are you sure you want to remove the announcement?",
+                icon: "warning",
+                buttons: {
+                    cancel: true,
+                    OK: "Delete",
+                },
+            }).then((value) => {
+                if (value == "OK") {
+                    axios
+                        .post("/api/calendar/delete/", {
+                            id: arg.event.id,
+                        })
+                        .then((response) => {
+                            swal({
+                                title: "Deleted!",
+                                text: "The appointment has been deleted!",
+                                icon: "success",
+                                buttons: false,
+                            });
+                            arg.event.remove();
+                        });
+                }
+            });
         },
         handleEvents(events) {
             this.calendarOptions.events = events;
@@ -165,12 +256,25 @@ export default {
         },
         toEvents(item) {
             let data = {
+                id: item.id,
                 title: item.title,
                 start: moment(item.start).format("YYYY-MM-DD HH:mm"),
                 end: moment(item.end).format("YYYY-MM-DD HH:mm"),
             };
 
             this.calendarOptions.events.push(data);
+        },
+    },
+
+    computed: {
+        items() {
+            return this.keyword
+                ? this.appointments.filter((item) =>
+                      item.doctor_id
+                          .toLowerCase()
+                          .includes(this.keyword.toLowerCase())
+                  )
+                : this.appointments;
         },
     },
 };

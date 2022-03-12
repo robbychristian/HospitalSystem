@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 //firebase for construct()
 use Kreait\Firebase\Contract\Firestore;
@@ -37,26 +38,55 @@ class CalendarController extends Controller
 
         $patients = json_encode($patients);
 
-        //GET ALL EVENTS
-        $allAppointments = $this->firestore->database()->collection("Appointments");
-        $query = $allAppointments->where('doctor_id', '==', Auth::user()->id_fb);
-        $doctorAppointments = $query->documents();
+        //GET ALL EVENTS FOR ADMIN
+        if (Auth::user()->isAdmin == 1) {
+            $allAppointments = $this->firestore->database()->collection("Appointments")->documents()->rows();
+            $appointments = [];
 
-        $appointments = [];
+            foreach ($allAppointments as $appointment) {
+                $data = $appointment->data();
+                $data['id'] = $appointment->id();
 
-        foreach ($doctorAppointments as $appointment) {
-            $data = $appointment->data();
-            $data['id'] = $appointment->id();
+                array_push(
+                    $appointments,
+                    $data
+                );
+            }
+        } else { //GET ALL EVENTS FOR DOCTORS
+            $allAppointments = $this->firestore->database()->collection("Appointments");
+            $query = $allAppointments->where('doctor_id', '==', Auth::user()->id_fb);
+            $doctorAppointments = $query->documents();
+
+            $appointments = [];
+
+            foreach ($doctorAppointments as $appointment) {
+                $data = $appointment->data();
+                $data['id'] = $appointment->id();
+
+                array_push(
+                    $appointments,
+                    $data
+                );
+            }
+        }
+
+        //GET ALL DOCTORS
+        $allDoctors = $this->firestore->database()->collection("Doctors")->documents()->rows();
+        $doctors = [];
+
+        foreach ($allDoctors as $doctor) {
+            $data = $doctor->data();
+            $data['id'] = $doctor->id();
 
             array_push(
-                $appointments,
+                $doctors,
                 $data
             );
         }
 
         $appointments = json_encode($appointments);
 
-        return view('pages.calendar')->with('page', $page)->with('active', $active)->with('patients', $patients)->with('appointments', $appointments);
+        return view('pages.calendar')->with('page', $page)->with('active', $active)->with('patients', $patients)->with('appointments', $appointments)->with('doctors', $doctors);
     }
 
     /**
@@ -77,15 +107,24 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
+        $startDate = Carbon::create($request->date)->year . "-" . Carbon::create($request->date)->month . "-" . Carbon::create($request->date)->day . ' ' . $request->startTime;
+        $endDate = Carbon::create($request->date)->year . "-" . Carbon::create($request->date)->month . "-" . Carbon::create($request->date)->day . ' ' . $request->endTime;
+        $month = Carbon::create($request->date)->month;
+        $day = Carbon::create($request->date)->day;
+
+        $startTime = Carbon::create($startDate)->isoFormat("ddd | LL, LT");
+        $endTime = Carbon::create($endDate)->isoFormat("ddd | LL, LT");
+
         //MAKE NEW APPOINTMENT
         $newAppointment = $this->firestore->database()->collection("Appointments")->newDocument();
         $newAppointment->set([
+            'id' => $newAppointment->id(),
             'doctor_id' => Auth::user()->id_fb,
             'patient_id' => $request->patient,
             'title' => $request->title,
             'problem' => $request->problem,
-            'start' => $request->startTime,
-            'end' => $request->endTime
+            'start' => $startTime,
+            'end' => $endTime
         ]);
         //GET ALL EVENTS
         $allAppointments = $this->firestore->database()->collection("Appointments")->documents()->rows();
@@ -101,10 +140,22 @@ class CalendarController extends Controller
                 $data
             );
         }
+        //GET ALL DOCTORS
+        $allDoctors = $this->firestore->database()->collection("Doctors")->documents()->rows();
+        $doctors = [];
 
+        foreach ($allDoctors as $doctor) {
+            $data = $doctor->data();
+            $data['id'] = $doctor->id();
+
+            array_push(
+                $doctors,
+                $data
+            );
+        }
         $appointments = json_encode($appointments);
 
-        return redirect('/test/calendar')->with('Success', 'Stored')->with('appoinments', $appointments);
+        return redirect('/calendar')->with('Success', 'Stored')->with('appoinments', $appointments)->with('doctors', $doctors);
     }
 
     /**
@@ -147,8 +198,8 @@ class CalendarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $this->firestore->database()->collection('Appointments')->document($request->id)->delete();
     }
 }

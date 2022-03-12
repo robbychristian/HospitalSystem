@@ -1,6 +1,5 @@
 <template>
     <div class="container-fluid">
-        
         <div class="row justify-content-center">
             <div
                 class="col-xl-12 d-flex align-items-center justify-content-center login-bg"
@@ -11,7 +10,6 @@
                     img-left
                     img-height="250px"
                     img-width="200px"
-                    
                     tag="article"
                     style="max-width: 30rem"
                     class="mb-2"
@@ -112,16 +110,13 @@ export default {
             //event.preventDefault();
             // const email = this.form.email;
             // const pass = this.form.pass;
-
             // const arr = JSON.parse(this.data);
-
             // let loggedIn = false;
             // arr.map((item, index) => {
             //     if (item.email == email && item.password == pass) {
             //         loggedIn = true;
             //     }
             // });
-
             // if (loggedIn == false) {
             //     alert("Credentials does not match");
             // } else {

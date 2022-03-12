@@ -82,6 +82,11 @@ Vue.component(
     require("./components/pages/DashboardComponent.vue").default
 );
 
+Vue.component(
+    "profile-component",
+    require("./components/pages/ProfileComponent.vue").default
+);
+
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 

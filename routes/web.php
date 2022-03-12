@@ -7,6 +7,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\DashboardController;
@@ -71,11 +72,16 @@ Route::prefix('patient')->name('patient.')->group(function () {
 });
 Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::get('/', [CalendarController::class, 'index']);
+    Route::post('/addappointment', [CalendarController::class, 'store']);
 });
 
 Route::prefix('inquiry')->name('inquiry.')->group(function () {
     Route::get('/', [InquiryController::class, 'index']);
     Route::post('/image', [InquiryController::class, 'signedUrl']);
+});
+
+Route::prefix('profile')->name('profile.')->group(function () {
+    Route::get('/', [ProfileController::class, 'index']);
 });
 
 

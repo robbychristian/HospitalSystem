@@ -223,6 +223,7 @@ export default {
             //filter
             keyword: "",
             filterBy: "title",
+
             announcements: JSON.parse(this.announcementData),
 
             fields: [
