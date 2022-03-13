@@ -13884,7 +13884,7 @@ input[type=color].form-control:disabled {
   --bs-pink: #f66d9b;
   --bs-red: #e3342f;
   --bs-orange: #f6993f;
-  --bs-yellow: #ffc107;
+  --bs-yellow: #FFCA2C;
   --bs-green: #38c172;
   --bs-teal: #4dc0b5;
   --bs-cyan: #6cb2eb;
@@ -13904,7 +13904,7 @@ input[type=color].form-control:disabled {
   --bs-secondary: #858796;
   --bs-success: #38c172;
   --bs-info: #6cb2eb;
-  --bs-warning: #ffc107;
+  --bs-warning: #FFCA2C;
   --bs-danger: #e3342f;
   --bs-light: #f8f9fc;
   --bs-dark: #3a3b45;
@@ -13912,7 +13912,7 @@ input[type=color].form-control:disabled {
   --bs-secondary-rgb: 133, 135, 150;
   --bs-success-rgb: 56, 193, 114;
   --bs-info-rgb: 108, 178, 235;
-  --bs-warning-rgb: 255, 193, 7;
+  --bs-warning-rgb: 255, 202, 44;
   --bs-danger-rgb: 227, 52, 47;
   --bs-light-rgb: 248, 249, 252;
   --bs-dark-rgb: 58, 59, 69;
@@ -15940,15 +15940,15 @@ progress {
 }
 
 .table-warning {
-  --bs-table-bg: #fff3cd;
-  --bs-table-striped-bg: #f2e7c3;
+  --bs-table-bg: #fff4d5;
+  --bs-table-striped-bg: #f2e8ca;
   --bs-table-striped-color: #000;
-  --bs-table-active-bg: #e6dbb9;
+  --bs-table-active-bg: #e6dcc0;
   --bs-table-active-color: #000;
-  --bs-table-hover-bg: #ece1be;
+  --bs-table-hover-bg: #ece2c5;
   --bs-table-hover-color: #000;
   color: #000;
-  border-color: #e6dbb9;
+  border-color: #e6dcc0;
 }
 
 .table-danger {
@@ -17017,32 +17017,32 @@ textarea.form-control-lg {
 
 .btn-warning {
   color: #000;
-  background-color: #ffc107;
-  border-color: #ffc107;
+  background-color: #FFCA2C;
+  border-color: #FFCA2C;
 }
 .btn-warning:hover {
   color: #000;
-  background-color: #ffca2c;
-  border-color: #ffc720;
+  background-color: #ffd24c;
+  border-color: #ffcf41;
 }
 .btn-check:focus + .btn-warning, .btn-warning:focus {
   color: #000;
-  background-color: #ffca2c;
-  border-color: #ffc720;
-  box-shadow: 0 0 0 0.25rem rgba(217, 164, 6, 0.5);
+  background-color: #ffd24c;
+  border-color: #ffcf41;
+  box-shadow: 0 0 0 0.25rem rgba(217, 172, 37, 0.5);
 }
 .btn-check:checked + .btn-warning, .btn-check:active + .btn-warning, .btn-warning:active, .btn-warning.active, .show > .btn-warning.dropdown-toggle {
   color: #000;
-  background-color: #ffcd39;
-  border-color: #ffc720;
+  background-color: #ffd556;
+  border-color: #ffcf41;
 }
 .btn-check:checked + .btn-warning:focus, .btn-check:active + .btn-warning:focus, .btn-warning:active:focus, .btn-warning.active:focus, .show > .btn-warning.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.25rem rgba(217, 164, 6, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(217, 172, 37, 0.5);
 }
 .btn-warning:disabled, .btn-warning.disabled {
   color: #000;
-  background-color: #ffc107;
-  border-color: #ffc107;
+  background-color: #FFCA2C;
+  border-color: #FFCA2C;
 }
 
 .btn-danger {
@@ -17236,27 +17236,27 @@ textarea.form-control-lg {
 }
 
 .btn-outline-warning {
-  color: #ffc107;
-  border-color: #ffc107;
+  color: #FFCA2C;
+  border-color: #FFCA2C;
 }
 .btn-outline-warning:hover {
   color: #000;
-  background-color: #ffc107;
-  border-color: #ffc107;
+  background-color: #FFCA2C;
+  border-color: #FFCA2C;
 }
 .btn-check:focus + .btn-outline-warning, .btn-outline-warning:focus {
-  box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(255, 202, 44, 0.5);
 }
 .btn-check:checked + .btn-outline-warning, .btn-check:active + .btn-outline-warning, .btn-outline-warning:active, .btn-outline-warning.active, .btn-outline-warning.dropdown-toggle.show {
   color: #000;
-  background-color: #ffc107;
-  border-color: #ffc107;
+  background-color: #FFCA2C;
+  border-color: #FFCA2C;
 }
 .btn-check:checked + .btn-outline-warning:focus, .btn-check:active + .btn-outline-warning:focus, .btn-outline-warning:active:focus, .btn-outline-warning.active:focus, .btn-outline-warning.dropdown-toggle.show:focus {
-  box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(255, 202, 44, 0.5);
 }
 .btn-outline-warning:disabled, .btn-outline-warning.disabled {
-  color: #ffc107;
+  color: #FFCA2C;
   background-color: transparent;
 }
 
@@ -18839,12 +18839,12 @@ textarea.form-control-lg {
 }
 
 .alert-warning {
-  color: #664d03;
-  background-color: #fff3cd;
-  border-color: #ffecb5;
+  color: #665112;
+  background-color: #fff4d5;
+  border-color: #ffefc0;
 }
 .alert-warning .alert-link {
-  color: #523e02;
+  color: #52410e;
 }
 
 .alert-danger {
@@ -19206,17 +19206,17 @@ textarea.form-control-lg {
 }
 
 .list-group-item-warning {
-  color: #664d03;
-  background-color: #fff3cd;
+  color: #665112;
+  background-color: #fff4d5;
 }
 .list-group-item-warning.list-group-item-action:hover, .list-group-item-warning.list-group-item-action:focus {
-  color: #664d03;
-  background-color: #e6dbb9;
+  color: #665112;
+  background-color: #e6dcc0;
 }
 .list-group-item-warning.list-group-item-action.active {
   color: #fff;
-  background-color: #664d03;
-  border-color: #664d03;
+  background-color: #665112;
+  border-color: #665112;
 }
 
 .list-group-item-danger {
@@ -20332,10 +20332,10 @@ textarea.form-control-lg {
 }
 
 .link-warning {
-  color: #ffc107;
+  color: #FFCA2C;
 }
 .link-warning:hover, .link-warning:focus {
-  color: #ffcd39;
+  color: #ffd556;
 }
 
 .link-danger {
@@ -20773,7 +20773,7 @@ textarea.form-control-lg {
 }
 
 .border-warning {
-  border-color: #ffc107 !important;
+  border-color: #FFCA2C !important;
 }
 
 .border-danger {
@@ -25333,26 +25333,248 @@ textarea.form-control-lg {
   margin-bottom: 0px;
 }
 
-.patient-page {
-  background-color: #D9D9D9;
+.appointment-page {
   padding: 0.5rem;
 }
-.patient-page .patient-content {
-  background-color: white;
-}
-.patient-page .patient-content .search-holder {
-  padding: 0.25rem;
+.appointment-page .search-bar {
   display: flex;
   justify-content: flex-end;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.appointment-page .search-bar input, .appointment-page .search-bar select {
+  padding: 0.25rem;
+}
+.appointment-page .appointment-content {
+  background-color: #e9e9e9;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.appointment-page .appointment-content .appointment-box {
+  background-color: white;
+  border: 1px #8d8d8d solid !important;
+  border-radius: 0rem 0rem 5px 5px;
+  margin-bottom: 0.5rem;
+  min-width: 300px;
+  box-shadow: 0rem 0rem 0.5rem rgba(0, 0, 0, 0.25);
+}
+.appointment-page .appointment-content .appointment-box .Approved {
+  background-color: #38c172;
+}
+.appointment-page .appointment-content .appointment-box .Rejected, .appointment-page .appointment-content .appointment-box .Cancelled {
+  background-color: #e3342f;
+}
+.appointment-page .appointment-content .appointment-box .Pending {
+  background-color: #f6993f;
+}
+.appointment-page .appointment-content .appointment-box .status {
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+}
+.appointment-page .appointment-content .appointment-box .divider {
+  margin: 0.5rem 0px 0.5rem 0px;
+  width: 100%;
+  height: 1px;
+  background-color: #8d8d8d;
+}
+.appointment-page .appointment-content .appointment-box .patient-info, .appointment-page .appointment-content .appointment-box .doctor-info, .appointment-page .appointment-content .appointment-box .appointment-info {
+  width: 100%;
+  padding: 0.25rem;
+}
+.appointment-page .appointment-content .appointment-box .patient-info p, .appointment-page .appointment-content .appointment-box .doctor-info p, .appointment-page .appointment-content .appointment-box .appointment-info p {
+  margin-bottom: 0.25rem;
+  color: black;
+}
+.appointment-page .appointment-content .appointment-box .patient-info, .appointment-page .appointment-content .appointment-box .doctor-info {
+  border-bottom: 1px solid #8d8d8d;
+}
+.appointment-page .appointment-content .appointment-box .patient-info {
+  color: #277d81;
+}
+.appointment-page .appointment-content .appointment-box .doctor-info {
+  color: #0e5785;
+}
+
+.preview-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
-.patient-page .patient-content .search-holder .btn-add {
-  background-color: #28a745;
-  margin-right: 15px;
+.preview-details .prescribe-form {
+  width: 100%;
+  min-width: 300px;
+  max-width: 815px;
+}
+.preview-details .prescribe-form .header {
+  text-align: center;
+  width: 100%;
+}
+.preview-details .prescribe-form .header img {
+  margin-bottom: 0.75rem;
+}
+.preview-details .prescribe-form .header .doctor-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.preview-details .prescribe-form .header .doctor-details img {
+  margin-right: 1rem;
+  margin-bottom: 0rem;
+  width: 65px;
+  height: 65px;
+  border-radius: 100%;
+  border: 2px solid #5C97C8;
+}
+.preview-details .prescribe-form .divider {
+  width: 100%;
+  height: 4px !important;
+  margin: 1rem 0 1rem 0 !important;
+  border-radius: 0px !important;
+  background-color: #568DB5 !important;
+  border: none !important;
+}
+.preview-details .prescribe-form .body {
+  text-align: center;
+}
+.preview-details .prescribe-form .body .patient-form-info {
+  display: inline-block;
+  width: 100%;
+  max-width: 600px;
+}
+.preview-details .prescribe-form .body .patient-form-info .form-info {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+.preview-details .prescribe-form .body .patient-form-info .form-info h6, .preview-details .prescribe-form .body .patient-form-info .form-info .h6, .preview-details .prescribe-form .body .patient-form-info .form-info p {
+  text-align: start !important;
+  margin: 0px 0.75rem 0rem 0rem;
+}
+.preview-details .prescribe-form .body .patient-form-info .form-info p {
+  min-width: 50px !important;
+  border-bottom: 1px black solid;
+  flex-grow: 1;
+}
+.preview-details .prescribe-form .body .prescription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.preview-details .prescribe-form .body .prescription h5, .preview-details .prescribe-form .body .prescription .h5 {
+  margin-top: 1.5rem;
+  color: #14679B;
+  align-self: flex-start !important;
+  max-width: 815px;
+}
+.preview-details .prescribe-form .body .prescription button {
+  margin-top: 0.5rem;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box {
+  max-width: 815px;
+  width: 100%;
+  background-color: #dbdbdb;
+  border-radius: 5px;
+  padding: 0.25rem;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .divider-vertical {
+  height: 30px;
+  width: 2px;
+  background-color: #000;
+  margin: 0.5rem 0.2rem 0rem 0.2rem;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .prescription-input {
+  display: flex;
+  flex-wrap: wrap;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .prescription-input input.error::-moz-placeholder {
   color: white;
 }
-.patient-page .patient-content .search-holder label {
-  margin: 0px 15px 0px 0px;
+.preview-details .prescribe-form .body .prescription .prescription-box .prescription-input input.error:-ms-input-placeholder {
+  color: white;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .prescription-input input.error::placeholder, .preview-details .prescribe-form .body .prescription .prescription-box .prescription-input .error {
+  color: white;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .prescription-input .error {
+  background-color: rgba(255, 0, 0, 0.5) !important;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .prescription-input input, .preview-details .prescribe-form .body .prescription .prescription-box .prescription-input select {
+  padding: 0.25rem;
+  height: 35px;
+  margin-top: 0.5rem;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .prescription-input input[type=number] {
+  max-width: 100px;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .medicines {
+  display: flex;
+}
+.preview-details .prescribe-form .body .prescription .prescription-box .medicines h6, .preview-details .prescribe-form .body .prescription .prescription-box .medicines .h6 {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.preview-details .lab-form {
+  width: 100%;
+  max-width: 1000px;
+  min-width: 600px;
+}
+.preview-details .lab-form .top-info {
+  background-color: #C0504D;
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px black solid;
+}
+.preview-details .lab-form .top-info p {
+  margin-bottom: 0px;
+}
+.preview-details .lab-form .header .patient-box {
+  display: flex;
+  flex-direction: column;
+  border: 1px black solid;
+  padding: 0.35rem;
+  flex-grow: 1;
+}
+.preview-details .lab-form .header .patient-box p {
+  margin-bottom: 0px;
+}
+.preview-details .lab-form .header .patient-box h6, .preview-details .lab-form .header .patient-box .h6 {
+  margin-bottom: 0.25rem;
+}
+.preview-details .lab-form .body {
+  display: flex;
+}
+.preview-details .lab-form .body .content-box {
+  width: 50%;
+}
+.preview-details .lab-form .body .content-box .top-info {
+  padding: 0.25rem !important;
+}
+.preview-details .lab-form .body .content-box .top-info h6, .preview-details .lab-form .body .content-box .top-info .h6 {
+  margin-bottom: 0px !important;
+}
+.preview-details .lab-form .body .content-box .info-content {
+  border: 1px black solid;
+  padding: 0.25rem;
+}
+.preview-details .lab-form .body .content-box .info-content .box {
+  width: 13px;
+  height: 13px;
+  background-color: white;
+  margin-right: 0.25rem;
+  border: #000 1px solid;
+  border-radius: 2px;
+}
+.preview-details .lab-form .body .content-box .info-content .checked {
+  background-color: #000 !important;
+}
+.preview-details .lab-form .body .content-box .info-content p {
+  margin-bottom: 0px;
 }
 
 .inquiry-page {
@@ -25371,7 +25593,6 @@ textarea.form-control-lg {
   width: 100%;
   height: 0px;
   margin: 10px 0 10px 0;
-  transition: 0.5s ease-out;
   border-radius: 100%;
   border-top: 2px solid rgba(72, 137, 140, 0.8);
 }
@@ -25464,7 +25685,194 @@ textarea.form-control-lg {
   height: 150px;
   margin-right: 1.5rem;
 }
+.inquiry-page .inquiry-content .form-tab {
+  margin-top: 0.5rem;
+  width: 100%;
+  display: flex;
+  padding: 0rem 0rem 0rem 1rem;
+}
+.inquiry-page .inquiry-content .form-tab button {
+  border: none;
+  background-color: #bdbdbd;
+  color: black;
+  padding: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.inquiry-page .inquiry-content .form-tab .active {
+  background-color: #48898C !important;
+  margin-bottom: 0px !important;
+  color: white !important;
+}
+.inquiry-page .inquiry-content .form-tab button:hover {
+  background-color: rgba(72, 137, 140, 0.75);
+}
+.inquiry-page .inquiry-content .form-box {
+  background-color: #48898C;
+  padding: 1.5rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body {
+  background-color: white;
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form {
+  min-width: 600px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .top-info {
+  background-color: #C0504D;
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px black solid;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .top-info p {
+  margin-bottom: 0px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .header .patient-box {
+  display: flex;
+  flex-direction: column;
+  border: 1px black solid;
+  padding: 0.35rem;
+  flex-grow: 1;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .header .patient-box p {
+  margin-bottom: 0px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .header .patient-box h6, .inquiry-page .inquiry-content .form-box .form-body .lab-form .header .patient-box .h6 {
+  margin-bottom: 0.25rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .body {
+  display: flex;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box {
+  width: 50%;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .top-info {
+  padding: 0.25rem !important;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .top-info h6, .inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .top-info .h6 {
+  margin-bottom: 0px !important;
+}
+.inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .info-content {
+  border: 1px black solid;
+  padding: 0.25rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form {
+  min-width: 600px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .header {
+  text-align: center;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .header img {
+  margin-bottom: 0.75rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .header .doctor-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .header .doctor-details img {
+  margin-right: 1rem;
+  margin-bottom: 0rem;
+  width: 65px;
+  height: 65px;
+  border-radius: 100%;
+  border: 2px solid #5C97C8;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .divider {
+  width: 100%;
+  height: 4px !important;
+  margin: 1rem 0 1rem 0 !important;
+  border-radius: 0px !important;
+  background-color: #568DB5 !important;
+  border: none !important;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body {
+  text-align: center;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .patient-form-info {
+  display: inline-block;
+  width: 600px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .patient-form-info .form-info {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .patient-form-info .form-info h6, .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .patient-form-info .form-info .h6, .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .patient-form-info .form-info p {
+  margin: 0px 0.75rem 0rem 0rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .patient-form-info .form-info p {
+  text-align: start !important;
+  min-width: 50px !important;
+  border-bottom: 1px black solid;
+  flex-grow: 1;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription h5, .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .h5 {
+  margin-top: 1.5rem;
+  color: #14679B;
+  text-align: start !important;
+  width: 815px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription button {
+  margin-top: 0.5rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box {
+  width: 815px;
+  background-color: #dbdbdb;
+  border-radius: 5px;
+  padding: 0.25rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .divider-vertical {
+  height: 30px;
+  width: 2px;
+  background-color: #000;
+  margin: 0.5rem 0.2rem 0rem 0.2rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input {
+  display: flex;
+  flex-wrap: wrap;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input input.error::-moz-placeholder {
+  color: white;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input input.error:-ms-input-placeholder {
+  color: white;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input input.error::placeholder, .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input .error {
+  color: white;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input .error {
+  background-color: rgba(255, 0, 0, 0.5) !important;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input input, .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input select {
+  padding: 0.25rem;
+  height: 35px;
+  margin-top: 0.5rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .prescription-input input[type=number] {
+  max-width: 100px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .medicines {
+  display: flex;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .medicines h6, .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .body .prescription .prescription-box .medicines .h6 {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
 
+.dashboard-page {
+  /* Track */
+  /* Handle */
+  /* Handle on hover */
+}
 .dashboard-page .manage-table {
   min-width: 500px;
   padding: 0.5rem;
@@ -25507,7 +25915,86 @@ textarea.form-control-lg {
   color: white;
 }
 .dashboard-page .manage-table .announcement-tab {
-  background-color: #ffc107;
+  background-color: #FFCA2C;
+}
+.dashboard-page .reviews {
+  min-width: 500px;
+  padding: 0.5rem;
+  background-color: rgba(56, 193, 114, 0.15);
+  margin-bottom: 0.5rem;
+}
+.dashboard-page .reviews .review-graph h4, .dashboard-page .reviews .review-graph .h4 {
+  font-weight: bold;
+  font-style: italic;
+}
+.dashboard-page .feedbacks::-webkit-scrollbar {
+  height: 8px;
+}
+.dashboard-page .feedbacks::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.dashboard-page .feedbacks::-webkit-scrollbar-thumb {
+  background: #48898C;
+  border-radius: 5px;
+}
+.dashboard-page .feedbacks::-webkit-scrollbar-thumb:hover {
+  background: rgba(85, 85, 85, 0.404);
+}
+.dashboard-page .feedbacks {
+  min-width: 500px;
+  padding: 0.5rem;
+  max-height: 400px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background-color: #f2f2f3ec;
+}
+.dashboard-page .feedbacks .feedbacks-holder {
+  width: 1500px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+}
+.dashboard-page .feedbacks .feedbacks-holder .feedbacks-box::-webkit-scrollbar {
+  display: none !important;
+}
+.dashboard-page .feedbacks .feedbacks-holder .feedbacks-box {
+  background-color: white;
+  padding: 0.25rem;
+  width: 300px;
+  margin-right: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 5px;
+  box-shadow: 0rem 0rem 0.25rem rgba(0, 0, 0, 0.15);
+}
+.dashboard-page .feedbacks .feedbacks-holder .feedbacks-box .head {
+  display: flex;
+  border-bottom: #000000 1px solid;
+  align-items: center;
+  padding: 0.5rem;
+  width: 100%;
+}
+.dashboard-page .feedbacks .feedbacks-holder .feedbacks-box .head img {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  margin-right: 1rem;
+}
+.dashboard-page .feedbacks .feedbacks-holder .feedbacks-box .head .review-details {
+  border: #FFCA2C 1px solid;
+  padding: 0.25rem;
+  border-radius: 5px;
+  background-color: #ffca2c2d;
+  color: #FFCA2C;
+  text-align: center;
+  max-width: 60px;
+}
+.dashboard-page .feedbacks .feedbacks-holder .feedbacks-box .head .review-details h5, .dashboard-page .feedbacks .feedbacks-holder .feedbacks-box .head .review-details .h5 {
+  margin: 0;
+}
+.dashboard-page .feedbacks .feedbacks-holder .feedbacks-box .body {
+  padding: 0.8rem;
+  width: 100%;
 }
 
 .text-hidden-ellipsis {
@@ -25701,6 +26188,10 @@ textarea.form-control-lg {
   justify-content: center;
 }
 
+body {
+  overflow: hidden !important;
+}
+
 .main-page {
   display: flex;
   width: 100vw;
@@ -25712,8 +26203,7 @@ textarea.form-control-lg {
   width: 100%;
   max-height: 100%;
   max-width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: auto !important;
 }
 
 .test-page, .patient-page, .inquiry-page, .dashboard-page, .doctor-page {

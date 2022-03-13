@@ -7,6 +7,7 @@
 // Imports
 import Vue from "vue";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import VueApexCharts from 'vue-apexcharts'
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";
@@ -15,7 +16,9 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 require("./bootstrap");
 
 window.Vue = require("vue").default;
+Vue.use(VueApexCharts)
 
+Vue.component('apexchart', VueApexCharts)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -57,8 +60,8 @@ Vue.component(
 );
 
 Vue.component(
-    "patient-component",
-    require("./components/pages/PatientComponent.vue").default
+    "appointment-component",
+    require("./components/pages/AppointmentComponent.vue").default
 );
 
 Vue.component(

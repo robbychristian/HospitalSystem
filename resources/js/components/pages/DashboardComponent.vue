@@ -131,10 +131,37 @@
                 </div>
             </div>
 
-            <template #modal-footer> <b-button size="md" variant="outline-success" @click="addDoctor()"> {{modal.operation}} Doctor </b-button> </template>
+            <template #modal-footer> <b-button size="md" variant="success" @click="addDoctor()"> {{modal.operation}} Doctor </b-button> </template>
 
         </b-modal>
 
+        <!-- Loading Modal -->
+            <b-modal 
+                ref="loading-modal"
+                scrollable 
+                no-close-on-esc
+                no-close-on-backdrop
+                hide-header-close
+                header-class="border-0 text-dark-green"
+                hide-footer 
+                centered 
+            >
+                <template #modal-title> 
+                    <div>
+                        <h4> <span  style="margin: 0px 1rem 0px 0px;"> Loading please wait </span> <i class="fa-solid fa-spinner fa-spin"></i> </h4>
+                    </div>
+                </template>
+
+                <div class="d-flex justify-content-center">
+                    <img src="/img/Loading.gif" alt="loading">
+                </div>
+
+                <template #modal-footer> 
+                    <div></div>
+                </template>
+
+            </b-modal>
+        <!-- END -->
         
         <b-modal 
             ref="doctor-show"
@@ -270,6 +297,39 @@
             </b-alert>
         </div>
 
+        <div class="reviews" v-if="!user.isAdmin">
+             <h5 class="mt-3 text-dark-green"> Dr. {{user.name}} Review</h5>
+             
+             <div class="review-graph" >
+                <apexchart v-if="hasReviews" type="donut" width="400" height="400" :options="chartOptions" :series="series"></apexchart>
+
+                <h4 v-else>  You haven't recieve a review yet</h4>
+             </div>
+        </div>
+
+
+        <div class="feedbacks" v-if="!user.isAdmin">
+            <h5 class="mt-3 mb-0"> Today's Feedbacks and Reviews</h5>
+            <div class="feedbacks-holder">
+
+                <div v-for="(feedback, index) in feedbacks" class="feedbacks-box" :key="index">
+                    <div class="head">
+                        <img :src="feedback.img">
+                        <div>
+                            <h6> {{feedback.name}} </h6>
+                            <div class="review-details">
+                                <h5> {{feedback.review}}: <i class="fa-solid fa-star"></i></h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="body">
+                        <p> {{feedback.comment}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <doctor-component ref="doctor-component" v-if="user.isAdmin" :doctor-data="doctorData">
         </doctor-component>
 
@@ -277,6 +337,7 @@
 </template>
 
 <script>
+
     export default {
         props:['userData', 'doctors'],
 
@@ -295,6 +356,43 @@
                     title: '',
                     operation: '',
                 },
+
+                feedbacks:[
+                    {
+                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
+                        img: '/img/TeleDoc-LogoIcon.jpeg',
+                        name: "Vaundy",
+                        review: 4,
+                    },  
+
+                    {
+                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
+                        img: '/img/TeleDoc-LogoIcon.jpeg',
+                        name: "Yuna Shin",
+                        review: 2,
+                    },  
+
+                    {
+                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
+                        img: '/img/TeleDoc-LogoIcon.jpeg',
+                        name: "Ryujin Shin",
+                        review: 2,
+                    },  
+
+                    {
+                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
+                        img: '/img/TeleDoc-LogoIcon.jpeg',
+                        name: "Choi, Jisu",
+                        review: 5,
+                    },  
+
+                    {
+                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
+                        img: '/img/TeleDoc-LogoIcon.jpeg',
+                        name: "Lee, Chaeryoung",
+                        review: 5,
+                    },  
+                ],
 
                 options:[
                     'Pediatricians' ,
@@ -359,10 +457,49 @@
                     // password: '',
                     // password_confirmation: '',
                 },
+
+                chartOptions: {
+                    chart: {
+                        type: 'donut',
+                    },
+
+                    labels: ["1 Star", "2 Star", "3 Star", "4 Star", "5 Star"],
+                    
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        showAlways: true,
+                                        show: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                },
+                hasReviews: JSON.parse(this.userData).name == "Ryujin Shin",
+                series: [3,5,2,9,1],
             }
         },
 
         methods:{
+            
+            // Loading Modal Related
+                openLoading(modal){
+                    this.$refs[modal].hide()
+                    this.$refs['loading-modal'].show()
+                },
+
+                closeLoading(modal, hasError){
+                    this.$refs['loading-modal'].hide()
+                    if(hasError)
+                        this.$refs[modal].show()
+                },
+
+            // END
 
             populateFormError(data){
                 this.doctorFormError.firstName = data.firstName 
@@ -479,10 +616,26 @@
             addPhotoFile(){ this.doctorForm.photo = this.$refs['picture'].files[0] },
 
             deleteDoctor(){ 
-                this.$refs['doctor-component'].deleteDoctor(this.doctorForm.id, this.doctorForm.id_fb, this.doctorForm.firstName + " " + this.doctorForm.lastName) 
+                this.$refs['loading-modal'].show()
+                setTimeout(
+                    this.$refs['doctor-component'].deleteDoctor(this.doctorForm.id, this.doctorForm.id_fb, this.doctorForm.firstName + " " + this.doctorForm.lastName),
+                    3000
+                )
             },
-            addDoctor(){ this.$refs['doctor-component'].addDoctor(this.doctorForm) },
-            updateDoctor(){ this.$refs['doctor-component'].updateDoctor(this.doctorForm) },
+            addDoctor(){ 
+                this.openLoading('modal-add')
+                setTimeout(
+                    this.$refs['doctor-component'].addDoctor(this.doctorForm),
+                    3000
+                )
+            },
+            updateDoctor(){ 
+                this.openLoading('doctor-show')
+                setTimeout(
+                    this.$refs['doctor-component'].updateDoctor(this.doctorForm),
+                    3000
+                )
+            },
         },
 
         // mouted(){

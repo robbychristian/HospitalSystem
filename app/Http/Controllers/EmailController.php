@@ -86,7 +86,7 @@ class EmailController extends Controller
             Mail::to($email)->queue(new EmailVerification($verify));
         }
         catch(\Exception $e){
-            dd($e);
+            
             return true;
         }
         return false;

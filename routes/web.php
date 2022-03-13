@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 // Imports
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\PatientController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ProfileController;
 
@@ -64,12 +64,14 @@ Route::post('/sign-in', [LoginController::class, 'Login']);
 
 Route::post('/offline', [LoginController::class, 'offline']);
 
-Route::prefix('patient')->name('patient.')->group(function () {
-    Route::get('/', [PatientController::class, 'index']);
-    Route::post('/add', [PatientController::class, 'add']);
-    Route::post('/delete', [PatientController::class, 'delete']);
-    Route::post('/update', [PatientController::class, 'update']);
+Route::prefix('appointment')->name('appointment.')->group(function () {
+    Route::get('/', [AppointmentController::class, 'index']);
+    Route::post('/add', [AppointmentController::class, 'add']);
+    Route::post('/delete', [AppointmentController::class, 'delete']);
+    Route::post('/update', [AppointmentController::class, 'update']);
+    Route::post('/status', [AppointmentController::class, 'status']);
 });
+
 Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::get('/', [CalendarController::class, 'index']);
     Route::post('/addappointment', [CalendarController::class, 'store']);
@@ -78,6 +80,7 @@ Route::prefix('calendar')->name('calendar.')->group(function () {
 Route::prefix('inquiry')->name('inquiry.')->group(function () {
     Route::get('/', [InquiryController::class, 'index']);
     Route::post('/image', [InquiryController::class, 'signedUrl']);
+    Route::post('/send', [InquiryController::class, 'send']);
 });
 
 Route::prefix('profile')->name('profile.')->group(function () {

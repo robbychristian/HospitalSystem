@@ -1,3 +1,205 @@
+$maroon: #C0504D;
+
+.preview-details{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .prescribe-form{
+        width: 100%;
+        min-width: 300px;
+        max-width: 815px;
+    
+        .header{
+            text-align: center;
+            width: 100%;
+    
+            img{
+                margin-bottom: .75rem;
+            }
+            .doctor-details{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+    
+                img{
+                    margin-right: 1rem;
+                    margin-bottom: 0rem;
+                    width: 65px;
+                    height: 65px;
+                    border-radius: 100%;
+                    border: 2px solid #5C97C8;
+                }
+            }
+        }
+        
+        .divider {
+            width: 100%;
+            height: 4px !important;
+            margin: 1rem 0 1rem 0 !important;
+            border-radius: 0px !important;
+            background-color: #568DB5 !important;
+            border: none !important;
+        }
+    
+        .body{
+            text-align: center;
+    
+            .patient-form-info{
+                display: inline-block;
+                width: 100%;
+                max-width: 600px;
+                
+                .form-info{
+                    margin-bottom: .5rem;
+                    display: flex;
+                    align-items: center;
+    
+                    h6, p{
+                        text-align: start !important;
+                        margin: 0px .75rem 0rem 0rem;
+                    }
+    
+                    p{
+                        min-width: 50px !important;
+                        border-bottom: 1px black solid;
+                        flex-grow: 1;
+                    }
+    
+                }
+            }
+    
+            .prescription{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+    
+                h5{ 
+                    margin-top: 1.5rem;
+                    color: $darker-blue; 
+                    align-self: flex-start !important;
+                    max-width: 815px;
+                }
+    
+                button{ margin-top: .5rem; }
+    
+                .prescription-box{
+    
+                    max-width: 815px;
+                    width: 100%;
+                    background-color: #dbdbdb;
+                    border-radius: 5px;
+                    padding: .25rem;
+    
+                    .divider-vertical{
+                        height: 30px;
+                        width: 2px;
+                        background-color: #000;
+                        margin: .5rem .2rem 0rem .2rem;
+                    }
+                    
+                    .prescription-input{
+                        display: flex;
+                        flex-wrap: wrap;
+    
+                        input.error::placeholder, .error { color: white; }
+                        .error{ background-color: rgba(255, 0, 0, 0.5) !important; }
+                        
+                        input, select{
+                            padding: .25rem;
+                            height: 35px;
+                            margin-top: .5rem;
+                        }
+    
+                        input[type=number]{
+                            max-width: 100px;
+                        }
+                    }
+    
+                    .medicines{
+                        display: flex;
+                        h6{
+                            display: flex;
+                            align-items: center;
+                            margin-top: .5rem;
+                        }
+                    }
+                }
+                
+            }
+        }
+    
+    }
+    
+    .lab-form{
+        width: 100%;
+        max-width: 1000px;
+        min-width: 600px;
+        
+        .top-info{
+            background-color: $maroon;
+            color: white;
+            text-align: center;
+            width: 100%;
+            padding: .5rem;
+            border: 1px black solid;
+            p{
+                margin-bottom: 0px;
+            }
+        }
+
+        .header{
+            .patient-box{
+                display: flex;
+                flex-direction: column;
+                border: 1px black solid;
+                padding: .35rem;
+                flex-grow: 1;
+                p{
+                    margin-bottom: 0px;
+                }
+                h6{
+                    margin-bottom: .25rem;
+                }
+            }
+        }
+
+        .body{
+            display: flex;
+
+            .content-box{
+                width: 50%;
+
+                .top-info{
+                    padding: .25rem !important;
+                    h6{ margin-bottom: 0px !important; }
+                }
+
+                .info-content{
+                    border: 1px black solid;
+                    padding: .25rem;
+
+                    .box{
+                        width: 13px;
+                        height: 13px;
+                        background-color: white;
+                        margin-right: .25rem;
+                        border: #000 1px solid;
+                        border-radius: 2px;
+                    }
+
+                    .checked{
+                        background-color: #000 !important;
+                    }
+
+                    p{ margin-bottom: 0px ;}
+                }
+            }
+        }
+    }
+
+}
 
 .inquiry-page{
     background-color: #D9D9D9;
@@ -15,7 +217,6 @@
             width: 100%;
             height: 0px;
             margin: 10px 0 10px 0;
-            transition: .5s ease-out;
             border-radius: 100%;
             border-top: 2px solid rgba($color: $dark-green, $alpha: .8);
         }
@@ -128,5 +329,211 @@
             }
         }
 
+        .form-tab{
+            margin-top: .5rem;
+            width: 100%;
+            display: flex;
+            padding: 0rem 0rem 0rem 1rem;
+
+            button{
+                border: none;
+                background-color: rgb(189, 189, 189);
+                color: black;
+                padding: .5rem;
+                margin-bottom: .25rem;
+                
+            }
+
+            .active{ 
+                background-color: $dark-green !important; 
+                margin-bottom: 0px !important;
+                color: white !important;
+            }
+            button:hover{ background-color: rgba( $color: $dark-green, $alpha: .75 ); }
+        }
+
+        .form-box{
+            background-color: $dark-green;
+            padding: 1.5rem;
+
+            .form-body{
+                background-color: white;
+                padding: 1.5rem;
+                overflow-x: auto;
+
+                .lab-form{
+                    min-width: 600px;
+                    
+                    .top-info{
+                        background-color: $maroon;
+                        color: white;
+                        text-align: center;
+                        width: 100%;
+                        padding: .5rem;
+                        border: 1px black solid;
+                        p{
+                            margin-bottom: 0px;
+                        }
+                    }
+
+                    .header{
+                        .patient-box{
+                            display: flex;
+                            flex-direction: column;
+                            border: 1px black solid;
+                            padding: .35rem;
+                            flex-grow: 1;
+                            p{
+                                margin-bottom: 0px;
+                            }
+                            h6{
+                                margin-bottom: .25rem;
+                            }
+                        }
+                    }
+
+                    .body{
+                        display: flex;
+
+                        .content-box{
+                            width: 50%;
+
+                            .top-info{
+                                padding: .25rem !important;
+                                h6{ margin-bottom: 0px !important; }
+                            }
+    
+                            .info-content{
+                                border: 1px black solid;
+                                padding: .25rem;
+                            }
+                        }
+                    }
+                }
+
+                .prescribe-form{
+                    min-width: 600px;
+
+                    .header{
+                        text-align: center;
+
+                        img{
+                            margin-bottom: .75rem;
+                        }
+                        .doctor-details{
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            img{
+                                margin-right: 1rem;
+                                margin-bottom: 0rem;
+                                width: 65px;
+                                height: 65px;
+                                border-radius: 100%;
+                                border: 2px solid #5C97C8;
+                            }
+                        }
+                    }
+
+                    
+                    .divider {
+                        width: 100%;
+                        height: 4px !important;
+                        margin: 1rem 0 1rem 0 !important;
+                        border-radius: 0px !important;
+                        background-color: #568DB5 !important;
+                        border: none !important;
+                    }
+
+                    .body{
+                        text-align: center;
+
+                        .patient-form-info{
+                            display: inline-block;
+                            width: 600px;
+                            
+                            .form-info{
+                                margin-bottom: .5rem;
+                                display: flex;
+                                align-items: center;
+
+                                h6, p{
+                                    margin: 0px .75rem 0rem 0rem;
+                                }
+
+                                p{
+                                    text-align: start !important;
+                                    min-width: 50px !important;
+                                    border-bottom: 1px black solid;
+                                    flex-grow: 1;
+                                }
+
+                            }
+                        }
+
+                        .prescription{
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+
+                            h5{ 
+                                margin-top: 1.5rem;
+                                color: $darker-blue; 
+                                text-align: start !important;
+                                width: 815px;
+                            }
+
+                            button{ margin-top: .5rem; }
+
+                            .prescription-box{
+                                
+                                width: 815px;
+                                background-color: #dbdbdb;
+                                border-radius: 5px;
+                                padding: .25rem;
+
+                                .divider-vertical{
+                                    height: 30px;
+                                    width: 2px;
+                                    background-color: #000;
+                                    margin: .5rem .2rem 0rem .2rem;
+                                }
+                                
+                                .prescription-input{
+                                    display: flex;
+                                    flex-wrap: wrap;
+
+                                    input.error::placeholder, .error { color: white; }
+                                    .error{ background-color: rgba(255, 0, 0, 0.5) !important; }
+                                    
+                                    input, select{
+                                        padding: .25rem;
+                                        height: 35px;
+                                        margin-top: .5rem;
+                                    }
+
+                                    input[type=number]{
+                                        max-width: 100px;
+                                    }
+                                }
+
+                                .medicines{
+                                    display: flex;
+                                    h6{
+                                        display: flex;
+                                        align-items: center;
+                                        margin-top: .5rem;
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+
+                }
+
+            }
+        }
     }
 }

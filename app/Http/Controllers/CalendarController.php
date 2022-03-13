@@ -14,6 +14,7 @@ class CalendarController extends Controller
     public function __construct(Firestore $firestore)
     {
         $this->firestore = $firestore;
+        $this->middleware('verified');
     }
     /**
      * Display a listing of the resource.

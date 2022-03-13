@@ -100,7 +100,6 @@
             },
             
             addDoctor(doctorForm){
-
                 const filePhoto = new FormData();
                 filePhoto.append('degree', doctorForm.degree)
                 filePhoto.append('photo', doctorForm.photo)
@@ -115,7 +114,6 @@
                 filePhoto.append('about', doctorForm.about)
                 
                 let self = this
-
                 axios.post('/doctor/add/', filePhoto)
                 .then( function (response){
                     let data = response.data
@@ -123,31 +121,33 @@
                     
                     if(data.hasError){
                         self.$parent.populateFormError(data)
+                        self.$parent.closeLoading('modal-add', true)
                     }
                     else if (data.error){
-                        self.$parent.$refs['modal-add'].hide()
                         self.$parent.error = data.error;
                         self.$parent.alertBackground = "danger"
+                        self.$parent.closeLoading('modal-add', false)
                         self.$parent.showAlert()
                     }
                     else{
                         self.$parent.doctorData.push( JSON.parse(data.doctor) )
-                        self.$parent.$refs['modal-add'].hide()
                         self.$parent.error = data.success;
                         self.$parent.alertBackground = "success"
                         self.$parent.neutralizeDoctorForm()
+                        self.$parent.closeLoading('modal-add', false)
                         self.$parent.showAlert()
                     }
                     // return response.data
                 })
                 .catch( function (error){
                     console.log(error);
-                });
+                })
             },
 
             deleteDoctor(id, id_fb, name){
                 if( confirm("Do you really want to delete? " + name) ){
                     let self = this 
+
                     axios.post('/doctor/delete/', {
                         params:{
                             id: id,
@@ -156,12 +156,13 @@
                     })
                     .then( function (response){
                         if(response.data.success){
+                            self.$parent.$refs['loading-modal'].hide()
                             self.$parent.successDeleteDoctor( response.data.success, id)
                         }
                     })
                     .catch( function (error){
                         console.log(error);
-                    });
+                    })
                 }
 
             },
@@ -198,11 +199,12 @@
                     
                     if(data.hasError){
                         self.populateAddError(data)
+                        self.$parent.closeLoading('doctor-show', true)
                     }
                     else if (data.error){
-                        self.$parent.$refs['modal-add'].hide()
                         self.$parent.error = data.error;
                         self.$parent.alertBackground = "danger"
+                        self.$parent.closeLoading('doctor-show', false)
                         self.$parent.showAlert()
                     }
                     else{
@@ -216,16 +218,16 @@
                             }
                         }
                         
-                        self.$parent.$refs['doctor-show'].hide()
                         self.$parent.error = data.success;
                         self.$parent.alertBackground = "success"
                         self.$parent.neutralizeDoctorForm()
+                        self.$parent.closeLoading('doctor-show', false)
                         self.$parent.showAlert()
                     }
                 })
                 .catch( function (error){
                     console.log(error);
-                });
+                })
             },
         },
 

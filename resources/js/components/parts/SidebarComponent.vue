@@ -45,6 +45,7 @@
                     <h6 class="mb-0">Announcement</h6>
                 </a>
 
+<<<<<<< Updated upstream
                 <a
                     href="/patient"
                     :class="[
@@ -63,6 +64,16 @@
                         'sidebar-menu',
                     ]"
                 >
+=======
+
+                <a href="/appointment" :class="[{ active: active == 'appointment' ? true : false }, 'sidebar-menu']">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <h6 class="mb-0" >Appointment</h6>
+                </a>
+
+
+                <a href="/calendar" :class="[{ active: active == 'calendar' ? true : false }, 'sidebar-menu']">
+>>>>>>> Stashed changes
                     <i class="fa-solid fa-calendar-days"></i>
                     <h6 class="mb-0">Calendar</h6>
                 </a>

@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Firestore;
 use Kreait\Firebase\Contract\Storage;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+
+use App\Mail\InquiryMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class InquiryController extends Controller
 {
@@ -26,6 +31,7 @@ class InquiryController extends Controller
         $documents = $this->firestore->database()->collection('Patients')->documents()->rows();
 
         $patient = [];
+        $num = 1;
 
         foreach ($documents as $document) {
             $data = $document->data();
@@ -33,6 +39,9 @@ class InquiryController extends Controller
             $data['joindate'] = Carbon::parse($data['joinDate'])->format('F d, Y');
             $data['age'] = Carbon::parse($data['birthdate'])->diff(Carbon::now())->y;
             $data['name'] = $data['fname'] . ' ' . $data['lname'];
+            $data['pno'] = $num;
+
+            $num = $num + 1;
 
             array_push(
                 $patient,
@@ -63,4 +72,37 @@ class InquiryController extends Controller
             return ['hasError' => true];
         }
     }
+
+    public function send(Request $request){
+        $data = $request->all();
+        $data['sender'] = Auth::user()->fname . ' ' . Auth::user()->lname;
+        $file = $request->file;
+
+        $localfolder = public_path('files') .'/';  
+
+        $fileName = $file->hashName();
+
+        if($file->move($localfolder, $fileName)){
+            $data['file'] = $localfolder . $fileName;
+        }
+
+        $hasError = $this->sendMail($data);
+
+        return response()->json([
+            'hasError' => $hasError,
+        ]);
+    }
+    
+    public function sendMail($data){
+        
+        try{
+            Mail::to($data['email'])->queue(new InquiryMail($data));
+        }
+        catch(\Exception $e){
+            dd($e);
+            return true;
+        }
+        return false;
+    }
 }
+// YunaShin@gmail.com

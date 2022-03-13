@@ -18,8 +18,8 @@ class DashboardController extends Controller
     {
         $this->firestore = $firestore;
         $this->storage = $storage;
-        //$this->middleware('auth');
-        //$this->middleware('verified');
+        $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     public function index()

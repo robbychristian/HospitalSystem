@@ -32,7 +32,7 @@ class AnnouncementController extends Controller
         if (Auth::user()->isAdmin) {
             $documents = $documents->documents()->rows();
         } else {
-            $documents = $documents->where('author_id', '==', Auth::user()->id_fb)->documents()->rows();
+            $documents = $documents->where('drId', '==', Auth::user()->id_fb)->documents()->rows();
         }
 
         $announcements = [];
