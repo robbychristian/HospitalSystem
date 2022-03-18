@@ -70,6 +70,7 @@ Route::prefix('appointment')->name('appointment.')->group(function () {
     Route::post('/delete', [AppointmentController::class, 'delete']);
     Route::post('/update', [AppointmentController::class, 'update']);
     Route::post('/status', [AppointmentController::class, 'status']);
+    Route::post('/lab', [AppointmentController::class, 'lab']);
 });
 
 Route::prefix('calendar')->name('calendar.')->group(function () {

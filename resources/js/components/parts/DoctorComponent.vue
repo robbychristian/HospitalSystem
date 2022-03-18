@@ -114,6 +114,7 @@
                 filePhoto.append('about', doctorForm.about)
                 
                 let self = this
+                
                 axios.post('/doctor/add/', filePhoto)
                 .then( function (response){
                     let data = response.data

@@ -103,4 +103,19 @@ class AppointmentController extends Controller
         return  ['hasError' => false];
     }
     
+    public function lab(Request $request){
+
+        $data = $request->all();
+        
+        $updateArray = [
+            ['path' => 'labRequest', 'value' => $data['data']],
+        ];
+
+        $this->firestore->database()->collection('AppointmentList')->document($data['id'])->update($updateArray);
+
+        return response()->json([
+            'hasError' => false,
+        ]);
+
+    }
 }
