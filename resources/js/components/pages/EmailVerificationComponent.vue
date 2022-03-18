@@ -108,7 +108,7 @@
                     if( code.toUpperCase() == this.verify.code.toUpperCase()){
                         let self = this
 
-                        axios.post('/email/verify/', {
+                        axios.post('/email/verify', {
                             id: this.verify.id,
                         })
                         .then( function (response){
@@ -137,7 +137,7 @@
             newCode(){
                 let self = this
 
-                axios.post('/email/resend/', {
+                axios.post('/email/resend', {
                     id: this.verify.id,
                 })
                 .then( function (response){
@@ -162,7 +162,7 @@
             requestCode(){
                 let self = this
 
-                axios.post('/email/request/')
+                axios.post('/email/request')
                 .then( function (response){
                     if(response.data.error){
                         self.alertBackground = "danger"

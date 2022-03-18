@@ -115,7 +115,7 @@
                 
                 let self = this
                 
-                axios.post('/doctor/add/', filePhoto)
+                axios.post('/doctor/add', filePhoto)
                 .then( function (response){
                     let data = response.data
                     console.log(data)
@@ -149,7 +149,7 @@
                 if( confirm("Do you really want to delete? " + name) ){
                     let self = this 
 
-                    axios.post('/doctor/delete/', {
+                    axios.post('/doctor/delete', {
                         params:{
                             id: id,
                             id_fb: id_fb,
@@ -194,7 +194,7 @@
 
                 let self = this
 
-                axios.post('/doctor/update/', form)
+                axios.post('/doctor/update', form)
                 .then( function (response){
                     let data = response.data
                     

@@ -111,7 +111,7 @@ export default {
             this.openLoading()
             let self = this
             
-            axios.post('/appointment/lab/', {
+            axios.post('/appointment/lab', {
                 id: id,
                 data: category,
             })
@@ -149,7 +149,7 @@ export default {
             this.openLoading()
             let self = this
             
-            axios.post('/appointment/status/', {
+            axios.post('/appointment/status', {
                 id: id,
                 status: status,
             })

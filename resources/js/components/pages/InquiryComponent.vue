@@ -801,7 +801,7 @@
 
                 let self = this
                 
-                axios.post('/inquiry/prescribe/', {
+                axios.post('/inquiry/prescribe', {
                     medicine: this.medicine,
                     actualProblem: this.patientProblem,
                     rx: this.rX,
@@ -877,7 +877,7 @@
             toLinkImage(image, isPatient){
                 let self = this
                 
-                axios.post('/inquiry/image/', {
+                axios.post('/inquiry/image', {
                     image: image,
                 })
                 .then( function (response){

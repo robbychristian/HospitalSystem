@@ -338,7 +338,7 @@ export default {
                 form.append('go', go)
             }
 
-            axios.post('/profile/'+ route +'/', form)
+            axios.post('/profile/'+ route, form)
             .then( function (response){
                 let data = response.data
                 
