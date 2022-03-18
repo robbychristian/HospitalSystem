@@ -25282,7 +25282,7 @@ textarea.form-control-lg {
   border: 1px solid #000000;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-color: black;
 }
 .sidebar .sidebar-content .sidebar-setting .settings-content a {
@@ -25290,7 +25290,8 @@ textarea.form-control-lg {
   text-align: start;
   text-decoration: none;
   color: black;
-  margin: 15px 0px 15px 15px;
+  margin: auto;
+  margin-top: 1rem;
 }
 .sidebar .sidebar-content .sidebar-setting .settings-content h6, .sidebar .sidebar-content .sidebar-setting .settings-content .h6 {
   margin: 15px 0px 15px 0px;
@@ -25420,13 +25421,16 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: center;
 }
-.preview-details .prescribe-form .header .doctor-details img {
+.preview-details .prescribe-form .header .doctor-details .img {
   margin-right: 1rem;
   margin-bottom: 0rem;
   width: 65px;
   height: 65px;
   border-radius: 100%;
   border: 2px solid #5C97C8;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .preview-details .prescribe-form .divider {
   width: 100%;
@@ -25772,13 +25776,16 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: center;
 }
-.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .header .doctor-details img {
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .header .doctor-details .img {
   margin-right: 1rem;
   margin-bottom: 0rem;
   width: 65px;
   height: 65px;
   border-radius: 100%;
   border: 2px solid #5C97C8;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .divider {
   width: 100%;
@@ -26154,8 +26161,190 @@ textarea.form-control-lg {
     margin-top: 0.35rem;
   }
 }
+input.error::-moz-placeholder {
+  color: white;
+}
+input.error:-ms-input-placeholder {
+  color: white;
+}
+input.error::placeholder, .error {
+  color: white;
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.5) !important;
+}
+
+.profile-page {
+  padding: 1.5rem;
+  background-color: rgba(105, 201, 205, 0.3);
+}
+.profile-page .profile-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+.profile-page .profile-content .settings {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.profile-page .profile-content .on-update {
+  background-color: rgba(255, 193, 7, 0.2) !important;
+}
+.profile-page .profile-content .personal-info, .profile-page .profile-content .clinic-info {
+  position: relative;
+  background-color: white;
+  box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  max-width: 500px;
+  margin: auto;
+}
+.profile-page .profile-content .personal-info p, .profile-page .profile-content .clinic-info p {
+  margin-top: 0.5rem;
+}
+.profile-page .profile-content .form-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+.profile-page .profile-content .form-box textarea {
+  resize: none;
+  width: 100%;
+}
+.profile-page .profile-content .other-box {
+  padding: 0.25rem;
+  margin-top: 1rem;
+  background-color: #d1d3e2;
+}
+.profile-page .profile-content .other-box .input-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-page .profile-content .other-box p {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-style: italic;
+}
+.profile-page .profile-content .clinic-info {
+  margin-top: 1rem;
+  border-bottom: 3px #48898C solid;
+  padding: 0rem;
+}
+.profile-page .profile-content .clinic-info .form-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+.profile-page .profile-content .clinic-info .form-box input {
+  flex-grow: 1;
+  padding: 0.25rem;
+}
+.profile-page .profile-content .clinic-info .form-box textarea {
+  resize: none;
+  width: 100%;
+}
+.profile-page .profile-content .clinic-info h6 span, .profile-page .profile-content .clinic-info .h6 span {
+  color: #858796;
+  font-style: italic;
+  font-weight: bold;
+}
+.profile-page .profile-content .clinic-info h5, .profile-page .profile-content .clinic-info .h5, .profile-page .profile-content .clinic-info h6, .profile-page .profile-content .clinic-info .h6 {
+  padding: 1rem 0.25rem 0rem 1rem;
+  word-wrap: break-word;
+}
+.profile-page .profile-content .clinic-info h4, .profile-page .profile-content .clinic-info .h4 {
+  background-color: #eaecf4;
+  padding: 1rem;
+  text-align: center;
+  color: #48898C;
+  margin-bottom: 0rem;
+}
+.profile-page .profile-content .clinic-info .availability {
+  margin-top: 0.75rem;
+  padding: 0rem 0.5rem 1rem 1rem;
+  background-color: #f8f9fc;
+}
+.profile-page .profile-content .clinic-info .availability small, .profile-page .profile-content .clinic-info .availability .small {
+  color: black !important;
+  font-weight: bold;
+  font-style: italic;
+}
+.profile-page .profile-content .clinic-info .availability h5, .profile-page .profile-content .clinic-info .availability .h5 {
+  padding: 1rem 0rem 0rem 0rem;
+}
+.profile-page .profile-content .clinic-info .availability h6, .profile-page .profile-content .clinic-info .availability .h6 {
+  color: #6e707e;
+  font-style: italic;
+}
+.profile-page .profile-content .personal-info {
+  border-right: 3px #14679B solid;
+  text-align: center;
+  width: 400px;
+  margin-top: 1.5rem;
+}
+.profile-page .profile-content .personal-info .image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  width: 130px;
+  height: 130px;
+  border-radius: 100%;
+  border: 2px solid #48898C;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.profile-page .profile-content .personal-info .image h6, .profile-page .profile-content .personal-info .image .h6 {
+  display: none;
+  margin-bottom: 0;
+}
+.profile-page .profile-content .personal-info .image-edit {
+  color: white;
+  cursor: pointer;
+  background-color: #000000 !important;
+}
+.profile-page .profile-content .personal-info .image-edit:hover {
+  background-image: none !important;
+}
+.profile-page .profile-content .personal-info .image-edit:hover h6, .profile-page .profile-content .personal-info .image-edit:hover .h6 {
+  display: block !important;
+}
+.profile-page .profile-content .personal-info .details {
+  flex-grow: 1;
+  margin-left: 1rem;
+}
+.profile-page .profile-content .personal-info .details p {
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  font-style: italic;
+}
+.profile-page .profile-content .personal-info .details p span {
+  color: #6e707e;
+}
+.profile-page .profile-content .personal-info .about {
+  margin-top: 0.75rem;
+  color: #858796;
+  word-wrap: break-word;
+}
+
 .text-dark-green {
   color: #48898C !important;
+}
+
+.text-dark-blue {
+  color: #14679B !important;
+}
+
+.text-orange {
+  color: #f6993f !important;
+}
+
+.text-pink {
+  color: #f66d9b !important;
 }
 
 .bg-dark-green {

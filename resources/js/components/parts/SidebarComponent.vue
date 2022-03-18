@@ -45,26 +45,6 @@
                     <h6 class="mb-0">Announcement</h6>
                 </a>
 
-<<<<<<< Updated upstream
-                <a
-                    href="/patient"
-                    :class="[
-                        { active: active == 'patient' ? true : false },
-                        'sidebar-menu',
-                    ]"
-                >
-                    <i class="fa-solid fa-hospital-user"></i>
-                    <h6 class="mb-0">Patient</h6>
-                </a>
-
-                <a
-                    href="/calendar"
-                    :class="[
-                        { active: active == 'calendar' ? true : false },
-                        'sidebar-menu',
-                    ]"
-                >
-=======
 
                 <a href="/appointment" :class="[{ active: active == 'appointment' ? true : false }, 'sidebar-menu']">
                     <i class="fa-solid fa-clipboard-list"></i>
@@ -73,7 +53,6 @@
 
 
                 <a href="/calendar" :class="[{ active: active == 'calendar' ? true : false }, 'sidebar-menu']">
->>>>>>> Stashed changes
                     <i class="fa-solid fa-calendar-days"></i>
                     <h6 class="mb-0">Calendar</h6>
                 </a>
@@ -105,7 +84,7 @@
                         </button>
                     </div>
 
-                    <div class="settings-content">
+                    <div class="settings-content align-items-center">
                         <div
                             class="profile-img"
                             :style="{
@@ -117,17 +96,16 @@
                             {{ name == "" ? "ADMIN" : name }}
                         </h5>
 
-                        <a href="/profile">Profile</a>
-                        <a href="#">Calendar</a>
-                        <a href="#">Inquiry</a>
+                        <a class="btn btn-dark text-white" href="/profile"> <i class="fa-solid fa-user-pen"></i> Profile</a>
 
-                        <form action="/offline" method="POST">
+                        <form class="mt-3" action="/offline" method="POST">
                             <input
                                 type="hidden"
                                 name="_token"
                                 v-bind:value="token"
                             />
-                            <button class="btn btn-link" type="submit">
+                            <button class="btn btn-dark text-white" type="submit">
+                                <i class="fa-solid fa-right-from-bracket"></i>
                                 Log out
                             </button>
                         </form>

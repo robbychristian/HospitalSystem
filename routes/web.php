@@ -80,11 +80,14 @@ Route::prefix('calendar')->name('calendar.')->group(function () {
 Route::prefix('inquiry')->name('inquiry.')->group(function () {
     Route::get('/', [InquiryController::class, 'index']);
     Route::post('/image', [InquiryController::class, 'signedUrl']);
-    Route::post('/send', [InquiryController::class, 'send']);
+    Route::post('/prescribe', [InquiryController::class, 'prescribe']);
 });
 
 Route::prefix('profile')->name('profile.')->group(function () {
     Route::get('/', [ProfileController::class, 'index']);
+    Route::post('/personal', [ProfileController::class, 'personal']);
+    Route::post('/clinic', [ProfileController::class, 'clinic']);
+    Route::post('/password', [ProfileController::class, 'password']);
 });
 
 

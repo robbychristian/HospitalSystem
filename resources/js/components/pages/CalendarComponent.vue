@@ -175,7 +175,7 @@ export default {
                 expandRows: true,
                 selectable: true,
                 editable: true,
-                events: items,
+                events: [],
                 eventClick: this.handleEventClick,
             },
         };

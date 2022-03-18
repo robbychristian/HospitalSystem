@@ -26,11 +26,6 @@ Route::prefix('announcement')->name('announcement.')->group(function () {
     Route::post('/update', [AnnouncementController::class, 'update']);
 });
 
-<<<<<<< Updated upstream
 Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::post('/delete', [CalendarController::class, 'destroy']);
 });
-=======
-Route::post('/add', [AnnouncementController::class, 'add']);
-
->>>>>>> Stashed changes

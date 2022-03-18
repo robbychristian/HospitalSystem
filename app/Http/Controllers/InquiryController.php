@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 
 class InquiryController extends Controller
 {
+    
     public function __construct(Firestore $firestore, Storage $storage){ 
         $this->firestore = $firestore; 
         $this->storage = $storage;
@@ -25,28 +26,26 @@ class InquiryController extends Controller
         $page="Laboratory Request & Prescription";
         $active="inquiry";
 
-
-        // $documents = $this->firestore->database()->collection('Doctors')->document(<doctor id>)->
-        // ->collection('Patients')->documents()->rows();
-        $documents = $this->firestore->database()->collection('Patients')->documents()->rows();
+        $documents = $this->firestore->database()->collection('AppointmentList')->where('drId', '==', Auth::user()->id_fb)->documents()->rows();
 
         $patient = [];
         $num = 1;
 
         foreach ($documents as $document) {
             $data = $document->data();
-            $data['id'] = $document->id();
-            $data['joindate'] = Carbon::parse($data['joinDate'])->format('F d, Y');
-            $data['age'] = Carbon::parse($data['birthdate'])->diff(Carbon::now())->y;
-            $data['name'] = $data['fname'] . ' ' . $data['lname'];
-            $data['pno'] = $num;
 
-            $num = $num + 1;
-
-            array_push(
-                $patient,
-                $data
-            );
+            if($data['prescribeState'] == 'no' && $data['appointStatus'] == 'Approved'){
+                $data['id'] = $document->id();
+                $data['name'] = $data['pfName'] . ' ' . $data['plName'];
+                $data['pno'] = $num;
+    
+                $num = $num + 1;
+    
+                array_push(
+                    $patient,
+                    $data
+                );
+            }
         }
 
         $patient = json_encode($patient);
@@ -71,6 +70,37 @@ class InquiryController extends Controller
         catch (Throwable $e){
             return ['hasError' => true];
         }
+    }
+
+    public function prescribe(Request $request){
+        $data = $request->all();
+        
+        $medicines = [];
+
+        foreach ($data['medicine'] as $item) {
+            array_push( $medicines, $item['prescribed'] );
+        }
+
+        $updateArray = [
+            ['path' => 'medicines', 'value' => $medicines],
+            ['path' => 'actualProblem', 'value' => $data['actualProblem']],
+            ['path' => 'rx', 'value' => $data['rx']],
+            ['path' => 'advice', 'value' => $data['advice']],
+            ['path' => 'prescribeState', 'value' => 'yes'],
+        ];
+        
+        try{
+            $this->firestore->database()->collection('AppointmentList')->document($data['id'])->update($updateArray);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'hasError' => true,
+            ]);
+        }
+
+        return response()->json([
+            'hasError' => false,
+        ]);
     }
 
     public function send(Request $request){

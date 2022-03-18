@@ -39,11 +39,11 @@
 
         <div class="appointment-content">
             <h1 v-if="appointments.length == 0">
-                There's no appointment in the database
+                There's no ongoing approved appointment right now
             </h1>
 
             <div v-else class="appointment-box mx-auto" v-for="(data, ind) in items" :key="'A'+ind">
-                <div :class="[ (data.appointStatus == 'Pending payment' ? 'bg-secondary' : data.appointStatus) , 'status']"> {{data.appointStatus}} </div>
+                <div :class="[ data.appointStatus , 'status']"> {{data.appointStatus}} </div>
 
                 <div class="patient-info">
                     <h6> Patient:</h6>
@@ -58,8 +58,10 @@
                 
                 <div class="appointment-info">
                     <p> Schedule: {{data.bookingDate}} {{data.bookingSchedule}}</p>
-                    <p> Payment: {{data.appointState == "Hospital" ? "Cash on Hand" : "Online Payment"}}</p>
+                    <p> Payment: {{data.proofOfPay ? "Online Payment" : "Cash on Hand"}}</p>
                     <p class="text-danger"> Reason: {{data.pProblem}}</p>
+                    <button v-if="data.appointStatus == 'Pending' && data.proofOfPay" @click="showPayment(data.pName, data.proofOfPay)" class="btn btn-sm p-1 btn-info w-100 text-center text-white"> Show Payment</button>
+
 
 
                     <div v-if="isAdmin == 1">
@@ -73,7 +75,8 @@
                         </div>
 
                         <div v-else-if="data.appointStatus == 'Approved'"  class="d-flex px-3 py-1 mt-3 justify-content-between" style="background-color: #ececec;">
-                            <button @click="updateAppointment(data.id, 'Cancelled', ind)" class="btn btn-sm p-1 btn-danger  flex-grow-1"> Cancel Appointment</button>
+                            <button @click="removeLab(data.id, ind)" :class="[ data.labRequest == '1' ? 'bg-primary' : 'bg-secondary', 'btn btn-sm p-1  flex-grow-1 text-white']" :disabled="data.labRequest == '2'"> Lab request {{ data.labRequest == 1 ? 'unessential' : 'essential'}}</button>
+                            <button @click="updateAppointment(data.id, 'Cancelled', ind)" class="btn btn-sm p-1 btn-danger  flex-grow-1"> Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -103,11 +106,49 @@ export default {
     },
 
     methods: {
+
+        removeLab(id, ind){
+            this.openLoading()
+            let self = this
+            
+            axios.post('/appointment/status/', {
+                id: id,
+            })
+            .then( function (response){
+                let data = response.data
+                
+                if(data.hasError){
+                    Swal({
+                        title: 'Error!',
+                        text: 'Please refresh the page',
+                        icon: 'error'
+                    })
+                    self.closeLoading()
+                }
+                else{
+                    Swal({
+                        title: 'Success!',
+                        text: 'Appointment is ' + status,
+                        icon: 'success'
+                    })
+
+                    let appointment = self.items.splice(ind, 1)
+                    appointment[0].appointStatus = status
+                    self.items.push(appointment[0])
+
+                    self.closeLoading()
+                }
+            })
+            .catch( function (error){
+                console.log(error);
+            });
+
+        },
         
         updateAppointment(id, status, ind){
                     
             this.openLoading()
-            self = this
+            let self = this
             
             axios.post('/appointment/status/', {
                 id: id,
@@ -143,6 +184,18 @@ export default {
             });
 
             this.closeLoading()
+        },
+
+        showPayment(name, image){
+
+            Swal({
+                title: 'Proof of Payment!',
+                text: name + ' Has already paid!',
+                icon: image,
+                imageWidth: 600,
+                imageHeight: 600,
+                imageAlt: 'Image does not exist!',
+            })
         },
 
         // Loading Modal Related

@@ -124,7 +124,7 @@
                     border: 1px solid #000000;
                     background-position: center;
                     background-repeat: no-repeat;
-                    background-size: contain;
+                    background-size: cover;
                     background-color: black;
                 }
 
@@ -134,7 +134,8 @@
                     text-align: start;
                     text-decoration: none;
                     color: black;
-                    margin: 15px 0px 15px 15px;
+                    margin: auto;
+                    margin-top: 1rem;
                 }
 
                 h6{

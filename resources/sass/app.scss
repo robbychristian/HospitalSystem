@@ -58,8 +58,13 @@
 @import 'pages/inquiry.scss';
 @import 'pages/dashboard.scss';
 @import 'pages/email-verification.scss';
+@import 'pages/profile.scss';
 
 .text-dark-green{ color: $dark-green !important; }
+.text-dark-blue{ color: $darker-blue !important; }
+.text-orange{ color: $orange !important; }
+.text-pink{ color: $pink !important; }
+
 .bg-dark-green{ background-color: $dark-green !important; }
 .bg-dark-blue{ background-color: $darker-blue !important; }
 .bg-aiai{ background-color: #a1a1a1 !important; }

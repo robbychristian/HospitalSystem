@@ -37,7 +37,9 @@
                         <img src="/img/logo1.png" alt="Logo" width="90" height="115">
 
                         <div class="doctor-details">
-                            <img :src="user.photoUrl" alt="doctor image">
+                            <div class="img"
+                            :style="{backgroundImage: 'url(' + (user.photoUrl == '' || user.photoUrl == null ? '/img/avatar.png' : user.photoUrl) + ')',}"
+                            ></div>
                             <h4 class="mb-0 fw-bold"> Dr. {{user.name}}</h4>
                         </div>
                         <h6 class="fw-normal">{{user.degree}}</h6>
@@ -66,16 +68,16 @@
                             </div>
 
                             <div class="form-info">
-                                <h6>Address: </h6>  <p class="flex-grow-1">{{patient.address}}</p>
+                                <h6>Address: </h6>  <p class="flex-grow-1">{{patient.pAddress}}</p>
                             </div>
                             
                             <div class="d-flex justify-content-between">
                                 <div class="form-info">
-                                    <h6>Birthdate: </h6>  <p>{{patient.birthdate}}</p>
+                                    <h6>Birthdate: </h6>  <p>{{patient.pBirthdate}}</p>
                                 </div>
 
                                 <div class="form-info">
-                                    <h6>Gender: </h6>  <p>{{patient.gender}}</p>
+                                    <h6>Gender: </h6>  <p>{{patient.pGender}}</p>
                                 </div>
                             </div>
                         </div>
@@ -149,24 +151,24 @@
                         <div class="d-flex">
                             <div class="patient-box">
                                 <h6>Patient's Address: </h6>
-                                <p>{{ patient.address }}</p>
+                                <p>{{ patient.pAddress }}</p>
                             </div>
 
                             <div class="patient-box" style="max-width: 100px;">
                                 <h6>Phone: </h6>
-                                <p>{{ patient.phone }}</p>
+                                <p>{{ patient.pPhone }}</p>
                             </div>
                         </div>
 
                         <div class="d-flex">
                             <div class="patient-box" style="max-width: 120px;">
                                 <h6>Date of Birth: </h6>
-                                <p>{{ patient.birthdate }}</p>
+                                <p>{{ patient.pBirthdate }}</p>
                             </div>
 
                             <div class="patient-box" style="max-width: 100px;">
                                 <h6>Gender: </h6>
-                                <p>{{ patient.gender }}</p>
+                                <p>{{ patient.pGender }}</p>
                             </div>
 
                             <div class="patient-box"></div>
@@ -256,6 +258,10 @@
                 </div>
 
             </div>
+
+            <template #modal-footer>
+                <button v-if="isPrescribed" class="btn btn-success " @click="prescribed()">Prescribe</button>
+            </template>
         </b-modal>
 
         <div class="inquiry-content">
@@ -286,12 +292,12 @@
                 </div>
 
                 <div class="patient-info" v-if="patient_id != -1">
-                    <img :src="patient.imageUrl" alt="Image does not exist" >
+                    <img :src="patient.pPhotoUrl" alt="Image does not exist" >
 
                     <div class="patient-details">
                         <h6>Name: <span class="text-dark-green">{{patient.name}}</span></h6>
-                        <h6>Blood Type: <span class="text-dark-green">{{patient.bloodType}}</span></h6>
-                        <h6>Email: <span class="text-dark-green">{{patient.email}}</span></h6>
+                        <h6>Said Problem: <span class="text-dark-green">{{patient.pProblem}}</span></h6>
+                        <h6>Email: <span class="text-dark-green">{{patient.pPhone}}</span></h6>
                     </div>
 
                 </div>
@@ -315,7 +321,9 @@
                             <img src="/img/logo1.png" alt="Logo" width="90" height="115">
 
                             <div class="doctor-details">
-                                <img :src="user.photoUrl" alt="doctor image">
+                                <div class="img"
+                                :style="{backgroundImage: 'url(' + (user.photoUrl == '' || user.photoUrl == null ? '/img/avatar.png' : user.photoUrl) + ')',}"
+                                ></div>
                                 <h4 class="mb-0 fw-bold"> Dr. {{user.name}}</h4>
                             </div>
                             <h6 class="fw-normal">{{user.degree}}</h6>
@@ -344,16 +352,16 @@
                                 </div>
 
                                 <div class="form-info">
-                                    <h6>Address: </h6>  <p class="flex-grow-1">{{patient.address}}</p>
+                                    <h6>Address: </h6>  <p class="flex-grow-1">{{patient.pAddress}}</p>
                                 </div>
                                 
                                 <div class="d-flex justify-content-between">
                                     <div class="form-info">
-                                        <h6>Birthdate: </h6>  <p>{{patient.birthdate}}</p>
+                                        <h6>Birthdate: </h6>  <p>{{patient.pBirthdate}}</p>
                                     </div>
 
                                     <div class="form-info">
-                                        <h6>Gender: </h6>  <p>{{patient.gender}}</p>
+                                        <h6>Gender: </h6>  <p>{{patient.pGender}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -442,24 +450,24 @@
                             <div class="d-flex">
                                 <div class="patient-box">
                                     <h6>Patient's Address: </h6>
-                                    <p>{{ patient.address }}</p>
+                                    <p>{{ patient.pAddress }}</p>
                                 </div>
 
-                                <div class="patient-box" style="max-width: 100px;">
+                                <div class="patient-box" style="max-width: 120px;">
                                     <h6>Phone: </h6>
-                                    <p>{{ patient.phone }}</p>
+                                    <p>{{ patient.pPhone }}</p>
                                 </div>
                             </div>
 
                             <div class="d-flex">
                                 <div class="patient-box" style="max-width: 120px;">
                                     <h6>Date of Birth: </h6>
-                                    <p>{{ patient.birthdate }}</p>
+                                    <p>{{ patient.pBirthdate }}</p>
                                 </div>
 
                                 <div class="patient-box" style="max-width: 100px;">
                                     <h6>Gender: </h6>
-                                    <p>{{ patient.gender }}</p>
+                                    <p>{{ patient.pGender }}</p>
                                 </div>
 
                                 <div class="patient-box"></div>
@@ -657,6 +665,7 @@
                     dosage: '',
                     perDay: '',
                     days: '',
+                    prescribed: '',
                 },
                 unit: 'mL',
 
@@ -768,7 +777,10 @@
                 }
 
                 if(go){
-                    this.medicineForm.dosage = this.medicineForm.dosage + " " + this.unit 
+                    this.medicineForm.dosage = this.medicineForm.dosage + " " + this.unit
+
+                    this.medicineForm.prescribed = this.medicineForm.medicine + " | " + this.medicineForm.dosage + " | " + this.medicineForm.perDay + " | " + this.medicineForm.days
+                    
                     this.medicine.push(this.medicineForm)
                     this.neutralizeMedForm();
                 }
@@ -781,65 +793,79 @@
                 this.medicine.splice(ind, 1)
             },
 
-
             changeContent(bool){
                 this.isPrescribed = bool
             },
 
-            send(){
+            prescribed(){
 
-                if(this.patient_id == -1){
+                let self = this
                 
-                    this.variant = 'danger'
-                    this.message = 'Pick a patient before sending the mail'
-                    this.showAlert()
-
-                }
-                else if( this.file == null ){
-
-                    this.variant = 'danger'
-                    this.message = 'File input is null'
-                    this.showAlert()
-
-                }
-                else{
-                    let self = this
-                    const form = new FormData();
-                    form.append('email', this.patient.email)
-                    form.append('file', this.file)
-                    form.append('body', this.body)
-                    form.append('subject', this.subject)
+                axios.post('/inquiry/prescribe/', {
+                    medicine: this.medicine,
+                    actualProblem: this.patientProblem,
+                    rx: this.rX,
+                    advice: this.advice,
+                    id: this.patient_id,
+                })
+                .then( function (response){
+                    let data = response.data
                     
-                    axios.post('/inquiry/send/', form)
-                    .then( function (response){
-                        let data = response.data
-                        
-                        if(data.hasError){
-                            self.variant = 'danger'
-                            self.message = 'Email did not send please refresh the page'
-                        }
-                        else{
-                            self.variant = 'success'
-                            self.message = 'Mail successfuly sent!'
-                        }
-                        
-                        self.showAlert()
-                    })
-                    .catch( function (error){
-                        console.log(error);
-                    });
-                }
-                
+                    if(data.hasError){
+                        Swal({
+                            title: 'Error!',
+                            text: 'Please refresh the page.',
+                            icon: 'error'
+                        })
+                    }
+                    else{
+                        self.removeList()
+
+                        Swal({
+                            title: 'Success!',
+                            text: 'Prescription has been sent to the user.',
+                            icon: 'success'
+                        })
+
+                    }
+                    
+                    self.showAlert()
+                })
+                .catch( function (error){
+                    console.log(error);
+                });
+            },
+
+            removeList(){
+                let length = this.patients.length
+
+                for(let i = 0; i < length; i++){
+                    if(this.patients[i].id == this.patient_id){
+                        this.patients.splice(i, 1)
+                    }
+                } 
+
+                this.patient_id = -1
+                this.patient = ''
+                this.medicine = []
+                this.rx = ''
+                this.advice = '',
+                this.patientProblem = ''
+
+                this.neutralizeMedForm()
+
             },
 
             pickPatient(ind){
                 
                 this.patient = this.items[ind]
 
-                let sub = this.patient.imageUrl.substring(0, 5).toLowerCase()
+                if(this.patient.photoUrl != null && this.patient.photoUrl != ''){
+                    let sub = this.patient.pPhotoUrl.substring(0, 5).toLowerCase()
 
-                if(sub != 'https'){
-                    this.toLinkImage(this.patient.imageUrl, true)
+                    if(sub != 'https'){
+                        this.toLinkImage(this.patient.pPhotoUrl, true)
+                    }
                 }
 
                 this.name = this.patient.name
@@ -890,7 +916,7 @@
                         go = false
                     }
                     if(this.patientProblem == ''){
-                        text += '- State the problem of the patient'
+                        text += '- State the problem of the patient\n'
                         go = false
                     }
                 }
@@ -902,7 +928,7 @@
                 }
 
                 if(this.patient_id == -1){
-                    text += '- Pick a patient!\n'
+                    text += '- Pick a patient!'
                     go = false
                 }
                 if(go)
