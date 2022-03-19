@@ -302,7 +302,7 @@ export default {
                 filePhoto.append("photoUrl", this.user.photoUrl);
 
                 axios
-                    .post("api/announcement/add/", filePhoto)
+                    .post("api/announcement/add", filePhoto)
                     .then((response) => {
                         swal(
                             "Posted!",
@@ -332,7 +332,7 @@ export default {
             }).then((value) => {
                 if (value) {
                     axios
-                        .post("/api/announcement/delete/", {
+                        .post("/api/announcement/delete", {
                             id: id,
                             photoUrl: photoUrl,
                         })
@@ -378,7 +378,7 @@ export default {
                 filePhoto.append("oldPhotoUrl", oldPhotoUrl);
 
                 axios
-                    .post("/api/announcement/update/", filePhoto)
+                    .post("/api/announcement/update", filePhoto)
                     .then((response) => {
                         console.log(response.data);
                         swal(

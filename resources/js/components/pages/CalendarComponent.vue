@@ -228,7 +228,7 @@ export default {
             }).then((value) => {
                 if (value == "OK") {
                     axios
-                        .post("/api/calendar/delete/", {
+                        .post("/api/calendar/delete", {
                             id: arg.event.id,
                         })
                         .then((response) => {
