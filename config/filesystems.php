@@ -41,6 +41,11 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        
+        'public_pdf' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/pdf',
+        ],
 
         's3' => [
             'driver' => 's3',

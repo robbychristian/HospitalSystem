@@ -33,7 +33,7 @@ Route::prefix('announcement')->name('announcement.')->group(function () {
 });
 
 Route::prefix('test')->name('test.')->group(function () {
-    Route::get('/', [TestController::class, 'index']);
+    Route::post('/', [TestController::class, 'index']);
     Route::get('/calendar', [CalendarController::class, 'index']);
     Route::post('/addappointment', [CalendarController::class, 'store']);
     // Route::get('/insert', [TestController::class, 'insert']);

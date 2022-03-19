@@ -25157,9 +25157,63 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-.test-page {
-  height: 1000px;
-  background-color: whitesmoke;
+.lab-form {
+  padding: 0.5rem;
+  width: 100%;
+}
+.lab-form .top-info {
+  background-color: #C0504D;
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px black solid;
+}
+.lab-form .top-info p {
+  margin-bottom: 0px;
+}
+.lab-form .header .patient-box {
+  display: flex;
+  flex-direction: column;
+  border: 1px black solid;
+  padding: 0.35rem;
+  flex-grow: 1;
+}
+.lab-form .header .patient-box p {
+  margin-bottom: 0px;
+}
+.lab-form .header .patient-box h6, .lab-form .header .patient-box .h6 {
+  margin-bottom: 0.25rem;
+}
+.lab-form .body {
+  display: flex;
+}
+.lab-form .body .content-box {
+  width: 50%;
+}
+.lab-form .body .content-box .top-info {
+  padding: 0.25rem !important;
+}
+.lab-form .body .content-box .top-info h6, .lab-form .body .content-box .top-info .h6 {
+  margin-bottom: 0px !important;
+}
+.lab-form .body .content-box .info-content {
+  border: 1px black solid;
+  padding: 0.25rem;
+}
+.lab-form .body .content-box .info-content .box {
+  width: 13px;
+  height: 13px;
+  background-color: white;
+  margin-right: 0.25rem;
+  border: #000 1px solid;
+  border-radius: 2px;
+}
+.lab-form .body .content-box .info-content .checked {
+  background-color: #000 !important;
+}
+.lab-form .body .content-box .info-content p {
+  margin-bottom: 0px;
 }
 
 .topbar {

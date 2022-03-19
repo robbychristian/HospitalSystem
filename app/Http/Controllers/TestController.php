@@ -6,11 +6,15 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use Kreait\Firebase\Contract\Firestore;
-use Kreait\Firebase\Contract\Storage;
+// use Kreait\Firebase\Contract\Storage;
 // use Kreait\Firebase\Contract\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
+use PDF;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 
 class TestController extends Controller
@@ -23,11 +27,39 @@ class TestController extends Controller
         // $this->middleware('auth');
     }
 
-    public function index(){
-        $page="Test";
-        $active="test";
+    public function index(Request $request){
+        $data = $request->all();
 
-        return view('test')->with('page', $page)->with('active', $active);
+        $data['patient'] = json_decode($data['patient']);
+        $data['chemProfOptions'] = json_decode($data['chemProfOptions']);
+        $data['chemOptions'] = json_decode($data['chemOptions']);
+        $data['glucoseOptions'] = json_decode($data['glucoseOptions']);
+        
+        $data['hemaOptions'] = json_decode($data['hemaOptions']);
+        $data['urineOptions'] = json_decode($data['urineOptions']);
+        $data['bodyFluidsOptions'] = json_decode($data['bodyFluidsOptions']);
+        
+        $data['labform'] = json_decode($data['labform']);
+        
+        // dd($data);
+
+        $pdf = PDF::loadView('mail/lab', $data);
+
+        $name = Str::upper(Str::random(6)) ;
+        $path = '/' . $name . '.pdf';
+
+        Storage::disk('public_pdf')->put($path, $pdf->output()); 
+        
+        // return $pdf->download('itsolutionstuff.pdf');
+    
+        return response()->json([
+            'hasError' => false,
+        ]);
+        
+        // $page="Test";
+        // $active="test";
+
+        // return view('test')->with('page', $page)->with('active', $active);
 
         // http://storage.googleapis.com/[BUCKET_NAME]/[OBJECT_NAME]
         // $nameBucket = $this->storage->getBucket()->name();

@@ -41,7 +41,7 @@ class CalendarController extends Controller
 
         //GET ALL EVENTS FOR ADMIN
         if (Auth::user()->isAdmin == 1) {
-            $allAppointments = $this->firestore->database()->collection("Appointments")->documents()->rows();
+            $allAppointments = $this->firestore->database()->collection("AppointmentList")->documents()->rows();
             $appointments = [];
 
             foreach ($allAppointments as $appointment) {
@@ -54,7 +54,7 @@ class CalendarController extends Controller
                 );
             }
         } else { //GET ALL EVENTS FOR DOCTORS
-            $allAppointments = $this->firestore->database()->collection("Appointments");
+            $allAppointments = $this->firestore->database()->collection("AppointmentList");
             $query = $allAppointments->where('doctor_id', '==', Auth::user()->id_fb);
             $doctorAppointments = $query->documents();
 
@@ -108,27 +108,75 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
+        $doctor = $this->firestore->database()->collection("Doctors")->document(Auth::user()->id_fb)->snapshot()->data();
+        $patient = $this->firestore->database()->collection("Patients")->document($request->patient)->snapshot()->data();
+
         $startDate = Carbon::create($request->date)->year . "-" . Carbon::create($request->date)->month . "-" . Carbon::create($request->date)->day . ' ' . $request->startTime;
         $endDate = Carbon::create($request->date)->year . "-" . Carbon::create($request->date)->month . "-" . Carbon::create($request->date)->day . ' ' . $request->endTime;
         $month = Carbon::create($request->date)->month;
-        $day = Carbon::create($request->date)->day;
+        $day = Carbon::create($request->date)->isoFormat("ddd");
 
-        $startTime = Carbon::create($startDate)->isoFormat("ddd | LL, LT");
-        $endTime = Carbon::create($endDate)->isoFormat("ddd | LL, LT");
+        $startTime = Carbon::create($startDate)->isoFormat("hh:mm");
+        $endTime = Carbon::create($endDate)->isoFormat("hh:mm");
 
         //MAKE NEW APPOINTMENT
-        $newAppointment = $this->firestore->database()->collection("Appointments")->newDocument();
+        $newAppointment = $this->firestore->database()->collection("AppointmentList")->newDocument();
+
         $newAppointment->set([
             'id' => $newAppointment->id(),
-            'doctor_id' => Auth::user()->id_fb,
-            'patient_id' => $request->patient,
-            'title' => $request->title,
-            'problem' => $request->problem,
-            'start' => $startTime,
-            'end' => $endTime
+            'actualProblem' => $request->problem,
+            'appointDate' => Carbon::parse($request->date)->format('m/d/y'),
+            'appointState' => 'Teleconsultation',
+            'appointStatus' => 'Pending',
+            'appointTime' => '',
+            'bookingDate' => Carbon::parse($request->date)->format('m/d/y'),
+            'bookingSchedule' => $day . ' ' . $startTime . ' ' . $endTime,
+
+            'drId' => Auth::user()->id_fb,
+            'consultFee' => $doctor['consultFee'],
+            'drClinic' => $doctor['clinicAddress'],
+            'drDegree' => $doctor['degree'],
+            'drEmail' => $doctor['email'],
+            'drPhone' => $doctor['phone'],
+            'drPhotoUrl' => $doctor['photoUrl'],
+            'drfName' => $doctor['fname'],
+            'specialization' => $doctor['specialization'],
+            'drlName' => $doctor['lname'],
+
+            'hospitalAddress' => '',
+            'hospitalName' => '',
+            'labRequest' => '1',
+
+            'medicines' => '',
+            'nextVisit' => '',
+
+            'pAddress' => $patient['address'],
+            'pBirthdate' => $patient['birthdate'],
+            'pGender' => $patient['gender'],
+            'pPhone' => $patient['phone'],
+            'pPhotoUrl' => $patient['imageUrl'],
+            'pfName' => $patient['fname'],
+            'plName' => $patient['lname'],
+            'pProblem' => $request->problem,
+            'pId' => $request->patient,
+
+            'prescribeDate' => '',
+            'prescribeNo' => '',
+            'prescribeState' => 'no',
+            'rx' => '',
+            'prescribeState' => '',
+
+            'reviewComment' => '',
+            'reviewDate' => '',
+            'reviewStar' => '',
+            'reviewTimeStamp' => '',
+            'teleconsultFee' => '',
+            'timeStamp' => '',
+            'advice' => null,
         ]);
+
         //GET ALL EVENTS
-        $allAppointments = $this->firestore->database()->collection("Appointments")->documents()->rows();
+        $allAppointments = $this->firestore->database()->collection("AppointmentList")->documents()->rows();
 
         $appointments = [];
 
@@ -201,6 +249,6 @@ class CalendarController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->firestore->database()->collection('Appointments')->document($request->id)->delete();
+        $this->firestore->database()->collection('AppointmentList')->document($request->id)->delete();
     }
 }

@@ -261,6 +261,19 @@
 
             <template #modal-footer>
                 <button v-if="isPrescribed" class="btn btn-success " @click="prescribed()">Prescribe</button>
+                <button v-else class="btn btn-success " @click="labForm()">Send Lab Form</button>
+
+                <!-- <form action="/test" v-else method="POST"> 
+                    <input type="hidden" name="_token" v-bind:value="csrf">
+                    <input type="hidden" name="patient" :value="JSON.stringify(patient)">
+                    <input type="hidden" name="now" :value="now">
+
+                    <input type="hidden" name="chemProfOptions" :value="JSON.stringify(chemProfOptions)">
+                    <input type="hidden" name="chemOptions" :value="JSON.stringify(chemOptions)">
+                    <input type="hidden" name="glucoseOptions" :value="JSON.stringify(glucoseOptions)">
+                    <input type="hidden" name="labform" :value="JSON.stringify(labform)">
+                    <button class="btn btn-success " >Send Lab</button>
+                </form> -->
             </template>
         </b-modal>
 
@@ -633,7 +646,7 @@
     import Swal from "sweetalert";
 
     export default {
-        props:['patientData', 'userData', 'now'],
+        props:['patientData', 'userData', 'now', 'csrf'],
 
         data() {
             return { 
@@ -827,9 +840,53 @@
                             icon: 'success'
                         })
 
+                        self.$refs['preview-modal'].hide()
+
                     }
+                })
+                .catch( function (error){
+                    console.log(error);
+                });
+            },
+
+            labForm(){
+                let self = this
+                
+                axios.post('/test', {
+                    patient: JSON.stringify(self.patient),
+                    now: self.now,
+                    chemProfOptions: JSON.stringify(self.chemProfOptions),
+                    chemOptions: JSON.stringify(self.chemOptions),
+                    glucoseOptions: JSON.stringify(self.glucoseOptions),
+
+                    hemaOptions: JSON.stringify(self.hemaOptions),
+                    urineOptions: JSON.stringify(self.urineOptions),
+                    bodyFluidsOptions: JSON.stringify(self.bodyFluidsOptions),
+
+                    labform: JSON.stringify(self.labform),
+                })
+                .then( function (response){
+                    let data = response.data
                     
-                    self.showAlert()
+                    if(data.hasError){
+                        Swal({
+                            title: 'Error!',
+                            text: 'Please refresh the page.',
+                            icon: 'error'
+                        })
+                    }
+                    else{
+                        self.removeList()
+
+                        Swal({
+                            title: 'Success!',
+                            text: 'Lab request form has been sent to the user.',
+                            icon: 'success'
+                        })
+
+                        self.$refs['preview-modal'].hide()
+
+                    }
                 })
                 .catch( function (error){
                     console.log(error);

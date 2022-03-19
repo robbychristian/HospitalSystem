@@ -5,7 +5,7 @@
                 class="col d-flex mx-3 justify-content-start"
                 v-if="this.isAdmin == 1"
             >
-                <b-dropdown
+                <!-- <b-dropdown
                     split
                     split-variant="outline-primary"
                     variant="primary"
@@ -19,7 +19,7 @@
                     <b-dropdown-item href="#"
                         >Something else here...</b-dropdown-item
                     >
-                </b-dropdown>
+                </b-dropdown> -->
             </div>
             <div class="col d-flex mx-3 justify-content-end">
                 <b-button

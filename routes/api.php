@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ Route::prefix('announcement')->name('announcement.')->group(function () {
     Route::post('/delete', [AnnouncementController::class, 'delete']);
     Route::post('/update', [AnnouncementController::class, 'update']);
 });
+
+Route::post('/profile/update/{id_fb}/{pass}', [ProfileController::class, 'update']);
 
 Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::post('/delete', [CalendarController::class, 'destroy']);

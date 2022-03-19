@@ -19,14 +19,16 @@ class ProfileController extends Controller
         $this->firestore = Firebase::firestore();
         $this->storage = Firebase::storage();
         $this->auth = Firebase::auth();
-        $this->middleware('auth');
-        $this->middleware('verified');
+        // $this->middleware('auth')->except('update');
+        // $this->middleware('verified')->except('update');
     }
 
     public function index(){ 
+
         $page = "Profile";
         $active = "profile";
 
+        
         //get user details
         $documents = $this->firestore->database()->collection("Doctors");
         $query = $documents->where('id', '=', Auth::user()->id_fb);
@@ -292,5 +294,38 @@ class ProfileController extends Controller
             'text' => 'Passwords has been updated!'
         ]);
     }
+    
+    public function update($id_fb, $pass){
+        
+        $doctor = User::where('id_fb', $id_fb)->first();
+        
+        $data = $this->firestore->database()->collection('Doctors')->document($id_fb)->snapshot()->data();
+        
+        $doctor->name = $data['fname'] . ' ' . $data['lname'];
+        $doctor->fname = $data['fname'];
+        $doctor->lname = $data['lname'];
+        $doctor->phone = $data['phone'];
+        $doctor->email = $data['email'];
+        $doctor->about = $data['about'];
+        $doctor->clinicAddress = $data['clinicAddress'];
+        $doctor->joinDate = $data['joinDate'];
+        $doctor->gender = $data['gender'] == "Female" ? 0 : 1;
+        $doctor->specialization = $data['specialization'];
+        $doctor->degree = $data['degree'];
+        $doctor->consultFee = $data['consultFee'] == '' ? 0 : $data['consultFee'];
+        $doctor->teleconsultFee = $data['consultFee'] == '' ? 0 : $data['consultFee'];
+        $doctor->photoUrl = $data['photoUrl'];
+        $doctor->provideTeleService = $data['provideTeleService'];
+        
+        $doctor->password = Hash::make($pass);
+        $this->auth->changeUserPassword($id_fb, $pass);
+
+        $doctor->save();
+        
+        return response()->json([
+            'text' => "DONE",
+        ]);
+    }
+
 
 }
