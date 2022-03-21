@@ -43,7 +43,6 @@ class PatientController extends Controller
         
         return view('pages.patient')->with('page', $page)->with('active', $active)->with('patient', $patient);
     }
-    
 
     public function create($data, $request){
         $user = $this->firestore->database()->collection('Patients')->newDocument();

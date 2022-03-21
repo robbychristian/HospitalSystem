@@ -47,7 +47,12 @@
             </div>
             
             <div class="backout-box">
-                <a type="button" @click="newCode()"> Did not recieve the code?</a>
+
+                <form action="/email/resend" method="POST">
+                    <input type="hidden" name="_token" v-bind:value="token">
+                    <button class="btn btn-link btn-sm" type="submit">Did not recieve the code?</button>
+                </form>
+                <!-- <a type="button" @click="newCode()"> Did not recieve the code?</a> -->
                 
                 <form action="/offline" method="POST">
                     <input type="hidden" name="_token" v-bind:value="token">

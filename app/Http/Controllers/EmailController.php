@@ -83,10 +83,10 @@ class EmailController extends Controller
     public function sendVerificationCode($verify, $email){
         
         try{
-            Mail::to($email)->queue(new EmailVerification($verify));
+            Mail::to($email)->send(new EmailVerification($verify));
         }
         catch(\Exception $e){
-            
+            dd($e);
             return true;
         }
         return false;

@@ -152,7 +152,7 @@
 
             <div :class="[{ 'on-update': clinicForm.active }, 'clinic-info']">
                 <b-button @click="editClinic()" variant="transparent" size="sm" class="settings"> <h6 class="m-0 p-0"> <i v-if="clinicForm.active" class="fa-solid text-danger fa-xmark"></i> <i v-else class="fa-solid fa-pen-to-square"></i> </h6></b-button>
-                <h4> Hospital Information </h4>
+                <h4> Clinic Information </h4>
                 
                 <div class="mt-3" v-if="clinicForm.active">
                     
@@ -166,6 +166,17 @@
                     <div class="form-box">
                         <i class="fa-solid fa-money-bill text-dark-green"></i>: &nbsp;
                         <input  :class="{error: errors.consultFee}" type="text" placeholder="Consult Fee" v-model="clinicForm.consultFee">
+                    </div>
+                    
+                    <div class="form-box text-dark-green">
+                        Provide TeleService: &nbsp;
+                        <input type="checkbox" v-model="clinicForm.provideTeleService" v-bind:value="clinicForm.provideTeleService">
+                    </div>
+                    
+                    <p class="text-danger" v-for="(error, ind) in errors.teleconsultFee" :key="'TCF'+ind">{{error}}</p>
+                    <div class="form-box text-dark-green">
+                        Tele consult Fee: &nbsp;
+                        <input  :class="{error: errors.teleconsultFee}" type="text" placeholder="Consult Fee" v-model="clinicForm.teleconsultFee">
                     </div>
 
                     <div class="on-update availability">
@@ -188,7 +199,7 @@
                 <div v-else>
                     <h5>  <i class="fa-solid fa-hospital text-dark-green"></i> : &nbsp; {{user.clinicAddress == '' || user.clinicAddress == null ? 'Not stated' : user.clinicAddress}} </h5>
                     <h5>  <i class="fa-solid fa-money-bill text-dark-green"></i> : &nbsp; {{user.consultFee == '' || user.consultFee == null ? 'Not stated' : user.consultFee}} <small class="text-dark-blue"> per Appointment</small></h5>
-                    <h6 class="mt-2 text-dark-green"> Provide TeleService: <span> {{ user.provideTeleService ? 'Nope' : 'Yes'}} </span></h6>
+                    <h6 class="mt-2 text-dark-green"> Provide TeleService: <span> {{ user.provideTeleService ? 'Yes' : 'Nope'}} </span></h6>
                     <h6 class=" text-dark-green"> Tele consult Fee: <span> {{ user.teleconsultFee == '' || user.teleconsultFee == null ? 'NaN' : user.teleconsultFee}} </span></h6>
                     <div :class="[{'on-update': clinicForm.active}, 'availability']">
                         <h5> Availability each day <i class="fa-solid fa-sun text-orange"></i></h5>
@@ -252,6 +263,9 @@ export default {
                 teleThurs: ['', ''],
                 teleFri: ['', ''],
                 teleSat: ['', ''],
+                provideTeleService: '',
+                teleconsultFee: '',
+
                 active: true,
             },
 
@@ -273,6 +287,7 @@ export default {
                 teleFri: '',
                 teleSat: '',
                 password: '',
+                teleconsultFee: '',
             },
             
             options:[
@@ -451,11 +466,15 @@ export default {
                 
                 this.user.consultFee =  this.clinicForm.consultFee
                 this.user.clinicAddress =  this.clinicForm.clinicAddress
+                this.user.teleconsultFee =  this.clinicForm.teleconsultFee
+                this.user.provideTeleService =  this.clinicForm.provideTeleService
                 this.clinicForm.active = false
                 this.errors.consultFee = ''
                 this.errors.clinicAddress = ''
+                this.errors.teleconsultFee = ''
             }
         },
+
         populateError(route, data){
             if(route == 'personal'){
                 this.errors.photoUrl = data.photo
@@ -467,6 +486,7 @@ export default {
             }
             else{
                 this.errors.consultFee = data.consultFee
+                this.errors.teleconsultFee = data.teleconsultFee
                 this.errors.clinicAddress = data.clinicAddress
             }
         },
@@ -582,6 +602,7 @@ export default {
         clinicBtn(){
             if(
                 this.clinicForm.clinicAddress == this.user.clinicAddress && this.clinicForm.consultFee == this.user.consultFee &&
+                this.clinicForm.provideTeleService == this.user.provideTeleService && this.clinicForm.teleconsultFee == this.user.teleconsultFee &&
                 this.arrayEquals(this.clinicForm.teleMon, this.user.teleMon) &&  this.arrayEquals(this.clinicForm.teleSun, this.user.teleSun) &&
                 this.arrayEquals(this.clinicForm.teleTue, this.user.teleTue) &&  this.arrayEquals(this.clinicForm.teleWed, this.user.teleWed) &&
                 this.arrayEquals(this.clinicForm.teleThurs, this.user.teleThurs) &&  this.arrayEquals(this.clinicForm.teleFri, this.user.teleFri) &&
@@ -619,6 +640,8 @@ export default {
         this.clinicForm = {
             clinicAddress: this.user.clinicAddress,
             consultFee: this.user.consultFee,
+            provideTeleService: this.user.provideTeleService,
+            teleconsultFee: this.user.teleconsultFee,
             teleSun: ['', ''],
             teleMon: ['', ''],
             teleTue: ['', ''],

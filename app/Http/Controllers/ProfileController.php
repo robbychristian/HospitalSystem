@@ -102,6 +102,7 @@ class ProfileController extends Controller
         return Validator::make($data, [
             'clinicAddress' => ['required', 'string', 'max:255'],
             'consultFee' => ['required', 'integer',],
+            'teleconsultFee' => ['required', 'integer',],
         ]);
     }
 
@@ -133,6 +134,8 @@ class ProfileController extends Controller
         $updateArray = [
             ['path' => 'clinicAddress', 'value' => $data->clinicAddress],
             ['path' => 'consultFee', 'value' => $data->consultFee],
+            ['path' => 'provideTeleService', 'value' => $data->provideTeleService],
+            ['path' => 'teleconsultFee', 'value' => $data->teleconsultFee],
             ['path' => 'teleSun', 'value' => $data->teleSun],
             ['path' => 'teleMon', 'value' => $data->teleMon],
             ['path' => 'teleTue', 'value' => $data->teleTue, ],
@@ -236,6 +239,7 @@ class ProfileController extends Controller
         $validate =[
             'clinicAddress' => $data->clinicAddress,
             'consultFee' => $data->consultFee,
+            'teleconsultFee' => $data->teleconsultFee,
         ];
 
         $doctor = $request->user();

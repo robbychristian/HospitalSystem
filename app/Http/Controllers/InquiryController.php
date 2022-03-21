@@ -139,7 +139,7 @@ class InquiryController extends Controller
         Storage::disk('public_pdf')->put($path, $pdf->output()); 
         
         try{
-            Mail::to($email)->queue(new InquiryMail($data, $name . '.pdf'));
+            Mail::to($email)->send(new InquiryMail($data, $name . '.pdf'));
             $updateArray = [
                 ['path' => 'labRequest', 'value' => '2'],
             ];
