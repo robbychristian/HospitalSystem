@@ -46,15 +46,7 @@
                 v-bind:value="csrf"
             >
                 <input type="hidden" name="_token" v-bind:value="csrf" />
-                <b-row>
-                    <b-col sm="2"><label>Title: </label></b-col>
-                    <b-col sm="10">
-                        <b-form-input
-                            v-model="text"
-                            name="title"
-                        ></b-form-input>
-                    </b-col>
-                </b-row>
+
                 <b-row>
                     <b-col sm="2"><label>Date: </label></b-col>
                     <b-col sm="10">
@@ -65,6 +57,7 @@
                         ></b-form-datepicker>
                     </b-col>
                 </b-row>
+
                 <b-row>
                     <b-col sm="2"><label>Start: </label></b-col>
                     <b-col sm="10">
@@ -75,6 +68,7 @@
                         ></b-form-timepicker>
                     </b-col>
                 </b-row>
+
                 <b-row>
                     <b-col sm="2"><label>End: </label></b-col>
                     <b-col sm="10">
@@ -85,6 +79,7 @@
                         ></b-form-timepicker>
                     </b-col>
                 </b-row>
+
                 <b-row>
                     <b-col sm="2"><label>Problem: </label></b-col>
                     <b-col sm="10">
@@ -98,6 +93,7 @@
                         ></b-form-textarea>
                     </b-col>
                 </b-row>
+
                 <b-row>
                     <b-col sm="2"><label>Patient: </label></b-col>
                     <b-col sm="10">
@@ -106,6 +102,21 @@
                             :options="options"
                             name="patient"
                         ></b-form-select>
+                    </b-col>
+                </b-row>
+                
+                <b-row>
+                    <b-col sm="3"><label>Appointment State: </label></b-col>
+                    <b-col sm="9">
+
+                        <input type="radio" id="one" value="Teleconsultation" v-model="appointState" >
+                        <label for="one">Teleconsultation</label>
+
+                        <br>
+
+                        <input type="radio" id="two" value="Hospital" v-model="appointState">
+                        <label for="two">Hospital</label>
+
                     </b-col>
                 </b-row>
             </form>
@@ -155,6 +166,7 @@ export default {
             selectedPatient: "",
             options: [],
             modalShow: "addCalendar",
+            appointState: '',
 
             //filter
             doctorName: "Choose a Doctor",

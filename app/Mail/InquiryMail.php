@@ -32,7 +32,7 @@ class InquiryMail extends Mailable
      */
     public function build()
     {
-        return $this->from('Teledocs.Noreply@teledocs.service.com', 'Teledoc Website Service')->
+        return $this->from('admin@teledoc-eternals.tech', 'Teledoc Website Service')->
         subject('Lab Request Form')->view('mail.lab');
     }
 }

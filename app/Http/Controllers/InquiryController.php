@@ -140,6 +140,7 @@ class InquiryController extends Controller
         
         try{
             Mail::to($email)->send(new InquiryMail($data, $name . '.pdf'));
+
             $updateArray = [
                 ['path' => 'labRequest', 'value' => '2'],
             ];
@@ -147,7 +148,8 @@ class InquiryController extends Controller
             
         }
         catch(\Exception $e){
-            unlink('/pdf' . $path);
+            
+            unlink( public_path('pdf') . $path);
 
             return response()->json([
                 'hasError' => true,

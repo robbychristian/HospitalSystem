@@ -5,7 +5,7 @@
 </h5>
 
 <p> 
-    Dr. @if( $data['patient']->drGender == 'Female' ) Mrs. @else Mr. @endif
+    Dr.
     &nbsp; {{$data['patient']->drfName}} &nbsp; {{$data['patient']->drlName}}
     Has sent you a lab request form that you will pass to the laboratory facility <br>
     please do fill up the inputs above if there's a blank.!
