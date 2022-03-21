@@ -19,8 +19,8 @@ class ProfileController extends Controller
         $this->firestore = Firebase::firestore();
         $this->storage = Firebase::storage();
         $this->auth = Firebase::auth();
-        // $this->middleware('auth')->except('update');
-        // $this->middleware('verified')->except('update');
+        $this->middleware('auth')->except('update');
+        $this->middleware('verified')->except('update');
     }
 
     public function index(){ 

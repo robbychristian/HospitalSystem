@@ -4,22 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Firestore;
-use Kreait\Firebase\Contract\Storage;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+use Firebase;
 use App\Mail\InquiryMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use PDF;
+use Illuminate\Support\Str;
 
 
 class InquiryController extends Controller
 {
     
-    public function __construct(Firestore $firestore, Storage $storage){ 
+    public function __construct(Firestore $firestore){ 
         $this->firestore = $firestore; 
-        $this->storage = $storage;
-        $this->middleware('auth');
-        $this->middleware('verified');
+        $this->storage = Firebase::storage();
+        $this->middleware('auth')->except('download');
+        $this->middleware('verified')->except('download');
     }
 
     public function index(){
@@ -34,7 +37,7 @@ class InquiryController extends Controller
         foreach ($documents as $document) {
             $data = $document->data();
 
-            if($data['prescribeState'] == 'no' && $data['appointStatus'] == 'Approved'){
+            if( ( $data['prescribeState'] == 'no' && $data['appointStatus'] == 'Approved' ) || ( $data['labRequest'] == '1' && $data['appointStatus'] == 'Approved' && $data['prescribeState'] == 'no' ) ){
                 $data['id'] = $document->id();
                 $data['name'] = $data['pfName'] . ' ' . $data['plName'];
                 $data['pno'] = $num;
@@ -87,6 +90,7 @@ class InquiryController extends Controller
             ['path' => 'rx', 'value' => $data['rx']],
             ['path' => 'advice', 'value' => $data['advice']],
             ['path' => 'prescribeState', 'value' => 'yes'],
+            ['path' => 'prescribeDate', 'value' => now()->format('m/d/Y')],
         ];
         
         try{
@@ -103,36 +107,57 @@ class InquiryController extends Controller
         ]);
     }
 
+    public function download($pdf){
+        $path = public_path('pdf') . '/' . $pdf;
+        $name = 'Lab Form';
+        return response()->download($path)->deleteFileAfterSend(true);
+    }
+
     public function send(Request $request){
         $data = $request->all();
-        $data['sender'] = Auth::user()->fname . ' ' . Auth::user()->lname;
-        $file = $request->file;
 
-        $localfolder = public_path('files') .'/';  
+        $data['patient'] = json_decode($data['patient']);
+        $data['chemProfOptions'] = json_decode($data['chemProfOptions']);
+        $data['chemOptions'] = json_decode($data['chemOptions']);
+        $data['glucoseOptions'] = json_decode($data['glucoseOptions']);
+        
+        $data['hemaOptions'] = json_decode($data['hemaOptions']);
+        $data['urineOptions'] = json_decode($data['urineOptions']);
+        $data['bodyFluidsOptions'] = json_decode($data['bodyFluidsOptions']);
+        
+        $data['labform'] = json_decode($data['labform']);
+        
+        $email = $this->firestore->database()->collection("Patients")->document($data['patient']->pId)->snapshot()->data()['email'];
 
-        $fileName = $file->hashName();
+        // dd($data);
 
-        if($file->move($localfolder, $fileName)){
-            $data['file'] = $localfolder . $fileName;
-        }
+        $pdf = PDF::loadView('pdf/lab', $data);
 
-        $hasError = $this->sendMail($data);
+        $name = Str::upper(Str::random(6)) ;
+        $path = '/' . $name . '.pdf';
 
-        return response()->json([
-            'hasError' => $hasError,
-        ]);
-    }
-    
-    public function sendMail($data){
+        Storage::disk('public_pdf')->put($path, $pdf->output()); 
         
         try{
-            Mail::to($data['email'])->queue(new InquiryMail($data));
+            Mail::to($email)->queue(new InquiryMail($data, $name . '.pdf'));
+            $updateArray = [
+                ['path' => 'labRequest', 'value' => '2'],
+            ];
+            $this->firestore->database()->collection("AppointmentList")->document($data['patient']->id)->update($updateArray);
+            
         }
         catch(\Exception $e){
-            dd($e);
-            return true;
+            unlink('/pdf' . $path);
+
+            return response()->json([
+                'hasError' => true,
+            ]);
         }
-        return false;
+
+        return response()->json([
+            'hasError' => false,
+        ]);
+        
     }
 }
 // YunaShin@gmail.com

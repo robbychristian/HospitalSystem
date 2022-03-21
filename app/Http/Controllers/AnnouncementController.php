@@ -262,8 +262,13 @@ class AnnouncementController extends Controller
     {
         $data = $request->all();
 
-        if ($data['photoUrl'] != '' || $data['photoUrl'] != null) {
-            $this->deleteObject($data['photoUrl']);
+        if(  $data['photoUrl'] != '' && $data['photoUrl'] != null ){
+
+            $sub = substr($data['photoUrl'] ,0 ,5);
+
+            if ( $sub != 'https' ) {
+                $this->deleteObject($data['photoUrl']);
+            }
         }
 
         $this->firestore->database()->collection('Announcements')->document($data['id'])->delete();

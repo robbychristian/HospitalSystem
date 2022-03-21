@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\InquiryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::prefix('announcement')->name('announcement.')->group(function () {
 });
 
 Route::post('/profile/update/{id_fb}/{pass}', [ProfileController::class, 'update']);
+
+Route::get('/inquiry/download/{pdf}', [InquiryController::class, 'download']);
 
 Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::post('/delete', [CalendarController::class, 'destroy']);

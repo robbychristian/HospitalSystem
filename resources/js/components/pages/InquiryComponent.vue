@@ -1,18 +1,33 @@
 <template>
     <div class="inquiry-page">
 
-        <div class="alert-top">
-            <b-alert
-                :show="dismissCountDown"
-                :variant="variant"
-                @dismissed="dismissCountDown=0"
-                @dismiss-count-down="countDownChanged"
-                fade
-                
+        <!-- Loading Modal -->
+            <b-modal 
+                ref="loading-modal"
+                scrollable 
+                no-close-on-esc
+                no-close-on-backdrop
+                hide-header-close
+                header-class="border-0 text-dark-green"
+                hide-footer 
+                centered 
             >
-                {{ message }} 
-            </b-alert>
-        </div>
+                <template #modal-title> 
+                    <div>
+                        <h4> <span  style="margin: 0px 1rem 0px 0px;"> Loading please wait </span> <i class="fa-solid fa-spinner fa-spin"></i> </h4>
+                    </div>
+                </template>
+
+                <div class="d-flex justify-content-center">
+                    <img src="/img/Loading.gif" alt="loading">
+                </div>
+
+                <template #modal-footer> 
+                    <div></div>
+                </template>
+
+            </b-modal>
+        <!-- END -->
             
         <b-modal 
             ref="preview-modal"
@@ -310,7 +325,7 @@
                     <div class="patient-details">
                         <h6>Name: <span class="text-dark-green">{{patient.name}}</span></h6>
                         <h6>Said Problem: <span class="text-dark-green">{{patient.pProblem}}</span></h6>
-                        <h6>Email: <span class="text-dark-green">{{patient.pPhone}}</span></h6>
+                        <h6>Phone: <span class="text-dark-green">{{patient.pPhone}}</span></h6>
                     </div>
 
                 </div>
@@ -811,7 +826,7 @@
             },
 
             prescribed(){
-
+                this.openLoading()
                 let self = this
                 
                 axios.post('/inquiry/prescribe', {
@@ -830,6 +845,7 @@
                             text: 'Please refresh the page.',
                             icon: 'error'
                         })
+                        self.closeLoading()
                     }
                     else{
                         self.removeList()
@@ -840,8 +856,8 @@
                             icon: 'success'
                         })
 
+                        self.closeLoading()
                         self.$refs['preview-modal'].hide()
-
                     }
                 })
                 .catch( function (error){
@@ -850,9 +866,10 @@
             },
 
             labForm(){
+                this.openLoading()
                 let self = this
                 
-                axios.post('/test', {
+                axios.post('/inquiry/send', {
                     patient: JSON.stringify(self.patient),
                     now: self.now,
                     chemProfOptions: JSON.stringify(self.chemProfOptions),
@@ -874,6 +891,7 @@
                             text: 'Please refresh the page.',
                             icon: 'error'
                         })
+                        self.closeLoading()
                     }
                     else{
                         self.removeList()
@@ -884,8 +902,8 @@
                             icon: 'success'
                         })
 
+                        self.closeLoading()
                         self.$refs['preview-modal'].hide()
-
                     }
                 })
                 .catch( function (error){
@@ -1025,6 +1043,12 @@
                     days: error.days,
                 }
             },
+
+            // Loading Modal Related
+                openLoading(){ this.$refs['loading-modal'].show() },
+
+                closeLoading(){ this.$refs['loading-modal'].hide() },
+            // END
         },
 
         computed:{

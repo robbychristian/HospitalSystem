@@ -164,7 +164,6 @@ class CalendarController extends Controller
             'prescribeNo' => '',
             'prescribeState' => 'no',
             'rx' => '',
-            'prescribeState' => '',
 
             'reviewComment' => '',
             'reviewDate' => '',

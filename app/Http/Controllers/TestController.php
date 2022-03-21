@@ -16,6 +16,9 @@ use PDF;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+use App\Mail\InquiryMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class TestController extends Controller
 {
@@ -28,33 +31,7 @@ class TestController extends Controller
     }
 
     public function index(Request $request){
-        $data = $request->all();
 
-        $data['patient'] = json_decode($data['patient']);
-        $data['chemProfOptions'] = json_decode($data['chemProfOptions']);
-        $data['chemOptions'] = json_decode($data['chemOptions']);
-        $data['glucoseOptions'] = json_decode($data['glucoseOptions']);
-        
-        $data['hemaOptions'] = json_decode($data['hemaOptions']);
-        $data['urineOptions'] = json_decode($data['urineOptions']);
-        $data['bodyFluidsOptions'] = json_decode($data['bodyFluidsOptions']);
-        
-        $data['labform'] = json_decode($data['labform']);
-        
-        // dd($data);
-
-        $pdf = PDF::loadView('mail/lab', $data);
-
-        $name = Str::upper(Str::random(6)) ;
-        $path = '/' . $name . '.pdf';
-
-        Storage::disk('public_pdf')->put($path, $pdf->output()); 
-        
-        // return $pdf->download('itsolutionstuff.pdf');
-    
-        return response()->json([
-            'hasError' => false,
-        ]);
         
         // $page="Test";
         // $active="test";
