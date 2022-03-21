@@ -149,6 +149,8 @@ class ProfileController extends Controller
 
         $doctor->clinicAddress = $data->clinicAddress;
         $doctor->consultFee = $data->consultFee;
+        $doctor->teleconsultFee = $data->teleconsultFee;
+        $doctor->provideTeleService = $data->provideTeleService;
         $doctor->save();
 
         return $data;

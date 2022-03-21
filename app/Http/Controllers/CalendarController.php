@@ -14,7 +14,7 @@ class CalendarController extends Controller
     public function __construct(Firestore $firestore)
     {
         $this->firestore = $firestore;
-        $this->middleware('verified');
+        $this->middleware('verified')->except('destroy');
     }
     /**
      * Display a listing of the resource.
@@ -38,8 +38,9 @@ class CalendarController extends Controller
         }
 
         $patients = json_encode($patients);
+        $doctors = [];
 
-        //GET ALL EVENTS FOR ADMIN
+        //GET ALL EVENTS FOR ADMIN AND DOCTORS
         if (Auth::user()->isAdmin == 1) {
             $allAppointments = $this->firestore->database()->collection("AppointmentList")->documents()->rows();
             $appointments = [];
@@ -53,9 +54,22 @@ class CalendarController extends Controller
                     $data
                 );
             }
+            
+            $allDoctors = $this->firestore->database()->collection("Doctors")->documents()->rows();
+
+            foreach ($allDoctors as $doctor) {
+                $data = $doctor->data();
+                $data['id'] = $doctor->id();
+                $data['hospital'] = count($this->firestore->database()->collection("Hospitals")->where('doctorId', '==', $data['id'])->documents()->rows());
+
+                array_push(
+                    $doctors,
+                    $data
+                );
+            }
         } else { //GET ALL EVENTS FOR DOCTORS
             $allAppointments = $this->firestore->database()->collection("AppointmentList");
-            $query = $allAppointments->where('doctor_id', '==', Auth::user()->id_fb);
+            $query = $allAppointments->where('drId', '==', Auth::user()->id_fb);
             $doctorAppointments = $query->documents();
 
             $appointments = [];
@@ -70,24 +84,14 @@ class CalendarController extends Controller
                 );
             }
         }
-
-        //GET ALL DOCTORS
-        $allDoctors = $this->firestore->database()->collection("Doctors")->documents()->rows();
-        $doctors = [];
-
-        foreach ($allDoctors as $doctor) {
-            $data = $doctor->data();
-            $data['id'] = $doctor->id();
-
-            array_push(
-                $doctors,
-                $data
-            );
-        }
+        
+        $hospital = count($this->firestore->database()->collection("Hospitals")->where('doctorId', '==', Auth::user()->id_fb)->documents()->rows());
 
         $appointments = json_encode($appointments);
+        $doctors = json_encode($doctors);
 
-        return view('pages.calendar')->with('page', $page)->with('active', $active)->with('patients', $patients)->with('appointments', $appointments)->with('doctors', $doctors);
+        return view('pages.calendar')->with('page', $page)->with('active', $active)->with('patients', $patients)
+        ->with('appointments', $appointments)->with('doctors', $doctors)->with('hospital', $hospital);
     }
 
     /**
@@ -108,7 +112,16 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
-        $doctor = $this->firestore->database()->collection("Doctors")->document(Auth::user()->id_fb)->snapshot()->data();
+        // dd($request->all());
+
+        $doctor = '';
+
+        if( Auth::user()->isAdmin){
+            $doctor = $this->firestore->database()->collection("Doctors")->document($request->drId)->snapshot()->data();
+        }
+        else{
+            $doctor = $this->firestore->database()->collection("Doctors")->document(Auth::user()->id_fb)->snapshot()->data();
+        }
         $patient = $this->firestore->database()->collection("Patients")->document($request->patient)->snapshot()->data();
 
         $startDate = Carbon::create($request->date)->year . "-" . Carbon::create($request->date)->month . "-" . Carbon::create($request->date)->day . ' ' . $request->startTime;
@@ -126,7 +139,7 @@ class CalendarController extends Controller
             'id' => $newAppointment->id(),
             'actualProblem' => $request->problem,
             'appointDate' => Carbon::parse($request->date)->format('m/d/y'),
-            'appointState' => 'Teleconsultation',
+            'appointState' => $request->appointState,
             'appointStatus' => 'Pending',
             'appointTime' => '',
             'bookingDate' => Carbon::parse($request->date)->format('m/d/y'),
@@ -201,9 +214,11 @@ class CalendarController extends Controller
                 $data
             );
         }
-        $appointments = json_encode($appointments);
 
-        return redirect('/calendar')->with('Success', 'Stored')->with('appoinments', $appointments)->with('doctors', $doctors);
+        $appointments = json_encode($appointments);
+        $doctors = json_encode($doctors);
+
+        return redirect('/calendar')->with('Success', 'Stored');
     }
 
     /**
