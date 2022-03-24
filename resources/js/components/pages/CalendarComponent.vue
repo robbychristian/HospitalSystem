@@ -18,7 +18,7 @@
                 </b-dropdown>
             </div>
 
-            <div v-if="user.isAdmin == 0" class="col d-flex mx-3 justify-content-end">
+            <div class="col d-flex mx-3 justify-content-end">
                 <b-button
                     @click="addCalendar"
                     class="btn"
@@ -296,7 +296,7 @@ export default {
             
             let date = item.appointDate
             let schedule = item.bookingSchedule
-            let start = schedule.substring( schedule.indexOf(' ') + 1 , schedule.lastIndexOf(' ') );
+            let start = schedule.substring( schedule.indexOf(' ') + 1 , schedule.lastIndexOf('-') -1 );
             let end = schedule.substring( schedule.lastIndexOf(' ')+1);
             let name = item.pfName + ' ' + item.plName
 

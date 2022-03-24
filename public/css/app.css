@@ -25442,6 +25442,10 @@ textarea.form-control-lg {
   margin-bottom: 0.25rem;
   color: black;
 }
+.appointment-page .appointment-content .appointment-box .patient-info .btn-lab:disabled, .appointment-page .appointment-content .appointment-box .doctor-info .btn-lab:disabled, .appointment-page .appointment-content .appointment-box .appointment-info .btn-lab:disabled {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  color: black !important;
+}
 .appointment-page .appointment-content .appointment-box .patient-info, .appointment-page .appointment-content .appointment-box .doctor-info {
   border-bottom: 1px solid #8d8d8d;
 }

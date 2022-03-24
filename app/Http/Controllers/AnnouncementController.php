@@ -32,8 +32,20 @@ class AnnouncementController extends Controller
         if (Auth::user()->isAdmin) {
             $documents = $documents->documents()->rows();
         } else {
-            $documents = $documents->where('drId', '==', Auth::user()->id_fb)->documents()->rows();
+            $admins = $this->firestore->database()->collection("Doctors")->where('isAdmin', '==', '1')->documents()->rows();
+
+            $id = [];
+
+            foreach($admins as $admin){
+                array_push($id, $admin->id());
+            }
+
+            array_push($id, Auth::user()->id_fb);
+
+            $documents = $documents->where('drId', 'in', $id)->documents()->rows();
         }
+
+
 
         $announcements = [];
         foreach ($documents as $document) {

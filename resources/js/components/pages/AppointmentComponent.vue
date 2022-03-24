@@ -64,20 +64,18 @@
 
 
 
-                    <div v-if="isAdmin == 1">
-                        <div v-if="data.appointStatus == 'Pending'" class="d-flex px-3 py-1 mt-3 justify-content-between" style="background-color: #ececec;">
-                            <button @click="updateAppointment(data.id, 'Rejected', ind)" class="btn btn-sm p-1 btn-danger flex-grow-1"> Reject</button>
-                            <button @click="updateAppointment(data.id, 'Approved', ind)" class="btn btn-sm p-1 btn-success flex-grow-1"> Accept</button>
-                        </div>
+                    <div v-if="data.appointStatus == 'Pending'" class="d-flex px-3 py-1 mt-3 justify-content-between" style="background-color: #ececec;">
+                        <button @click="updateAppointment(data.id, 'Rejected', ind)" class="btn btn-sm p-1 btn-danger flex-grow-1"> Reject</button>
+                        <button @click="updateAppointment(data.id, 'Approved', ind)" class="btn btn-sm p-1 btn-success flex-grow-1"> Accept</button>
+                    </div>
 
-                        <div v-else-if="data.appointStatus == 'Pending payment'"  class="d-flex px-3 py-1 mt-3 justify-content-between" style="background-color: #ececec;">
-                            <button @click="updateAppointment(data.id, 'Rejected', ind)" class="btn btn-sm p-1 btn-danger  flex-grow-1"> Reject</button>
-                        </div>
+                    <div v-else-if="data.appointStatus == 'Pending payment'"  class="d-flex px-3 py-1 mt-3 justify-content-between" style="background-color: #ececec;">
+                        <button @click="updateAppointment(data.id, 'Rejected', ind)" class="btn btn-sm p-1 btn-danger  flex-grow-1"> Reject</button>
+                    </div>
 
-                        <div v-else-if="data.appointStatus == 'Approved'"  class="d-flex px-3 py-1 mt-3 justify-content-between" style="background-color: #ececec;">
-                            <button @click="removeLab(data.id, ind, data.labRequest == '1' ? '0' : '1')" :class="[ data.labRequest == '1' ? 'bg-primary' : 'bg-secondary', 'btn btn-sm p-1  flex-grow-1 text-white']" :disabled="data.labRequest == '2'"> Lab request {{ data.labRequest == 1 ? 'unessential' : 'essential'}}</button>
-                            <button @click="updateAppointment(data.id, 'Cancelled', ind)" class="btn btn-sm p-1 btn-danger  flex-grow-1"> Cancel</button>
-                        </div>
+                    <div v-else-if="data.appointStatus == 'Approved'"  class="d-flex px-3 py-1 mt-3 justify-content-between" style="background-color: #ececec;">
+                        <button @click="removeLab(data.id, ind, data.labRequest == '1' ? '0' : '1')" :class="[ data.labRequest == '1' ? 'bg-primary' : 'bg-secondary', 'btn btn-sm p-1  flex-grow-1 text-white btn-lab']" :disabled="data.labRequest == '2'"> Lab request {{ data.labRequest == 1 ? 'unessential' : 'essential'}}</button>
+                        <button @click="updateAppointment(data.id, 'Cancelled', ind)" class="btn btn-sm p-1 btn-danger  flex-grow-1"> Cancel</button>
                     </div>
                 </div>
             </div>

@@ -143,7 +143,7 @@ class CalendarController extends Controller
             'appointStatus' => 'Pending',
             'appointTime' => '',
             'bookingDate' => Carbon::parse($request->date)->format('m/d/y'),
-            'bookingSchedule' => $day . ' ' . $startTime . ' ' . $endTime,
+            'bookingSchedule' => $day . ': ' . $startTime . ' - ' . $endTime,
 
             'drId' => Auth::user()->id_fb,
             'consultFee' => $doctor['consultFee'],

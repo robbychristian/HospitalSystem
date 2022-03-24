@@ -31,54 +31,28 @@ class AppointmentController extends Controller
         else {
             $documents = $documents->where('drId', '==', Auth::user()->id_fb)->documents()->rows();
         }
-            
+        
         $appointment = [];
 
-        if (Auth::user()->isAdmin) {
-            foreach ($documents as $document) {
-                $data = $document->data();
+        foreach ($documents as $document) {
+            $data = $document->data();
 
-                $data['id'] = $document->id();
-                $data['dName'] = $data['drfName'] . ' ' . $data['drlName'];
-                $data['pName'] = $data['pfName'] . ' ' . $data['plName'];
+            $data['id'] = $document->id();
+            $data['dName'] = $data['drfName'] . ' ' . $data['drlName'];
+            $data['pName'] = $data['pfName'] . ' ' . $data['plName'];
 
-                if($data['prescribeState'] == "no"){
-                    if($data['appointStatus'] == "Pending"){
-                        array_unshift(
-                            $appointment,
-                            $data
-                        );
-                    }
-                    else{
-                        array_push(
-                            $appointment,
-                            $data
-                        );
-                    }
+            if($data['prescribeState'] == "no"){
+                if($data['appointStatus'] == "Pending"){
+                    array_unshift(
+                        $appointment,
+                        $data
+                    );
                 }
-            }
-        }
-        else{
-            foreach ($documents as $document) {
-                $data = $document->data();
-
-                $data['id'] = $document->id();
-                $data['dName'] = $data['drfName'] . ' ' . $data['drlName'];
-                $data['pName'] = $data['pfName'] . ' ' . $data['plName'];
-
-                if($data['prescribeState'] != "yes" && $data['appointStatus'] != "Pending" && $data['appointStatus'] != "Pending payment" ){
-                    if($data['appointStatus'] == "Approved"){
-                        array_unshift(
-                            $appointment,
-                            $data
-                        );
-                    }
-                    else{
-                        array_push(
-                            $appointment,
-                            $data
-                        );
-                    }
+                else{
+                    array_push(
+                        $appointment,
+                        $data
+                    );
                 }
             }
         }
