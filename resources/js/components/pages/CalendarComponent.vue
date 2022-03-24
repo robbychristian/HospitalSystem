@@ -27,6 +27,7 @@
                 >
             </div>
         </div>
+        
         <FullCalendar :options="calendarOptions" class="py-3 px-5" />
 
         <b-modal
@@ -51,6 +52,7 @@
                             id="example-datepicker"
                             v-model="date"
                             name="date"
+                            :date-disabled-fn="dateDisabled"
                         ></b-form-datepicker>
                     </b-col>
                 </b-row>
@@ -102,6 +104,17 @@
                     </b-col>
                 </b-row>
                 
+                <b-row v-if="isAdmin == 1">
+                    <b-col sm="2"><label>Doctor: </label></b-col>
+                    <b-col sm="10">
+                        <b-form-select
+                            v-model="selectedDoctor"
+                            :options="optDoc"
+                            name="doctor"
+                        ></b-form-select>
+                    </b-col>
+                </b-row>
+                
                 <b-row>
                     <b-col sm="3"><label>Appointment State: </label></b-col>
                     <b-col sm="9">
@@ -140,6 +153,11 @@ export default {
         let data = JSON.parse(this.patients);
 
         data.forEach(this.toItems);
+
+        this.isPatient = false
+        data = this.doctors;
+
+        data.forEach(this.toItems);
         
 
         let allAppointments = this.appointmentss;
@@ -169,13 +187,25 @@ export default {
                 .format("HH:mm:ss"),
             description: "",
             selectedPatient: "",
+            selectedDoctor: '',
             options: [],
+            optDoc: [],
             modalShow: "addCalendar",
             appointState: '',
 
             //filter
             doctorName: "Choose a Doctor",
             doctor: '',
+            weekdays: {
+                sun: '',
+                mon: '',
+                tue: '',
+                wed: '',
+                thurs: '',
+                fri: '',
+                sat: '',
+            },
+            isPatient: true,
 
             //choose doctor schedule
             keyword: "",
@@ -211,7 +241,7 @@ export default {
         },
         addCalendar() {
             this.$refs["addCalendar"].show();
-            console.log(this.startTime);
+            
         },
         submitForm() {
             if (
@@ -283,13 +313,17 @@ export default {
         handleEvents(events) {
             this.calendarOptions.events = events;
         },
+
         toItems(item) {
             let data = {
                 value: item.id,
                 text: item.fname + " " + item.lname,
             };
 
-            this.options.push(data);
+            if(this.isPatient) this.options.push(data);
+            else  {
+                if(item.isAdmin == 0) this.optDoc.push(data)
+            } 
         },
 
         toEvents(item) {
@@ -314,6 +348,22 @@ export default {
                     this.calendarOptions.events.push(data);
             }
         },
+
+        
+      dateDisabled(ymd, date) {
+        // Disable weekends (Sunday = `0`, Saturday = `6`) and
+        // disable days that fall on the 13th of the month
+        const weekday = date.getDay()
+        const day = date.getDate()
+        // Return `true` if the date should be disabled
+        
+        let length = this.weekdays.length
+
+        for(let i = 0; i < length; i++)
+            this.weekdays[i] = weekday === this.weekdays[i]
+        
+        return weekday === this.weekdays.sun || weekday === this.weekdays.mon || weekday === this.weekdays.tue || weekday === this.weekdays.wed || weekday === this.weekdays.thurs || weekday === this.weekdays.fri || weekday === this.weekdays.sat || day === 13
+      }
     },
 
     computed: {

@@ -27,46 +27,41 @@ class DashboardController extends Controller
 
         $page = "Dashboard";
         $active = "home";
-
-        // $documents = $this->firestore->database()->collection('Doctors')->documents()->rows();
-        // $doctors = [];
-        // foreach ($documents as $document) {
-
-        //     $data = $document->data();
-
-        //     if(!$data['isAdmin']){
-        //         $data['id'] = $document->id();
-        //         $data['joindate'] = Carbon::parse($data['joindate'])->format('F d, Y');
-
-        //         array_push( $doctors, $data );
-        //     }
-        // }
-
+        
         $doctors = [];
+        $reviews = [];
         // ->where('doctor_id', '==', Auth::user()->id_fb)
-        $documents = $this->firestore->database()->collection("Announcements");
 
         if (Auth::user()->isAdmin) {
-            $documents = $documents->documents()->rows();
             $doctors = User::where('isAdmin', false)->get();
-        } else {
-            $documents = $documents->where('author_id', '==', Auth::user()->id_fb)->documents()->rows();
         }
 
-        $announcements = [];
-        foreach ($documents as $document) {
-            $data = $document->data();
-            $data['id'] = $document->id();
-            $data['date'] = Carbon::parse($data['date'])->format('F d, Y');
-
-            array_push($announcements, $data);
+        if(!Auth::user()->isAdmin){
+            $documents = $this->firestore->database()->collection("AppointmentList")->where('drId', '==', Auth::user()->id_fb)->documents()->rows();
+            
+            foreach ($documents as $document) {
+                $data = $document->data();
+                
+                if($data['reviewStar'] != null && $data['reviewStar'] != ''){
+                    $review = [
+                        'star' => $data['reviewStar'],
+                        'date' => $data['reviewDate'],
+                        'comment' => $data['reviewComment'],
+                        'img' => $data['pPhotoUrl'],
+                        'name' => $data['pfName'] . ' ' . $data['plName'],
+                    ];
+        
+                    array_push($reviews, $review);
+                }
+                    
+            }
         }
-
+        
         $doctors = json_encode($doctors);
-        $announcements = json_encode($announcements);
+        $reviews = json_encode($reviews);
 
 
         return view('pages.dashboard')->with('page', $page)->with('active', $active)
-            ->with('doctors', $doctors)->with('announcements', $announcements);
+            ->with('doctors', $doctors)->with('reviews', $reviews);
     }
 }

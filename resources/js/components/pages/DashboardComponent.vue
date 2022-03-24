@@ -308,26 +308,31 @@
         </div>
 
 
-        <div class="feedbacks" v-if="!user.isAdmin">
-            <h5 class="mt-3 mb-0"> Today's Feedbacks and Reviews</h5>
-            <div class="feedbacks-holder">
+        <div class="feedbacks mb-3" v-if="!user.isAdmin">
 
-                <div v-for="(feedback, index) in feedbacks" class="feedbacks-box" :key="index">
-                    <div class="head">
-                        <img :src="feedback.img">
-                        <div>
-                            <h6> {{feedback.name}} </h6>
-                            <div class="review-details">
-                                <h5> {{feedback.review}}: <i class="fa-solid fa-star"></i></h5>
+            <div v-if="feedbacks.length">
+                <h5 class="mt-3 mb-0"> Today's Feedbacks</h5>
+                <div class="feedbacks-holder">
+
+                    <div v-for="(feedback, index) in feedbacks" class="feedbacks-box" :key="index">
+                        <div class="head">
+                            <img :src="feedback.img">
+                            <div>
+                                <h6> {{feedback.name}} </h6>
+                                <div class="review-details">
+                                    <h5> {{feedback.star}}: <i class="fa-solid fa-star"></i></h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="body">
-                        <p> {{feedback.comment}}</p>
+                        <div class="body">
+                            <p> {{feedback.comment}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <h5 class="mb-0"> You have no feedbacks for today</h5>
         </div>
 
         <doctor-component ref="doctor-component" v-if="user.isAdmin" :doctor-data="doctorData">
@@ -338,11 +343,14 @@
 
 <script>
 
+    import moment from "moment";
     export default {
-        props:['userData', 'doctors'],
+        props:['userData', 'doctors', 'reviewData'],
 
         data() {
             return { 
+
+                reviews: JSON.parse(this.reviewData),
                 user: JSON.parse(this.userData),
 
                 doctorData: JSON.parse(this.doctors),
@@ -357,42 +365,7 @@
                     operation: '',
                 },
 
-                feedbacks:[
-                    {
-                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
-                        img: '/img/TeleDoc-LogoIcon.jpeg',
-                        name: "Vaundy",
-                        review: 4,
-                    },  
-
-                    {
-                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
-                        img: '/img/TeleDoc-LogoIcon.jpeg',
-                        name: "Yuna Shin",
-                        review: 2,
-                    },  
-
-                    {
-                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
-                        img: '/img/TeleDoc-LogoIcon.jpeg',
-                        name: "Ryujin Shin",
-                        review: 2,
-                    },  
-
-                    {
-                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
-                        img: '/img/TeleDoc-LogoIcon.jpeg',
-                        name: "Choi, Jisu",
-                        review: 5,
-                    },  
-
-                    {
-                        comment: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, velit asperiores. Porro, nulla maxime. Veritatis fugiat quibusdam, harum iste velit dolore ab aut eaque architecto nemo, voluptatibus itaque, sapiente inventore.',
-                        img: '/img/TeleDoc-LogoIcon.jpeg',
-                        name: "Lee, Chaeryoung",
-                        review: 5,
-                    },  
-                ],
+                feedbacks:[ ],
 
                 options:[
                     'Pediatricians' ,
@@ -480,8 +453,8 @@
                     },
 
                 },
-                hasReviews: JSON.parse(this.userData).name == "Ryujin Shin",
-                series: [3,5,2,9,1],
+                hasReviews: false,
+                series: [],
             }
         },
 
@@ -638,9 +611,32 @@
             },
         },
 
-        // mouted(){
-        //     console.log(this.announcements)
-        // },
+        mounted(){
+            this.hasReviews = this.reviews.length
+
+            if(this.hasReviews){
+                let series = [0, 0, 0, 0, 0]
+                let length = this.hasReviews
+
+                for(let i = 0; i < length; i++){
+
+                    let feedback = {
+                        comment: this.reviews[i].comment,
+                        img: this.reviews[i].img == null || this.reviews[i].img == '' ? '/img/avatar.png' : this.reviews[i].img,
+                        name: this.reviews[i].name,
+                        star: parseInt(this.reviews[i].star),
+                        date: this.reviews[i].date,
+                    }
+
+                    let date = moment(feedback.date)
+                    
+                    series[feedback.star-1] += 1
+                    if( date.isSame( moment(), 'date' ) ) this.feedbacks.push(feedback)
+                }
+
+                this.series = series
+            }
+        },
         
     }
 </script>
