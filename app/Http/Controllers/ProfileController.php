@@ -39,7 +39,6 @@ class ProfileController extends Controller
         foreach ($doctorProfile as $detail) {
             $data = $detail->data();
             $data['id'] = $detail->id();
-            // $data['photoUrl'] = '';
 
             if( $data['otherSpecialization'] == null)
                 $data['otherSpecialization'] = [];
@@ -48,6 +47,11 @@ class ProfileController extends Controller
             if($data['photoUrl'] != '' && $data['photoUrl'] != null && $sub != 'https'){
                 
                 $data['photoUrl'] = $this->signedUrl($data['photoUrl']);
+            }
+
+            
+            if( $data['photoUrl'] == '' || $data['photoUrl'] == null){
+                $data['photoUrl'] = '/img/avatar.png';
             }
 
             array_push(

@@ -25337,7 +25337,7 @@ textarea.form-control-lg {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-color: black;
+  background-color: white;
 }
 .sidebar .sidebar-content .sidebar-setting .settings-content a {
   align-self: flex-start !important;
@@ -26254,7 +26254,7 @@ input.error::placeholder, .error {
   background-color: white;
   box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.15);
   padding: 1rem;
-  max-width: 500px;
+  max-width: 550px;
   margin: auto;
 }
 .profile-page .profile-content .personal-info p, .profile-page .profile-content .clinic-info p {

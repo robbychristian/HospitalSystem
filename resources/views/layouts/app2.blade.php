@@ -2,9 +2,14 @@
 
 @php
     $photo = Auth::user()->photoUrl;
-    $sub = strtolower(substr($photo, 0, 5));
-    if( $sub != 'https' ){
-        $photo = Firebase::storage()->getBucket()->object($photo)->signedUrl(now()->addDays(1));
+    if( $photo == null || $photo == ''){
+        $photo = '/img/avatar.png';
+    }
+    else{
+        $sub = strtolower(substr($photo, 0, 5));
+        if( $sub != 'https' ){
+            $photo = Firebase::storage()->getBucket()->object($photo)->signedUrl(now()->addDays(1));
+        }
     }
 @endphp
 

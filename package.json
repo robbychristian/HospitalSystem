@@ -36,6 +36,7 @@
         "frappe-charts": "^1.6.2",
         "fullcalendar": "^5.10.2",
         "moment": "^2.29.1",
+        "moment-range": "^4.0.2",
         "sweetalert": "^2.1.2",
         "uuid": "^8.3.2",
         "vue-apexcharts": "^1.6.2",

@@ -49,10 +49,12 @@ class CalendarController extends Controller
                 $data = $appointment->data();
                 $data['id'] = $appointment->id();
 
-                array_push(
-                    $appointments,
-                    $data
-                );
+                if($data['appointStatus'] == "Approved"){
+                    array_push(
+                        $appointments,
+                        $data
+                    );
+                }
             }
             
             $allDoctors = $this->firestore->database()->collection("Doctors")->documents()->rows();
@@ -78,10 +80,12 @@ class CalendarController extends Controller
                 $data = $appointment->data();
                 $data['id'] = $appointment->id();
 
-                array_push(
-                    $appointments,
-                    $data
-                );
+                if($data['appointStatus'] == "Approved"){
+                    array_push(
+                        $appointments,
+                        $data
+                    );
+                }
             }
         }
         
@@ -138,11 +142,11 @@ class CalendarController extends Controller
         $newAppointment->set([
             'id' => $newAppointment->id(),
             'actualProblem' => $request->problem,
-            'appointDate' => Carbon::parse($request->date)->format('m/d/y'),
+            'appointDate' => Carbon::parse($request->date)->format('m/d/Y'),
             'appointState' => $request->appointState,
             'appointStatus' => 'Pending',
             'appointTime' => '',
-            'bookingDate' => Carbon::parse($request->date)->format('m/d/y'),
+            'bookingDate' => Carbon::parse($request->date)->format('m/d/Y'),
             'bookingSchedule' => $day . ': ' . $startTime . ' - ' . $endTime,
 
             'drId' => Auth::user()->id_fb,

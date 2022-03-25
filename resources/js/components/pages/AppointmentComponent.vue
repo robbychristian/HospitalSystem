@@ -43,7 +43,9 @@
             </h1>
 
             <div v-else class="appointment-box mx-auto" v-for="(data, ind) in items" :key="'A'+ind">
-                <div :class="[ data.appointStatus , 'status']"> {{data.appointStatus}} </div>
+                <div :class="[ 
+                    data.appointStatus , 'status',  data.appointStatus == 'Pending' ? (conflicts(ind, data.drId) ? 'bg-danger' : '') : ''
+                ]"> {{data.appointStatus}} </div>
 
                 <div class="patient-info">
                     <h6> Patient:</h6>
@@ -86,6 +88,11 @@
 <script>
 
 import Swal from "sweetalert";
+import Moment from "moment";
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment)
+
 export default {
     props: ["appointmentData", "isAdmin"],
 
@@ -94,6 +101,7 @@ export default {
         return {
             keyword: '',
             filterBy: 'pName',
+            //
             options:[
                 {text: "Patient Name", value: 'pName', show: true },
                 {text: "Doctor Name", value: 'dName', show: this.isAdmin == 0 ? false : true },
@@ -103,7 +111,54 @@ export default {
         };
     },
 
+    // mounted(){
+    //     console.log(this.appointments[0])
+    // },
+
     methods: {
+
+        conflicts(ind, id){
+            
+            let length = this.appointments.length
+            let appointDate = this.appointments[ind].appointDate
+            let sched = this.appointments[ind].bookingSchedule.substr( this.appointments[ind].bookingSchedule.indexOf(' ') + 1 )
+            sched = sched.trim()
+            let time1s = sched.substr( 0, sched.indexOf(' ') )
+            let time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
+            var date1 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
+            var range  = moment.range(date1);
+
+            for(let i = 0; i < length; i++){
+
+                if(ind != i){
+                    
+                    if( id == this.appointments[i].drId ){
+
+                        if( appointDate == this.appointments[i].appointDate ){
+                            
+                            if( this.appointments[i].appointStatus == "Approved"){
+                                
+                                sched = this.appointments[i].bookingSchedule.substr( this.appointments[i].bookingSchedule.indexOf(' ') + 1 )
+                                sched = sched.trim()
+                                time1s = sched.substr( 0, sched.indexOf(' ') )
+                                time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
+
+                                var date2 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
+                                var range2 = moment.range(date2);
+
+                                if(range.overlaps(range2)){
+                                    console.log('tite')
+                                }
+                                    return true
+                            }
+
+                        }
+                    }
+                }
+            }
+            
+            return false
+        },
 
         removeLab(id, ind, category){
             this.openLoading()

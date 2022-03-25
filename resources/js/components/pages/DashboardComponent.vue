@@ -307,7 +307,6 @@
              </div>
         </div>
 
-
         <div class="feedbacks mb-3" v-if="!user.isAdmin">
 
             <div v-if="feedbacks.length">
@@ -329,7 +328,7 @@
                             <p> {{feedback.comment}}</p>
                         </div>
                     </div>
-                </div>
+                </div>  
             </div>
 
             <h5 class="mb-0"> You have no feedbacks for today</h5>
@@ -342,8 +341,8 @@
 </template>
 
 <script>
-
     import moment from "moment";
+
     export default {
         props:['userData', 'doctors', 'reviewData'],
 

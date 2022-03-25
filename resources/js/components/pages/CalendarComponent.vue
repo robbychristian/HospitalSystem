@@ -196,6 +196,8 @@ export default {
             //filter
             doctorName: "Choose a Doctor",
             doctor: '',
+
+            // Sunday = 0, Saturday 6
             weekdays: {
                 sun: '',
                 mon: '',

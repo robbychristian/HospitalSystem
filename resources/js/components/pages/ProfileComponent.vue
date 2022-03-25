@@ -186,10 +186,14 @@
 
                             <p class="text-danger mb-0" v-for="(error, ind) in errors[item.field]" :key="'CF'+ind">{{error}}</p>
                             <h6> 
-                                <small class="text-dark-blue"> {{item.day}} </small> : &nbsp;
+                                <small class="text-dark-blue"> {{item.day}} </small> : &nbsp; <br>
+
                                 <input :class="{error: errors[item.field]}" type="time" v-model="clinicForm[item.field][0]">
                                 &nbsp; to &nbsp;
-                                <input :class="{error: errors[item.field]}" type="time" v-model="clinicForm[item.field][1]">
+                                <input :class="[{error: errors[item.field]}, 'mb-3']" type="time" v-model="clinicForm[item.field][1]"> <br>
+
+                                Alloted Time / Appointment &nbsp;
+                                <input :class="{error: errors[item.field]}" placeholder="Minutes" type="text" v-model="clinicForm[item.field][2]">
                             </h6>
                         </div>
                     </div>
@@ -417,6 +421,20 @@ export default {
                         go = false
                     }
                     else this.errors[field] = ''
+                    
+                    if( this.clinicForm[field][0] != '' && this.clinicForm[field][1] != '' && this.clinicForm[field][2] == '' ){
+                        console.log( this.clinicForm[field][2]  )
+                        if( this.errors[field] != ''){
+                            this.errors[field].push( "Alloted Time is required" )
+                        }
+                        else{
+                            this.errors[field] = [
+                                'Alloted Time is required',
+                            ]
+                        }
+
+                        go = false
+                    }
                 }
             }
 
@@ -642,13 +660,13 @@ export default {
             consultFee: this.user.consultFee,
             provideTeleService: this.user.provideTeleService,
             teleconsultFee: this.user.teleconsultFee,
-            teleSun: ['', ''],
-            teleMon: ['', ''],
-            teleTue: ['', ''],
-            teleWed: ['', ''],
-            teleThurs: ['', ''],
-            teleFri: ['', ''],
-            teleSat: ['', ''],
+            teleSun: ['', '', ''],
+            teleMon: ['', '', ''],
+            teleTue: ['', '', ''],
+            teleWed: ['', '', ''],
+            teleThurs: ['', '', ''],
+            teleFri: ['', '', ''],
+            teleSat: ['', '', ''],
             active: false,
         }
 
@@ -659,13 +677,16 @@ export default {
                 if(this.user[field].length){
                     this.clinicForm[field][0] = this.user[field][0]
                     this.clinicForm[field][1] = this.user[field][1]
+                    this.clinicForm[field][2] = this.user[field][2] == null ? '' : this.user[field][2]
                 }
             }
             else{
-                this.user[field] = ['', '']
+                this.user[field] = ['', '', '']
             }
         }
         
+        console.log(this.clinicForm)
+        console.log(this.user)
     },
 };
 </script>
