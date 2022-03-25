@@ -121,6 +121,7 @@ export default {
             
             let length = this.appointments.length
             let appointDate = this.appointments[ind].appointDate
+            
             let sched = this.appointments[ind].bookingSchedule.substr( this.appointments[ind].bookingSchedule.indexOf(' ') + 1 )
             sched = sched.trim()
             let time1s = sched.substr( 0, sched.indexOf(' ') )
@@ -147,9 +148,8 @@ export default {
                                 var range2 = moment.range(date2);
 
                                 if(range.overlaps(range2)){
-                                    console.log('tite')
-                                }
                                     return true
+                                }
                             }
 
                         }

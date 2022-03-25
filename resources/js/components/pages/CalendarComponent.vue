@@ -49,6 +49,18 @@
             >
                 <input type="hidden" name="_token" v-bind:value="csrf" />
 
+                <b-row v-if="isAdmin == 1">
+                    <b-col sm="2"><label>Doctor: </label></b-col>
+                    <b-col sm="10">
+                        <b-form-select
+                            v-model="selectedDoctor"
+                            :options="optDoc"
+                            name="doctor"
+                            @input="updateUser()"
+                        ></b-form-select>
+                    </b-col>
+                </b-row>
+
                 <b-row>
                     <b-col sm="2"><label>Date: </label></b-col>
                     <b-col sm="10">
@@ -58,6 +70,8 @@
                             name="date"
                             :date-disabled-fn="dateDisabled"
                             :min="min"
+                            @input="updateSlots()"
+                            :disabled="user.length == 0"
                         ></b-form-datepicker>
                     </b-col>
                 </b-row>
@@ -70,6 +84,7 @@
                             :options="allSlot"
                             class="w-100"
                             name="timeSlot"
+                            :disabled="date == '' || user.length == 0"
                         >
                             <!-- This slot appears above the options from 'options' prop -->
                             <template #first>
@@ -103,17 +118,6 @@
                             v-model="selectedPatient"
                             :options="options"
                             name="patient"
-                        ></b-form-select>
-                    </b-col>
-                </b-row>
-
-                <b-row v-if="isAdmin == 1">
-                    <b-col sm="2"><label>Doctor: </label></b-col>
-                    <b-col sm="10">
-                        <b-form-select
-                            v-model="selectedDoctor"
-                            :options="optDoc"
-                            name="doctor"
                         ></b-form-select>
                     </b-col>
                 </b-row>
@@ -156,7 +160,6 @@
 </template>
 <script>
 import { Calendar } from "@fullcalendar/core";
-import moment from "moment";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import "@fullcalendar/core/vdom"; // solves problem with Vite
 import FullCalendar from "@fullcalendar/vue";
@@ -164,6 +167,11 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { v4 as uuidv4 } from "uuid";
 import swal from "sweetalert";
+import Moment from "moment";
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment)
+
 export default {
     props: [
         "csrf",
@@ -183,215 +191,14 @@ export default {
 
         this.isPatient = false;
         data = this.doctors;
-
-        //SETTING AVAILABLE DAYS
-        let drData = JSON.parse(this.drUserData)[0];
-        if (drData.teleSun == null) {
-            //SUNDAY
-            this.weekdays.sun = 0;
-        } else {
-            //SETTING AVAILABLE TIME
-            this.weekdays.sun = drData.teleSun;
-            let x0 = parseInt(this.weekdays.sun[0]);
-            let x1 = parseInt(this.weekdays.sun[1]);
-            let x2 = parseInt(this.weekdays.sun[2]);
-
-            for (let i = x0; i <= x1; i += 0.5) {
-                let startTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .format("h:mmA");
-                let endTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .add(x2, "m")
-                    .format("h:mmA");
-                this.allSlot.push({
-                    value: startTime + " - " + endTime,
-                    text: startTime + " - " + endTime,
-                });
-            }
-        }
-        if (drData.teleMon == null) {
-            //MON
-            this.weekdays.mon = 1;
-        } else {
-            //SETTING AVAILABLE TIME
-            this.weekdays.mon = drData.teleMon;
-            let x0 = parseInt(this.weekdays.mon[0]);
-            let x1 = parseInt(this.weekdays.mon[1]);
-            let x2 = parseInt(this.weekdays.mon[2]);
-
-            for (let i = x0; i <= x1; i += 0.5) {
-                let startTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .format("h:mmA");
-                let endTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .add(x2, "m")
-                    .format("h:mmA");
-                this.allSlot.push({
-                    value: startTime + " - " + endTime,
-                    text: startTime + " - " + endTime,
-                });
-            }
-        }
-        if (drData.teleTue == null) {
-            //TUESDAY
-            this.weekdays.tue = 2;
-        } else {
-            //SETTING AVAILABLE TIME
-            this.weekdays.tue = drData.teleTue;
-            let x0 = parseInt(this.weekdays.tue[0]);
-            let x1 = parseInt(this.weekdays.tue[1]);
-            let x2 = parseInt(this.weekdays.tue[2]);
-
-            for (let i = x0; i <= x1; i += 0.5) {
-                let startTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .format("h:mmA");
-                let endTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .add(x2, "m")
-                    .format("h:mmA");
-                this.allSlot.push({
-                    value: startTime + " - " + endTime,
-                    text: startTime + " - " + endTime,
-                });
-            }
-        }
-        if (drData.teleWed == null) {
-            //WEDNESDAY
-            this.weekdays.wed = 3;
-        } else {
-            //SETTING AVAILABLE TIME
-            this.weekdays.wed = drData.teleWed;
-            let x0 = parseInt(this.weekdays.wed[0]);
-            let x1 = parseInt(this.weekdays.wed[1]);
-            let x2 = parseInt(this.weekdays.wed[2]);
-
-            for (let i = x0; i <= x1; i += 0.5) {
-                let startTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .format("h:mmA");
-                let endTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .add(x2, "m")
-                    .format("h:mmA");
-                this.allSlot.push({
-                    value: startTime + " - " + endTime,
-                    text: startTime + " - " + endTime,
-                });
-            }
-        }
-        if (drData.teleThurs == null) {
-            // THURSDAY
-            this.weekdays.thurs = 4;
-        } else {
-            //SETTING AVAILABLE TIME
-            this.weekdays.thurs = drData.teleThurs;
-            let x0 = parseInt(this.weekdays.thurs[0]);
-            let x1 = parseInt(this.weekdays.thurs[1]);
-            let x2 = parseInt(this.weekdays.thurs[2]);
-
-            for (let i = x0; i <= x1; i += 0.5) {
-                let startTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .format("h:mmA");
-                let endTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .add(x2, "m")
-                    .format("h:mmA");
-                this.allSlot.push({
-                    value: startTime + " - " + endTime,
-                    text: startTime + " - " + endTime,
-                });
-            }
-        }
-        if (drData.teleFri == null) {
-            // FRIDAY
-            this.weekdays.fri = 5;
-        } else {
-            //SETTING AVAILABLE TIME
-            this.weekdays.fri = drData.teleFri;
-            let x0 = parseInt(this.weekdays.fri[0]);
-            let x1 = parseInt(this.weekdays.fri[1]);
-            let x2 = parseInt(this.weekdays.fri[2]);
-
-            for (let i = x0; i <= x1; i += 0.5) {
-                let startTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .format("h:mmA");
-                let endTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .add(x2, "m")
-                    .format("h:mmA");
-                this.allSlot.push({
-                    value: startTime + " - " + endTime,
-                    text: startTime + " - " + endTime,
-                });
-            }
-        }
-        if (drData.teleSat == null) {
-            // SATURDAY
-            this.weekdays.sat = 6;
-        } else {
-            //SETTING AVAILABLE TIME
-            this.weekdays.sat = drData.teleSat;
-            let x0 = parseInt(this.weekdays.sat[0]);
-            let x1 = parseInt(this.weekdays.sat[1]);
-            let x2 = parseInt(this.weekdays.sat[2]);
-
-            for (let i = x0; i <= x1; i += 0.5) {
-                let startTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .format("h:mmA");
-                let endTime = moment()
-                    .hour(i)
-                    .minute(0)
-                    .second(0)
-                    .add(x2, "m")
-                    .format("h:mmA");
-                this.allSlot.push({
-                    value: startTime + " - " + endTime,
-                    text: startTime + " - " + endTime,
-                });
-            }
-        }
-
-        console.log(this.weekdays);
-
         data.forEach(this.toItems);
 
         let allAppointments = this.appointmentss;
 
         allAppointments.forEach(this.toEvents);
+        
+        this.populateWeekdays()
 
-        console.log(this.user.provideTeleService == 0 ? false : true);
     },
 
     components: {
@@ -406,7 +213,7 @@ export default {
             doctors: JSON.parse(this.doctorsData),
             appointmentss: JSON.parse(this.appointments),
             //FOR DATE
-            date: null,
+            date: '',
             min: new Date(),
             //FOR TIME SLOT
             timeSlot: null,
@@ -477,7 +284,8 @@ export default {
                 this.description == "" ||
                 this.selectedPatient == "" ||
                 this.appointState == "" ||
-                this.timeSlot == ""
+                this.timeSlot == "" ||
+                this.selectedDoctor == ""
             ) {
                 swal({
                     title: "Error",
@@ -595,6 +403,129 @@ export default {
                 weekday === this.weekdays.sat
             );
         },
+
+        updateSlots(){
+            let day = moment(this.date).days()
+            let dayName = moment(this.date).format('ddd')
+
+            this.allSlot = []
+            let days = [
+                { day: 'sun', field: 'teleSun' },
+                { day: 'mon', field: 'teleMon' },
+                { day: 'tue', field: 'teleTue' },
+                { day: 'wed', field: 'teleWed' },
+                { day: 'thurs', field: 'teleThurs' },
+                { day: 'fri', field: 'teleFri' },
+                { day: 'sat', field: 'teleSat'},
+            ]
+
+            let week = this.weekdays[ days[day].day ]
+            let startTime = moment(this.date + " " + week[0])
+            let endTime = moment(this.date + " " + week[1])
+
+            let totalMin = ( endTime.hour() - startTime.hour()) *60 + ( endTime.minute() - startTime.minute())
+            let slots = parseInt(totalMin/week[2]) 
+
+            for (let i = 0; i < slots; i++) {
+
+                let start = startTime.format("h:mm");
+                startTime.add(week[2], "m")
+                let end = startTime.format("h:mm");
+
+                let slot = dayName + ": " + start + " - " + end
+
+                if( !this.conflicts(slot) ){
+                    this.allSlot.push({
+                        value: slot,
+                        text: start + " - " + end,
+                    });
+                }
+            }
+
+        },
+
+        updateUser(){
+
+            let length = this.doctors.length
+            
+            for(let i = 0; i < length; i++){
+                if( this.doctors[i].id == this.selectedDoctor ) this.user = this.doctors[i]
+            }
+            
+            this.populateWeekdays() 
+        },
+
+        conflicts( slot ){
+            
+            let length = this.appointmentss.length
+
+            let appointDate = moment( this.date ).format('L')
+            let id = this.user.id
+            
+            let sched = slot.substr( slot.indexOf(' ') + 1 )
+            sched = sched.trim()
+
+            let time1s = sched.substr( 0, sched.indexOf(' ') )
+            let time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
+            var date1 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
+            var range  = moment.range(date1);
+
+            for(let i = 0; i < length; i++){
+                
+                if( appointDate == this.appointmentss[i].appointDate ){
+                
+                    if( id == this.appointmentss[i].drId ){
+                        
+                        sched = this.appointmentss[i].bookingSchedule.substr( this.appointmentss[i].bookingSchedule.indexOf(' ') + 1 )
+                        sched = sched.trim()
+                        time1s = sched.substr( 0, sched.indexOf(' ') )
+                        time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
+
+                        var date2 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
+                        var range2 = moment.range(date2);
+
+                        if(range.overlaps(range2)){
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+
+        },
+
+        populateWeekdays(){
+            
+        //SETTING AVAILABLE DAYS
+            let drData = this.user;
+            this.selectedDoctor = this.user.id
+
+            if(this.user.length != 0){
+                
+                let days = [
+                    { day: 'sun', field: 'teleSun' },
+                    { day: 'mon', field: 'teleMon' },
+                    { day: 'tue', field: 'teleTue' },
+                    { day: 'wed', field: 'teleWed' },
+                    { day: 'thurs', field: 'teleThurs' },
+                    { day: 'fri', field: 'teleFri' },
+                    { day: 'sat', field: 'teleSat'},
+                ]
+
+                for(let i = 0; i < 7; i++){
+                    let day = days[i]
+                    if (drData[ day.field ] == null || drData[ day.field ] == '') {
+                        this.weekdays[ day.day ] = i;
+                    }
+                    else if( drData[ day.field ][0] == '' ){
+                        this.weekdays[ day.day ] = i;
+                    }
+                    else {
+                        this.weekdays[ day.day ] = drData[ day.field ];
+                    }
+                }
+            }
+        }
     },
 
     computed: {

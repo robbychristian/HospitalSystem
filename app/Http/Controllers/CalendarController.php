@@ -29,6 +29,7 @@ class CalendarController extends Controller
         $documents = $this->firestore->database()->collection("Patients")->documents()->rows();
 
         $patients = [];
+        $user = [];
 
         foreach ($documents as $document) {
             $data = $document->data();
@@ -71,14 +72,16 @@ class CalendarController extends Controller
             }
         } else { //GET ALL EVENTS FOR DOCTORS
             $allAppointments = $this->firestore->database()->collection("AppointmentList");
-            $doctorData = $this->firestore->database()->collection("Doctors");
+            // $doctorData = $this->firestore->database()->collection("Doctors");
             $query = $allAppointments->where('drId', '==', Auth::user()->id_fb);
-            $drQuery = $doctorData->where('id', '==', Auth::user()->id_fb);
+            // $drQuery = $doctorData->where('id', '==', Auth::user()->id_fb);
             $doctorAppointments = $query->documents();
-            $getDrData = $drQuery->documents();
+            // $getDrData = $drQuery->documents();
+
+            $user = $this->firestore->database()->collection("Doctors")->document(Auth::user()->id_fb)->snapshot()->data();
 
             $appointments = [];
-            $doctorsDatas = [];
+            // $doctorsDatas = [];
 
             foreach ($doctorAppointments as $appointment) {
                 $data = $appointment->data();
@@ -92,25 +95,28 @@ class CalendarController extends Controller
                 }
             }
 
-            foreach ($getDrData as $drData) {
-                $data = $drData->data();
-                $data['id'] = $drData->id();
+            // foreach ($getDrData as $drData) {
+            //     $data = $drData->data();
+            //     $data['id'] = $drData->id();
 
-                array_push(
-                    $doctorsDatas,
-                    $data
-                );
-            }
+            //     array_push(
+            //         $doctorsDatas,
+            //         $data
+            //     );
+            // }
         }
 
         $hospital = count($this->firestore->database()->collection("Hospitals")->where('doctorId', '==', Auth::user()->id_fb)->documents()->rows());
 
         $appointments = json_encode($appointments);
         $doctors = json_encode($doctors);
-        $doctorsDatas = json_encode($doctorsDatas);
+        $user = json_encode($user);
+        // $doctorsDatas = json_encode($doctorsDatas);
 
         return view('pages.calendar')->with('page', $page)->with('active', $active)->with('patients', $patients)
-            ->with('appointments', $appointments)->with('doctors', $doctors)->with('hospital', $hospital)->with("drData", $doctorsDatas);
+            ->with('appointments', $appointments)->with('doctors', $doctors)->with('hospital', $hospital)
+            ->with('user', $user);
+            // ->with("drData", $doctorsDatas);
     }
 
     /**
@@ -131,11 +137,10 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $doctor = '';
 
         if (Auth::user()->isAdmin) {
-            $doctor = $this->firestore->database()->collection("Doctors")->document($request->drId)->snapshot()->data();
+            $doctor = $this->firestore->database()->collection("Doctors")->document($request->doctor)->snapshot()->data();
         } else {
             $doctor = $this->firestore->database()->collection("Doctors")->document(Auth::user()->id_fb)->snapshot()->data();
         }
@@ -160,7 +165,7 @@ class CalendarController extends Controller
             'appointStatus' => 'Pending',
             'appointTime' => $request->timeSlot,
             'bookingDate' => Carbon::parse($request->date)->format('m/d/Y'),
-            'bookingSchedule' => $day . ': ' . $startTime . ' - ' . $endTime,
+            'bookingSchedule' => $request->timeSlot,
 
             'drId' => Auth::user()->id_fb,
             'consultFee' => $doctor['consultFee'],
