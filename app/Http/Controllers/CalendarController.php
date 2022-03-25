@@ -137,6 +137,7 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $doctor = '';
 
         if (Auth::user()->isAdmin) {
@@ -167,7 +168,7 @@ class CalendarController extends Controller
             'bookingDate' => Carbon::parse($request->date)->format('m/d/Y'),
             'bookingSchedule' => $request->timeSlot,
 
-            'drId' => Auth::user()->id_fb,
+            'drId' => $doctor['id'],
             'consultFee' => $doctor['consultFee'],
             'drClinic' => $doctor['clinicAddress'],
             'drDegree' => $doctor['degree'],

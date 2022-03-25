@@ -428,16 +428,18 @@ export default {
 
             for (let i = 0; i < slots; i++) {
 
-                let start = startTime.format("h:mm");
+                let start = startTime.format("HH:mm");
+                let startA = startTime.format("h:mmA");
                 startTime.add(week[2], "m")
-                let end = startTime.format("h:mm");
+                let end = startTime.format("HH:mm");
+                let endA = startTime.format("h:mmA");
 
                 let slot = dayName + ": " + start + " - " + end
 
                 if( !this.conflicts(slot) ){
                     this.allSlot.push({
                         value: slot,
-                        text: start + " - " + end,
+                        text: startA + " - " + endA,
                     });
                 }
             }
@@ -451,14 +453,14 @@ export default {
             for(let i = 0; i < length; i++){
                 if( this.doctors[i].id == this.selectedDoctor ) this.user = this.doctors[i]
             }
+
+            console.log(this.user)
             
             this.populateWeekdays() 
         },
 
         conflicts( slot ){
-            
             let length = this.appointmentss.length
-
             let appointDate = moment( this.date ).format('L')
             let id = this.user.id
             
@@ -472,10 +474,13 @@ export default {
 
             for(let i = 0; i < length; i++){
                 
+                console.log(appointDate + " " + this.appointmentss[i].appointDate)
+
                 if( appointDate == this.appointmentss[i].appointDate ){
-                
+                    
                     if( id == this.appointmentss[i].drId ){
                         
+
                         sched = this.appointmentss[i].bookingSchedule.substr( this.appointmentss[i].bookingSchedule.indexOf(' ') + 1 )
                         sched = sched.trim()
                         time1s = sched.substr( 0, sched.indexOf(' ') )
