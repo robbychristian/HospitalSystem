@@ -15,6 +15,7 @@
 </style>
 
 <template>
+
     <div class="sidebar" id="sidebar">
         <div class="sidebar-content">
             <div class="sidebar-logo-holder">
@@ -58,6 +59,7 @@
                 </a>
 
                 <a
+                    v-if="isAdmin != 1"
                     href="/inquiry"
                     :class="[
                         { active: active == 'inquiry' ? true : false },
@@ -114,11 +116,12 @@
             </Transition>
         </div>
     </div>
+
 </template>
 
 <script>
 export default {
-    props: ["active", "token", "name", "profilePicture"],
+    props: ["active", "token", "name", "profilePicture", 'isAdmin'],
 
     data() {
         return {

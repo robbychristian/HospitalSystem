@@ -210,7 +210,13 @@
 
                         <h6 v-for="(item, ind) in teleDays" :key="'TD'+ind"> 
                             <small class="text-dark-blue"> {{item.day}} </small> : &nbsp;
-                            {{ user[item.field][0] == '' || user[item.field] == null ? 'Not Available' :  timeBestFormat(user[item.field][0]) + ' - ' + timeBestFormat(user[item.field][1]) }}
+                            {{ 
+                                user[item.field][0] == '' || user[item.field] == null ? 'Not Available' :  
+                                timeBestFormat(user[item.field][0]) + ' - ' + timeBestFormat(user[item.field][1]) 
+                            }} &nbsp;
+                            <span v-if="user[item.field][0] != '' && user[item.field] != null">
+                                <i class="fa-solid fa-hourglass text-dark-green"></i> :  &nbsp; {{ user[item.field][2] == '' || user[item.field][2] == null ? "NaN" : user[item.field][2] }} mnts
+                            </span>
                         </h6>
                     </div>
                 </div>

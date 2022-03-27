@@ -935,6 +935,8 @@
                 
                 this.patient = this.items[ind]
 
+                console.log(this.patient)
+
                 if(this.patient.photoUrl != null && this.patient.photoUrl != ''){
                     let sub = this.patient.pPhotoUrl.substring(0, 5).toLowerCase()
 
@@ -1065,11 +1067,13 @@
             this.user = JSON.parse(this.userData)
 
             this.user.name = this.user.fname + ' ' + this.user.lname
+            
+            if(this.user.photoUrl != null && this.user.photoUrl != ''){
+                let sub = this.user.photoUrl.substring(0, 5).toLowerCase()
 
-            let sub = this.user.photoUrl.substring(0, 5).toLowerCase()
-
-            if(sub != 'https')
-                this.toLinkImage(this.user.photoUrl, false)
+                if(sub != 'https')
+                    this.toLinkImage(this.user.photoUrl, false)
+            }
         }
 
     }

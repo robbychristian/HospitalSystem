@@ -22,8 +22,8 @@
                 'ADMIN' :
                 Auth::user()->name 
             }}" 
-            profile-picture="{{ $photo }}
-            "
+            profile-picture="{{ $photo }}"
+            is-admin="{{ Auth::user()->isAdmin }}"
         ></sidebar>
         
         <div class="main-content">

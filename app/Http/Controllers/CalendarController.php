@@ -164,7 +164,7 @@ class CalendarController extends Controller
             'appointDate' => Carbon::parse($request->date)->format('m/d/Y'),
             'appointState' => $request->appointState,
             'appointStatus' => 'Pending',
-            'appointTime' => $request->timeSlot,
+            'appointTime' => '',
             'bookingDate' => Carbon::parse($request->date)->format('m/d/Y'),
             'bookingSchedule' => $request->timeSlot,
 

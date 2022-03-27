@@ -473,8 +473,6 @@ export default {
             var range  = moment.range(date1);
 
             for(let i = 0; i < length; i++){
-                
-                console.log(appointDate + " " + this.appointmentss[i].appointDate)
 
                 if( appointDate == this.appointmentss[i].appointDate ){
                     
