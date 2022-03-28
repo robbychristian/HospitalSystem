@@ -140,13 +140,13 @@ class ProfileController extends Controller
             ['path' => 'consultFee', 'value' => $data->consultFee],
             ['path' => 'provideTeleService', 'value' => $data->provideTeleService],
             ['path' => 'teleconsultFee', 'value' => $data->teleconsultFee],
-            ['path' => 'teleSun', 'value' => $data->teleSun],
-            ['path' => 'teleMon', 'value' => $data->teleMon],
-            ['path' => 'teleTue', 'value' => $data->teleTue, ],
-            ['path' => 'teleWed', 'value' => $data->teleWed ],
-            ['path' => 'teleThurs', 'value' => $data->teleThurs],
-            ['path' => 'teleFri', 'value' =>  $data->teleFri],
-            ['path' => 'teleSat', 'value' => $data->teleSat],
+            ['path' => 'teleSun', 'value' => $data->teleSun[0] == '' ? null : $data->teleSun],
+            ['path' => 'teleMon', 'value' => $data->teleMon[0] == '' ? null : $data->teleMon],
+            ['path' => 'teleTue', 'value' => $data->teleTue[0] == '' ? null : $data->teleTue],
+            ['path' => 'teleWed', 'value' => $data->teleWed[0] == '' ? null : $data->teleWed],
+            ['path' => 'teleThurs', 'value' => $data->teleThurs[0] == '' ? null : $data->teleThurs],
+            ['path' => 'teleFri', 'value' =>  $data->teleFri[0] == '' ? null : $data->teleFri],
+            ['path' => 'teleSat', 'value' => $data->teleSat[0] == '' ? null : $data->teleSat],
         ];
 
         $this->firestore->database()->collection('Doctors')->document($doctor->id_fb)->update($updateArray);

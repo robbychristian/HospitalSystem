@@ -142,7 +142,7 @@
                             type="radio"
                             id="two"
                             value="Hospital"
-                            :disabled="hospital == 0 ? true : false"
+                            :disabled="user.hospital <= 0 ? true : false"
                             v-model="appointState"
                         />
                         <label for="two">Hospital</label>
@@ -180,7 +180,6 @@ export default {
         "isAdmin",
         "doctorsData",
         "userData",
-        "hospital",
         "drUserData",
     ],
 
