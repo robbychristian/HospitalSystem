@@ -36,7 +36,7 @@
             no-close-on-backdrop
             header-class="border-0 bg-dark-green text-white modal-head"
             centered 
-            title="Preview Prescription"
+            :title="isPrescribed ? 'Preview Prescription' : 'Laboratory Request'"
             size="xl"
         >
 
@@ -147,8 +147,8 @@
                     <div class="header">
                         <div class="top-info">
                             <h6> LABORATORY TEST REQUEST </h6>
-                            <p> Lorem ipsum dolor sit amet, consecteturb hic facilis itaque voluptatum laboriosam deleniti nulla debitis.</p>
-                            <p> ( Lorem ipsum dolor sit amet, consecteturb hic facilis itaque. )</p>
+                            <p> Purpose: To be used when requesting testing of biological and potentially pathogenic agents at the Laboratory Services. Please present this form at the Laboratory Testing Center.</p>
+                            <p> ( Requested by Dr. {{user.name}} )</p>
                         </div>
                         
                         <div class="d-flex">
@@ -409,9 +409,13 @@
                                     <div class="prescription-input">
                                         <input v-model="medicineForm.medicine" :class="{'error': medicineErrorForm.medicine}" type="text" placeholder="Medicine"> <div class="divider-vertical"></div>
                                         <input v-model="medicineForm.dosage" :class="{'error': medicineErrorForm.dosage}" type="number" min="0" step="1" placeholder="Dosage">
-                                        <select v-model="unit">
+                                        <select v-model="unit">L, mg, mcg, oz,
+                                            <option value="L">L</option>
                                             <option value="mL">mL</option>
+                                            <option value="mg">mg</option>
+                                            <option value="mcg">mcg</option>
                                             <option value="g">g</option>
+                                            <option value="oz">oz</option>
                                         </select>
                                         <div class="divider-vertical"></div>
                                         <input v-model="medicineForm.perDay" :class="{'error': medicineErrorForm.perDay}" type="text" placeholder="How many times a day"> <div class="divider-vertical"></div>
@@ -459,8 +463,8 @@
                         <div class="header">
                             <div class="top-info">
                                 <h6> LABORATORY TEST REQUEST </h6>
-                                <p> Lorem ipsum dolor sit amet, consecteturb hic facilis itaque voluptatum laboriosam deleniti nulla debitis.</p>
-                                <p> ( Lorem ipsum dolor sit amet, consecteturb hic facilis itaque. )</p>
+                                <p> Purpose: To be used when requesting testing of biological and potentially pathogenic agents at the Laboratory Services. Please present this form at the Laboratory Testing Center.</p>
+                                <p> ( Requested by Dr. {{user.name}} )</p>
                             </div>
                             
                             <div class="d-flex">
@@ -1074,6 +1078,7 @@
                 if(sub != 'https')
                     this.toLinkImage(this.user.photoUrl, false)
             }
+
         }
 
     }

@@ -93,8 +93,8 @@
             <div class="header">
                 <div class="top-info">
                     <h6> LABORATORY TEST REQUEST </h6>
-                    <p> Lorem ipsum dolor sit amet, consecteturb hic facilis itaque voluptatum laboriosam deleniti nulla debitis.</p>
-                    <p> ( Lorem ipsum dolor sit amet, consecteturb hic facilis itaque. )</p>
+                    <p>  Purpose: To be used when requesting testing of biological and potentially pathogenic agents at the Laboratory Services. Please present this form at the Laboratory Testing Center. </p>
+                    <p> ( Requested by Dr.{{$patient->drfName}} {{$patient->drlName}}  )</p>
                 </div>
                 
                 <div class="d-flex" style="margin-top: 18px; padding: 0px;">

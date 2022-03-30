@@ -88,8 +88,12 @@
                     <div class="form-input">
                         <h6 class="mb-0 mr-15px"> Gender: </h6>
                         <div class='d-flex align-items-center mt-3 mt-lg-0'>
-                            <input class="'form-check-input' " type="checkbox" id="flexRadioDefault1" value="true" v-model="doctorForm.gender">
+                            <input class="'form-check-input' " type="radio" id="flexRadioDefault1" value="true" v-model="doctorForm.gender">
                             <label class="form-check-label mx-3" for="flexRadioDefault1"> Male </label>
+                        </div>
+                        <div class='d-flex align-items-center mt-3 mt-lg-0'>
+                            <input class="'form-check-input' " type="radio" id="flexRadioDefault2" value="false" v-model="doctorForm.gender">
+                            <label class="form-check-label mx-3" for="flexRadioDefault2"> Female </label>
                         </div>
                     </div>
 
@@ -235,8 +239,12 @@
                     <div class="form-input">
                         <h6 class="mb-0 mr-15px"> Gender: </h6>
                         <div class='d-flex align-items-center mt-3 mt-lg-0'>
-                            <input class="'form-check-input' " type="checkbox" id="flexRadioDefault1" value="true" v-model="doctorForm.gender">
+                            <input class="'form-check-input' " type="radio" id="flexRadioDefault1" value="true" v-model="doctorForm.gender">
                             <label class="form-check-label mx-3" for="flexRadioDefault1"> Male </label>
+                        </div>
+                        <div class='d-flex align-items-center mt-3 mt-lg-0'>
+                            <input class="'form-check-input' " type="radio" id="flexRadioDefault2" value="false" v-model="doctorForm.gender">
+                            <label class="form-check-label mx-3" for="flexRadioDefault2"> Female </label>
                         </div>
                     </div>
 
@@ -533,6 +541,7 @@
                 }   
 
                 this.doctorForm.firstName = data.fname 
+                this.doctorForm.gender = data.gender == 0 ? false : true 
                 this.doctorForm.lastName = data.lname
                 this.doctorForm.clinicAddress = data.clinicAddress
                 this.doctorForm.specialization = data.specialization
@@ -575,6 +584,7 @@
                 this.modal.operation = operation
 
                 if( operation == "Show"){
+                    console.log(this.doctorForm)
                     this.$refs['doctor-show'].show()
                 }
                 else{

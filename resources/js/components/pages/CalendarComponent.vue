@@ -308,7 +308,7 @@ export default {
             let self = this;
             swal({
                 title: "Delete Appointment?",
-                text: "Are you sure you want to remove the announcement?",
+                text: "Are you sure you want to remove the appointment?",
                 icon: "warning",
                 buttons: {
                     cancel: true,
