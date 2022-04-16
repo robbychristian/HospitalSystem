@@ -12,26 +12,27 @@ use Illuminate\Support\Facades\Validator;
 
 class AppointmentController extends Controller
 {
-    public function __construct(Firestore $firestore){ 
-        $this->firestore = $firestore; 
+    public function __construct(Firestore $firestore)
+    {
+        $this->firestore = $firestore;
         $this->middleware('auth');
         $this->middleware('verified');
     }
 
-    public function index(){
-        $page="Appointments";
-        $active="appointment";
+    public function index()
+    {
+        $page = "Appointments";
+        $active = "appointment";
 
         $documents = $this->firestore->database()->collection('AppointmentList');
-        
+
 
         if (Auth::user()->isAdmin) {
             $documents = $documents->documents()->rows();
-        } 
-        else {
+        } else {
             $documents = $documents->where('drId', '==', Auth::user()->id_fb)->documents()->rows();
         }
-        
+
         $appointment = [];
 
         foreach ($documents as $document) {
@@ -41,14 +42,13 @@ class AppointmentController extends Controller
             $data['dName'] = $data['drfName'] . ' ' . $data['drlName'];
             $data['pName'] = $data['pfName'] . ' ' . $data['plName'];
 
-            if($data['prescribeState'] == "no"){
-                if($data['appointStatus'] == "Pending"){
+            if ($data['prescribeState'] == "no") {
+                if ($data['appointStatus'] == "Pending") {
                     array_unshift(
                         $appointment,
                         $data
                     );
-                }
-                else{
+                } else {
                     array_push(
                         $appointment,
                         $data
@@ -56,31 +56,32 @@ class AppointmentController extends Controller
                 }
             }
         }
-        
+
         $appointment = json_encode($appointment);
 
-        
+
         return view('pages.appointment')->with('page', $page)->with('active', $active)->with('appointment', $appointment);
     }
 
-    public function status(Request $request){
-        
-        try{
+    public function status(Request $request)
+    {
+
+        try {
             $appointment = $this->firestore->database()->collection('AppointmentList')->document($request->id);
             $appointment->update([
                 ['path' => 'appointStatus', 'value' => $request->status],
             ]);
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['hasError' => true];
         }
         return  ['hasError' => false];
     }
-    
-    public function lab(Request $request){
+
+    public function lab(Request $request)
+    {
 
         $data = $request->all();
-        
+
         $updateArray = [
             ['path' => 'labRequest', 'value' => $data['data']],
         ];
@@ -90,6 +91,5 @@ class AppointmentController extends Controller
         return response()->json([
             'hasError' => false,
         ]);
-
     }
 }

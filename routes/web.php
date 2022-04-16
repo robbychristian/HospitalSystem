@@ -76,6 +76,9 @@ Route::prefix('appointment')->name('appointment.')->group(function () {
 Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::get('/', [CalendarController::class, 'index']);
     Route::post('/addappointment', [CalendarController::class, 'store']);
+    Route::get('/setongoing/{id}', [CalendarController::class, 'setOnGoing']);
+    Route::get('/setlate/{id}', [CalendarController::class, 'setLate']);
+    Route::get('/setearly/{id}', [CalendarController::class, 'setEarly']);
 });
 
 Route::prefix('inquiry')->name('inquiry.')->group(function () {

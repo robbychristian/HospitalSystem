@@ -22,6 +22,18 @@
                 </b-dropdown>
             </div>
 
+            <div
+                class="col d-flex mx-3 justify-content-start"
+                v-else-if="this.isAdmin == 0"
+            >
+                <b-button
+                    @click="showAppointments"
+                    class="btn"
+                    style="background-color: #14679b"
+                    ><i class="fas fa-list"></i> Show Appointments</b-button
+                >
+            </div>
+
             <div class="col d-flex mx-3 justify-content-end">
                 <b-button
                     @click="addCalendar"
@@ -34,6 +46,24 @@
 
         <FullCalendar :options="calendarOptions" class="py-3 px-5" />
 
+        <!-- MODAL FOR SHOW APPOINTMENT -->
+        <b-modal
+            id="modal-tall"
+            centered
+            title="Show Appointments"
+            ref="showAppointments"
+            size="xl"
+            :fields="this.fields"
+        >
+            <b-table striped hover :items="appointmentModalData">
+                <template #cell(Actions)="data">
+                    <span v-html="data.value"></span>
+                </template>
+            </b-table>
+        </b-modal>
+        <!-- MODAL FOR SHOW APPOINTMENT -->
+
+        <!-- MODAL FOR ADD APPOINTMENT -->
         <b-modal
             id="addCalendar"
             centered
@@ -156,6 +186,7 @@
                 </b-row>
             </form>
         </b-modal>
+        <!-- MODAL FOR ADD APPOINTMENT -->
     </div>
 </template>
 <script>
@@ -168,9 +199,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { v4 as uuidv4 } from "uuid";
 import swal from "sweetalert";
 import Moment from "moment";
-import { extendMoment } from 'moment-range';
+import { extendMoment } from "moment-range";
 
-const moment = extendMoment(Moment)
+const moment = extendMoment(Moment);
 
 export default {
     props: [
@@ -195,9 +226,22 @@ export default {
         let allAppointments = this.appointmentss;
 
         allAppointments.forEach(this.toEvents);
-        
-        this.populateWeekdays()
-
+        //FOR MODAL
+        const appointmentModal = JSON.parse(this.appointments);
+        for (let i = 0; i < appointmentModal.length; i++) {
+            const newObject = {
+                Patient:
+                    appointmentModal[i].pfName +
+                    " " +
+                    appointmentModal[i].plName,
+                Date: appointmentModal[i].bookingDate,
+                Time: appointmentModal[i].bookingSchedule,
+                Status: appointmentModal[i].status,
+                Actions: `<div class="d-flex justify-content-space"><div class="px-1"><a href="calendar/setongoing/${appointmentModal[i].id}" class="btn btn-warning"><i class="fas fa-history"></i></a></div><div class="px-1"><a href="calendar/setlate/${appointmentModal[i].id}" class="btn btn-danger"><i class="fa-solid fa-user-clock"></i></a></div><div class="px-1"><a href="calendar/setearly/${appointmentModal[i].id}" class="btn btn-success mr-2"><i class="fas fa-user-check"></i></a></div></div>`,
+            };
+            this.appointmentModalData.push(newObject);
+        }
+        this.populateWeekdays();
     },
 
     components: {
@@ -212,7 +256,7 @@ export default {
             doctors: JSON.parse(this.doctorsData),
             appointmentss: JSON.parse(this.appointments),
             //FOR DATE
-            date: '',
+            date: "",
             min: new Date(),
             //FOR TIME SLOT
             timeSlot: null,
@@ -228,7 +272,11 @@ export default {
 
             //filter
             doctorName: "Choose a Doctor",
-            doctor: '',
+            doctor: "",
+
+            //FOR SHOW APPOINTMENTS MODAL
+            fields: ["Patient", "Date", "Time", "Status", "Action"],
+            appointmentModalData: [],
 
             // Sunday = 0, Saturday 6
             weekdays: {
@@ -276,6 +324,9 @@ export default {
         },
         addCalendar() {
             this.$refs["addCalendar"].show();
+        },
+        showAppointments() {
+            this.$refs["showAppointments"].show();
         },
         submitForm() {
             if (
@@ -403,131 +454,131 @@ export default {
             );
         },
 
-        updateSlots(){
-            let day = moment(this.date).days()
-            let dayName = moment(this.date).format('ddd')
+        updateSlots() {
+            let day = moment(this.date).days();
+            let dayName = moment(this.date).format("ddd");
 
-            this.allSlot = []
+            this.allSlot = [];
             let days = [
-                { day: 'sun', field: 'teleSun' },
-                { day: 'mon', field: 'teleMon' },
-                { day: 'tue', field: 'teleTue' },
-                { day: 'wed', field: 'teleWed' },
-                { day: 'thurs', field: 'teleThurs' },
-                { day: 'fri', field: 'teleFri' },
-                { day: 'sat', field: 'teleSat'},
-            ]
+                { day: "sun", field: "teleSun" },
+                { day: "mon", field: "teleMon" },
+                { day: "tue", field: "teleTue" },
+                { day: "wed", field: "teleWed" },
+                { day: "thurs", field: "teleThurs" },
+                { day: "fri", field: "teleFri" },
+                { day: "sat", field: "teleSat" },
+            ];
 
-            let week = this.weekdays[ days[day].day ]
-            let startTime = moment(this.date + " " + week[0])
-            let endTime = moment(this.date + " " + week[1])
+            let week = this.weekdays[days[day].day];
+            let startTime = moment(this.date + " " + week[0]);
+            let endTime = moment(this.date + " " + week[1]);
 
-            let totalMin = ( endTime.hour() - startTime.hour()) *60 + ( endTime.minute() - startTime.minute())
-            let slots = parseInt(totalMin/week[2]) 
+            let totalMin =
+                (endTime.hour() - startTime.hour()) * 60 +
+                (endTime.minute() - startTime.minute());
+            let slots = parseInt(totalMin / week[2]);
 
             for (let i = 0; i < slots; i++) {
-
                 let start = startTime.format("HH:mm");
                 let startA = startTime.format("h:mmA");
-                startTime.add(week[2], "m")
+                startTime.add(week[2], "m");
                 let end = startTime.format("HH:mm");
                 let endA = startTime.format("h:mmA");
 
-                let slot = dayName + ": " + start + " - " + end
+                let slot = dayName + ": " + start + " - " + end;
 
-                if( !this.conflicts(slot) ){
+                if (!this.conflicts(slot)) {
                     this.allSlot.push({
                         value: slot,
                         text: startA + " - " + endA,
                     });
                 }
             }
-
         },
 
-        updateUser(){
+        updateUser() {
+            let length = this.doctors.length;
 
-            let length = this.doctors.length
-            
-            for(let i = 0; i < length; i++){
-                if( this.doctors[i].id == this.selectedDoctor ) this.user = this.doctors[i]
+            for (let i = 0; i < length; i++) {
+                if (this.doctors[i].id == this.selectedDoctor)
+                    this.user = this.doctors[i];
             }
 
-            console.log(this.user)
-            
-            this.populateWeekdays() 
+            console.log(this.user);
+
+            this.populateWeekdays();
         },
 
-        conflicts( slot ){
-            let length = this.appointmentss.length
-            let appointDate = moment( this.date ).format('L')
-            let id = this.user.id
-            
-            let sched = slot.substr( slot.indexOf(' ') + 1 )
-            sched = sched.trim()
+        conflicts(slot) {
+            let length = this.appointmentss.length;
+            let appointDate = moment(this.date).format("L");
+            let id = this.user.id;
 
-            let time1s = sched.substr( 0, sched.indexOf(' ') )
-            let time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
-            var date1 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
-            var range  = moment.range(date1);
+            let sched = slot.substr(slot.indexOf(" ") + 1);
+            sched = sched.trim();
 
-            for(let i = 0; i < length; i++){
+            let time1s = sched.substr(0, sched.indexOf(" "));
+            let time1e = sched.substr(sched.lastIndexOf(" ") + 1);
+            var date1 = [
+                moment(appointDate + " " + time1s),
+                moment(appointDate + " " + time1e),
+            ];
+            var range = moment.range(date1);
 
-                if( appointDate == this.appointmentss[i].appointDate ){
-                    
-                    if( id == this.appointmentss[i].drId ){
-                        
+            for (let i = 0; i < length; i++) {
+                if (appointDate == this.appointmentss[i].appointDate) {
+                    if (id == this.appointmentss[i].drId) {
+                        sched = this.appointmentss[i].bookingSchedule.substr(
+                            this.appointmentss[i].bookingSchedule.indexOf(" ") +
+                                1
+                        );
+                        sched = sched.trim();
+                        time1s = sched.substr(0, sched.indexOf(" "));
+                        time1e = sched.substr(sched.lastIndexOf(" ") + 1);
 
-                        sched = this.appointmentss[i].bookingSchedule.substr( this.appointmentss[i].bookingSchedule.indexOf(' ') + 1 )
-                        sched = sched.trim()
-                        time1s = sched.substr( 0, sched.indexOf(' ') )
-                        time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
-
-                        var date2 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
+                        var date2 = [
+                            moment(appointDate + " " + time1s),
+                            moment(appointDate + " " + time1e),
+                        ];
                         var range2 = moment.range(date2);
 
-                        if(range.overlaps(range2)){
-                            return true
+                        if (range.overlaps(range2)) {
+                            return true;
                         }
                     }
                 }
             }
-            return false
-
+            return false;
         },
 
-        populateWeekdays(){
-            
-        //SETTING AVAILABLE DAYS
+        populateWeekdays() {
+            //SETTING AVAILABLE DAYS
             let drData = this.user;
-            this.selectedDoctor = this.user.id
+            this.selectedDoctor = this.user.id;
 
-            if(this.user.length != 0){
-                
+            if (this.user.length != 0) {
                 let days = [
-                    { day: 'sun', field: 'teleSun' },
-                    { day: 'mon', field: 'teleMon' },
-                    { day: 'tue', field: 'teleTue' },
-                    { day: 'wed', field: 'teleWed' },
-                    { day: 'thurs', field: 'teleThurs' },
-                    { day: 'fri', field: 'teleFri' },
-                    { day: 'sat', field: 'teleSat'},
-                ]
+                    { day: "sun", field: "teleSun" },
+                    { day: "mon", field: "teleMon" },
+                    { day: "tue", field: "teleTue" },
+                    { day: "wed", field: "teleWed" },
+                    { day: "thurs", field: "teleThurs" },
+                    { day: "fri", field: "teleFri" },
+                    { day: "sat", field: "teleSat" },
+                ];
 
-                for(let i = 0; i < 7; i++){
-                    let day = days[i]
-                    if (drData[ day.field ] == null || drData[ day.field ] == '') {
-                        this.weekdays[ day.day ] = i;
-                    }
-                    else if( drData[ day.field ][0] == '' ){
-                        this.weekdays[ day.day ] = i;
-                    }
-                    else {
-                        this.weekdays[ day.day ] = drData[ day.field ];
+                for (let i = 0; i < 7; i++) {
+                    let day = days[i];
+                    if (drData[day.field] == null || drData[day.field] == "") {
+                        this.weekdays[day.day] = i;
+                    } else if (drData[day.field][0] == "") {
+                        this.weekdays[day.day] = i;
+                    } else {
+                        this.weekdays[day.day] = drData[day.field];
                     }
                 }
             }
-        }
+        },
     },
 
     computed: {

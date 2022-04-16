@@ -50,7 +50,7 @@ class CalendarController extends Controller
                 $data = $appointment->data();
                 $data['id'] = $appointment->id();
 
-                if($data['appointStatus'] == "Approved"){
+                if ($data['appointStatus'] == "Approved") {
                     array_push(
                         $appointments,
                         $data
@@ -87,9 +87,9 @@ class CalendarController extends Controller
             foreach ($doctorAppointments as $appointment) {
                 $data = $appointment->data();
                 $data['id'] = $appointment->id();
-        
 
-                if($data['appointStatus'] == "Approved"){
+
+                if ($data['appointStatus'] == "Approved") {
                     array_push(
                         $appointments,
                         $data
@@ -115,7 +115,7 @@ class CalendarController extends Controller
 
         return view('pages.calendar')->with('page', $page)->with('active', $active)->with('patients', $patients)
             ->with('appointments', $appointments)->with('doctors', $doctors)->with('user', $user);
-            // ->with("drData", $doctorsDatas);
+        // ->with("drData", $doctorsDatas);
     }
 
     /**
@@ -189,7 +189,7 @@ class CalendarController extends Controller
             'pBirthdate' => $patient['birthdate'],
             'pGender' => $patient['gender'],
             'pPhone' => $patient['phone'],
-            'pPhotoUrl' => $patient['imageUrl'],
+            'pPhotoUrl' => $patient['imageUrl'], //change to imageUrl in PRODUCTION //change to photoUrl in DEVELOPMENT
             'pfName' => $patient['fname'],
             'plName' => $patient['lname'],
             'pProblem' => $request->problem,
@@ -207,6 +207,9 @@ class CalendarController extends Controller
             'teleconsultFee' => '',
             'timeStamp' => '',
             'advice' => null,
+
+            //NEW
+            'status' => 'Pending'
         ]);
 
         //GET ALL EVENTS
@@ -286,5 +289,44 @@ class CalendarController extends Controller
     public function destroy(Request $request)
     {
         $this->firestore->database()->collection('AppointmentList')->document($request->id)->delete();
+    }
+
+    public function setOnGoing($id)
+    {
+        try {
+            $appointment = $this->firestore->database()->collection('AppointmentList')->document($id);
+            $appointment->update([
+                ['path' => 'status', 'value' => 'On Going'],
+            ]);
+        } catch (\Exception $e) {
+            return $e;
+        }
+        return redirect('/calendar');
+    }
+
+    public function setLate($id)
+    {
+        try {
+            $appointment = $this->firestore->database()->collection('AppointmentList')->document($id);
+            $appointment->update([
+                ['path' => 'status', 'value' => 'Finished Late'],
+            ]);
+        } catch (\Exception $e) {
+            return $e;
+        }
+        return redirect('/calendar');
+    }
+
+    public function setEarly($id)
+    {
+        try {
+            $appointment = $this->firestore->database()->collection('AppointmentList')->document($id);
+            $appointment->update([
+                ['path' => 'status', 'value' => 'Finished Early'],
+            ]);
+        } catch (\Exception $e) {
+            return $e;
+        }
+        return redirect('/calendar');
     }
 }
