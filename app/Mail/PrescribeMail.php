@@ -33,6 +33,6 @@ class PrescribeMail extends Mailable
     public function build()
     {
         return $this->from('admin@teledoc-eternals.tech', 'Teledoc Website Service')->
-        subject('Lab Request Form')->view('mail.lab');
+        subject('Prescription')->view('prescription.lab');
     }
 }

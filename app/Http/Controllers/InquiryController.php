@@ -137,7 +137,7 @@ class InquiryController extends Controller
         
         unlink( public_path('pdf') . '/' . $signatureName . $ext);
 
-        $email = $this->firestore->database()->collection("Patients")->document($data['patient']->pId)->snapshot()->data()['email'];
+        $email = $this->firestore->database()->collection("Patients")->document($data['patient']['pId'])->snapshot()->data()['email'];
         
         try{
             Mail::to($email)->send(new PrescribeMail($data, $name . '.pdf'));
