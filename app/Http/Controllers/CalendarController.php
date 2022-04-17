@@ -207,15 +207,12 @@ class CalendarController extends Controller
             'teleconsultFee' => '',
             'timeStamp' => '',
             'advice' => null,
-<<<<<<< Updated upstream
 
             //NEW
-            'status' => 'Pending'
-=======
+            'status' => 'Pending',
             'lic' => $doctor['lic'],
             's2' => $doctor['s2'],
             'ptr' => $doctor['ptr'],
->>>>>>> Stashed changes
         ]);
 
         //GET ALL EVENTS
