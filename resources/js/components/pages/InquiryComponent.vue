@@ -1042,7 +1042,7 @@
             },
 
             labForm(){
-                // this.openLoading()
+                this.openLoading()
                 let self = this
                 
                 axios.post('/inquiry/send', {
@@ -1098,6 +1098,7 @@
                 this.advice = '',
                 this.patientProblem = ''
                 this.payments = []
+                this.labForm = []
                 this.patient = ''
                 this.name = '<Select a Patient>'
 

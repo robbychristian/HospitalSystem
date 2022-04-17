@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 use Firebase;
 use App\Mail\InquiryMail;
+use App\Mail\PrescribeMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PDF;
@@ -135,34 +136,35 @@ class InquiryController extends Controller
         Storage::disk('public_pdf')->put($path, $pdf->output()); 
         
         unlink( public_path('pdf') . '/' . $signatureName . $ext);
-        // try{
-        //     $this->firestore->database()->collection('AppointmentList')->document($data['id'])->update($updateArray);
-        // }
-        // catch(\Exception $e){
-        //     return response()->json([
-        //         'hasError' => true,
-        //     ]);
-        // }
 
-
-        // $pdf = PDF::loadView('pdf/prescribe', $data);
-
-
-        // try{
-        //     Mail::to($email)->send(new InquiryMail($data, $name . '.pdf'));
-        // }
-        // catch(\Exception $e){
+        $email = $this->firestore->database()->collection("Patients")->document($data['patient']->pId)->snapshot()->data()['email'];
+        
+        try{
+            Mail::to($email)->send(new PrescribeMail($data, $name . '.pdf'));
+        }
+        catch(\Exception $e){
             
-        //     unlink( public_path('pdf') . $path);
+            unlink( public_path('pdf') . $path);
 
-        //     return response()->json([
-        //         'hasError' => true,
-        //     ]);
-        // }
+            return response()->json([
+                'hasError' => true,
+            ]);
+        }
+
+        try{
+            $this->firestore->database()->collection('AppointmentList')->document($data['id'])->update($updateArray);
+        }
+        catch(\Exception $e){
+
+            unlink( public_path('pdf') . $path);
+            return response()->json([
+                'hasError' => true,
+            ]);
+        }
         
 
         return response()->json([
-            'hasError' => true, // false
+            'hasError' => false, // false
         ]);
     }
 
