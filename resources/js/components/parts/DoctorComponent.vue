@@ -112,13 +112,15 @@
                 filePhoto.append('consultFee', doctorForm.consultFee)
                 filePhoto.append('email', doctorForm.email)
                 filePhoto.append('about', doctorForm.about)
+                filePhoto.append('lic', doctorForm.lic)
+                filePhoto.append('ptr', doctorForm.ptr)
+                filePhoto.append('s2', doctorForm.s2)
                 
                 let self = this
                 
                 axios.post('/doctor/add', filePhoto)
                 .then( function (response){
                     let data = response.data
-                    console.log(data)
                     
                     if(data.hasError){
                         self.$parent.populateFormError(data)
@@ -191,6 +193,9 @@
                 form.append('about', doctorForm.about)
                 form.append('id', doctorForm.id)
                 form.append('withEmail', withEmail)
+                form.append('lic', doctorForm.lic)
+                form.append('ptr', doctorForm.ptr)
+                form.append('s2', doctorForm.s2)
 
                 let self = this
 
@@ -199,7 +204,7 @@
                     let data = response.data
                     
                     if(data.hasError){
-                        self.populateAddError(data)
+                        self.$parent.populateFormError(data)
                         self.$parent.closeLoading('doctor-show', true)
                     }
                     else if (data.error){

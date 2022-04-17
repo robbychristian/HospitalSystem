@@ -1,6 +1,34 @@
 <template>
     <div class="inquiry-page">
 
+        <b-modal 
+            ref="change-signature"
+            scrollable 
+            no-close-on-esc
+            no-close-on-backdrop
+            header-class="border-0 bg-warning text-white modal-head"
+            centered 
+            title="Change Signature"
+            size="md"
+        >
+
+            <template #modal-header-close>
+                <i class="fa-solid fa-xmark"></i>
+            </template>
+
+            <div class="signature-form">
+                <!-- <div></div> -->
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Your Signtaure</label>
+                    <input class="form-control" type="file" ref="formFile" @change="triggerSignature()">
+                </div>
+            </div>
+
+            <template #modal-footer>
+                <button class="btn btn-warning " @click="changeSignature()"> Change</button>
+            </template>
+        </b-modal>
+
         <!-- Loading Modal -->
             <b-modal 
                 ref="loading-modal"
@@ -140,6 +168,26 @@
                         
                     </div>
 
+                    <div class="divider"></div>
+
+                    <div class="footer" v-if="patient != ''">
+                        <div class="payment p-3">
+                            <h5>Payment: </h5>
+                            
+                            <div class="d-flex align-items-center"  v-for="(payment, ind) in payments" :key="ind+'PP'">
+                                <h6 class="mb-0"> {{payment}} </h6> &nbsp;
+                            </div>
+                            <h5 class="mt-3 text-dark-green"> Total: &#8369; {{totalPayment}} </h5>
+                        </div>
+                        
+                            
+                        <div class="signature mt-3 p-3 d-flex flex-column align-items-end" >
+                            <img :src="user.signature" alt="" width="200" height="100">
+
+                            <h6 style="margin-bottom: 0px">Signature: &nbsp; <u> Dr. {{user.name}} MD. </u></h6>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div v-else class="lab-form">
@@ -196,80 +244,37 @@
                     </div>
 
                     <div class="body">
-                        <div class="content-box">
-
-                            <div class="top-info">
-                                <h6> CHEMISTRY PROFILE</h6>
-                            </div>
-                            <div class="info-content">
-                                
-                                <div v-for="(data, ind) in chemProfOptions " class="d-flex align-items-center" :key="'CP'+ind">
-                                    <div :class="[{'checked' : labform.includes(data.value)}, 'box']"></div>
-                                    <p>{{ data.text }}</p>
-                                </div>
-                            </div>
-
-                            <div class="top-info">
-                                <h6> CHEMISTRY</h6>
-                            </div>
-                            
-                            <div class="info-content">
-                                <div v-for="(data, ind) in chemOptions " class="d-flex align-items-center" :key="'C'+ind">
-                                    <div :class="[{'checked' : labform.includes(data.value)}, 'box']"></div>
-                                    <p>{{ data.text }}</p>
-                                </div>
-                            </div>
-                            
-                            <div class="top-info">
-                                <h6> GLUCOSE TOLERANT TEST</h6>
-                            </div>
-
-                            <div class="info-content">
-                                
-                                <div v-for="(data, ind) in glucoseOptions " class="d-flex align-items-center" :key="'G'+ind">
-                                    <div :class="[{'checked' : labform.includes(data.value)}, 'box']"></div>
-                                    <p>{{ data.text }}</p>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="content-box">
-                            
-                            <div class="top-info">
-                                <h6> BODY FLUIDS</h6>
-                            </div>
-                            <div class="info-content">
-                                <div v-for="(data, ind) in bodyFluidsOptions " class="d-flex align-items-center" :key="'BF'+ind">
-                                    <div :class="[{'checked' : labform.includes(data.value)}, 'box']"></div>
-                                    <p>{{ data.text }}</p>
-                                </div>
-                            </div>
-                            
-                            <div class="top-info">
-                                <h6> HEMATOLOGY/COAGULATION</h6>
-                            </div>
-                            <div class="info-content">
-                                
-                                <div v-for="(data, ind) in hemaOptions " class="d-flex align-items-center" :key="'H'+ind">
-                                    <div :class="[{'checked' : labform.includes(data.value)}, 'box']"></div>
-                                    <p>{{ data.text }}</p>
-                                </div>
-
-                            </div>
-                            
-                            <div class="top-info">
-                                <h6> URINALYSIS</h6>
-                            </div>
-                            <div class="info-content">
-                                <div v-for="(data, ind) in urineOptions " class="d-flex align-items-center" :key="'U'+ind">
-                                    <div :class="[{'checked' : labform.includes(data.value)}, 'box']"></div>
-                                    <p>{{ data.text }}</p>
+                        <div v-for="(items, name, ind) in checkedLab"  :key="'checked'+ind">
+                            <div class="content-box" v-if="items.length > 0">
+                                <div class="top-info"> {{labOption[ind].topInfo}}</div>
+                                <div class="info-content">
+                                    <div class="d-flex align-items-center" style="width: 300px" v-for="(text, index) in items"  :key="'textinfo'+index">
+                                        <div class="checked box "></div>
+                                        <p> {{text}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <div style=" padding: 5px;">
+
+                        <div class="d-flex justify-content-between align-items-end">
+
+                            <div>
+                                <h6> LIC: &nbsp; <u>{{user.lic}}</u></h6>
+                                <h6> PTR: &nbsp; <u>{{user.ptr}}</u></h6>
+                                <h6> S2: &nbsp; <u>{{user.s2}}</u></h6>
+                            </div>
+
+                            <div>
+                                <img :src="user.signature" alt="" width="200" height="100">
+
+                                <h6 style="margin-bottom: 0px"> Signature: &nbsp; <u>  {{ user.name }} MD. </u></h6>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -277,18 +282,6 @@
             <template #modal-footer>
                 <button v-if="isPrescribed" class="btn btn-success " @click="prescribed()">Prescribe</button>
                 <button v-else class="btn btn-success " @click="labForm()">Send Lab Form</button>
-
-                <!-- <form action="/test" v-else method="POST"> 
-                    <input type="hidden" name="_token" v-bind:value="csrf">
-                    <input type="hidden" name="patient" :value="JSON.stringify(patient)">
-                    <input type="hidden" name="now" :value="now">
-
-                    <input type="hidden" name="chemProfOptions" :value="JSON.stringify(chemProfOptions)">
-                    <input type="hidden" name="chemOptions" :value="JSON.stringify(chemOptions)">
-                    <input type="hidden" name="glucoseOptions" :value="JSON.stringify(glucoseOptions)">
-                    <input type="hidden" name="labform" :value="JSON.stringify(labform)">
-                    <button class="btn btn-success " >Send Lab</button>
-                </form> -->
             </template>
         </b-modal>
 
@@ -338,6 +331,7 @@
             <div class="form-tab">
                 <button :class="{ active: isPrescribed }" @click="changeContent(true)"> Prescribe </button>
                 <button  :class="{ active: !isPrescribed }"  @click="changeContent(false)"> Lab Request </button>
+                <button  class="btn bg-warning" @click="openSignature()"> Change signature </button>
             </div>
 
             <div class="form-box">
@@ -357,6 +351,13 @@
                             <h6 class="fw-normal">{{user.degree}}</h6>
                             <h6 class="fw-normal">Phone: {{user.phone}}</h6>
                             <h6 class="fw-normal">Email: {{user.email}}</h6>
+
+                            <div class="d-flex justify-content-center">
+                                <h6 class="fw-normal" style="margin-bottom: 0px; margin-right: 1rem;">LIC: &nbsp; {{user.lic}}</h6>
+                                <h6 class="fw-normal" style="margin-bottom: 0px; margin-right: 1rem;">PTR: &nbsp; {{user.ptr}}</h6>
+                                <h6 class="fw-normal" style="margin-bottom: 0px;">S2: &nbsp; {{user.s2}}</h6>
+                            </div>
+
                         </div>
 
                         <div class="divider"></div>
@@ -456,6 +457,33 @@
                             
                         </div>
 
+                        <div class="divider"></div>
+
+                        <div class="footer" v-if="patient != ''">
+                            <div class="payment p-3">
+                                <h5>Payment: </h5>
+                                
+                                <div class="d-flex align-items-center"  v-for="(payment, ind) in payments" :key="ind+'PP'">
+                                    <h6 class="mb-0"> {{payment}} </h6> &nbsp;
+                                    <b-button size="sm" variant="danger" v-if="ind != 0" @click="deletePayment(ind)"> <i class="fa-solid fa-trash"></i> </b-button>
+                                </div>
+                                
+                                <div class="d-flex"> 
+                                    <input type="text" placeholder="Reason" v-model="reason"> &nbsp; - &nbsp;
+                                    <input type="number" placeholder="Payment" min="0" step="1" v-model="money"> 
+                                    <b-button size="sm" variant="success" @click="addPayment(1)"> Additional </b-button>
+                                    <b-button size="sm" variant="danger" @click="addPayment(-1)"> Discount </b-button>
+                                </div>
+                                <h5 class="mt-3 text-dark-green"> Total: &#8369; {{totalPayment}} </h5>
+                            </div>
+                            
+                            <div class="signature mt-3 p-3 d-flex flex-column align-items-end" >
+                                <img :src="user.signature" alt="" width="200" height="100">
+
+                                <h6 style="margin-bottom: 0px">Signature: &nbsp; <u> Dr. {{user.name}} MD. </u></h6>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div v-else class="lab-form">
@@ -512,146 +540,50 @@
                         </div>
 
                         <div class="body">
-                            <div class="content-box">
+
+                            <div class="content-box" v-for="(items, i) in labOption" :key="'CONT'+i">
 
                                 <div class="top-info">
-                                    <h6> CHEMISTRY PROFILE</h6>
+                                    <h6> {{items.topInfo}}</h6>
                                 </div>
-                                <div class="info-content">
+
+                                <div class="info-content" :style="{ height: items.height +'px' }">
                                     
-                                    <b-form-group>
-
-                                        <b-form-checkbox-group
-                                            id="checkbox-group-1"
-                                            v-model="labform"
-                                            :options="chemProfOptions"
-                                            name="chemProfile-1"
-                                        ></b-form-checkbox-group>
-
-                                    </b-form-group>
+                                    <!-- loop -->
+                                    <div class="form-check" v-for="(option, j) in items.options" :key="items.name+i+j" style="max-width: 200px;">
+                                        <input class="form-check-input" type="checkbox" :value="items.name+i+j" :id="items.name+i+j" v-model="labform" @change="toggleCheckedLab(option.text, items.name)" >
+                                        <label class="form-check-label" :for="items.name+i+j">
+                                            {{option.text}}
+                                        </label>
+                                    </div>
 
                                 </div>
-
-                                <div class="top-info">
-                                    <h6> CHEMISTRY</h6>
-                                </div>
-                                
-                                <div class="info-content">
-                                    
-                                    <b-form-group>
-
-                                        <b-form-checkbox-group
-                                            id="checkbox-group-3"
-                                            v-model="labform"
-                                            :options="chemOptions"
-                                            name="chemistry-1"
-                                        ></b-form-checkbox-group>
-
-                                    </b-form-group>
-
-                                </div>
-                                
-                                <div class="top-info">
-                                    <h6> GLUCOSE TOLERANT TEST</h6>
-                                </div>
-
-                                <div class="info-content">
-                                    
-                                    <b-form-group>
-
-                                        <b-form-checkbox-group
-                                            id="checkbox-group-6"
-                                            v-model="labform"
-                                            :options="glucoseOptions"
-                                            name="glucose-1"
-                                        ></b-form-checkbox-group>
-
-                                    </b-form-group>
-
-                                </div>
-                            </div>
-
-                            <div class="content-box">
-                                
-                                <div class="top-info">
-                                    <h6> BODY FLUIDS</h6>
-                                </div>
-                                <div class="info-content">
-                                    
-                                    <b-form-group>
-
-                                        <b-form-checkbox-group
-                                            id="checkbox-group-2"
-                                            v-model="labform"
-                                            :options="bodyFluidsOptions"
-                                            name="bodyFluids-1"
-                                        ></b-form-checkbox-group>
-
-                                    </b-form-group>
-
-                                </div>
-                                
-                                <div class="top-info">
-                                    <h6> HEMATOLOGY/COAGULATION</h6>
-                                </div>
-                                <div class="info-content">
-                                    
-                                    <b-form-group>
-
-                                        <b-form-checkbox-group
-                                            id="checkbox-group-4"
-                                            v-model="labform"
-                                            :options="hemaOptions"
-                                            name="hema-1"
-                                        ></b-form-checkbox-group>
-
-                                    </b-form-group>
-
-                                </div>
-                                
-                                <div class="top-info">
-                                    <h6> URINALYSIS</h6>
-                                </div>
-                                <div class="info-content">
-                                    
-                                    <b-form-group>
-
-                                        <b-form-checkbox-group
-                                            id="checkbox-group-5"
-                                            v-model="labform"
-                                            :options="urineOptions"
-                                            name="urine-1"
-                                        ></b-form-checkbox-group>
-
-                                    </b-form-group>
-
-                                </div>
-
-<!--                                 
-                                <div class="top-info">
-                                    <h6> URINALYSIS</h6>
-                                </div>
-                                <div class="info-content">
-                                    
-                                    <b-form-group>
-
-                                        <b-form-checkbox-group
-                                            id="checkbox-group-5"
-                                            v-model="labform"
-                                            :options="urineOptions"
-                                            name="urine-1"
-                                        ></b-form-checkbox-group>
-
-                                    </b-form-group>
-
-                                </div> -->
                             </div>
                         </div>
+
+                        <div  v-if="patient != ''" style=" padding: 5px;">
+
+                            <div class="d-flex justify-content-between align-items-end">
+
+                                <div>
+                                    <h6> LIC: &nbsp; <u>{{user.lic}}</u></h6>
+                                    <h6> PRT: &nbsp; <u>{{user.prt}}</u></h6>
+                                    <h6> S2: &nbsp; <u>{{user.s2}}</u></h6>
+                                </div>
+
+                                <div>
+                                    <img :src="user.signature" alt="" width="200" height="100">
+
+                                    <h6 style="margin-bottom: 0px"> Signature: &nbsp; <u>  {{ user.name }} MD. </u></h6>
+                                </div>
+
+                            </div>
+                        </div>
+
 
                     </div>
 
                 </div>
-
                 
                 <button @click="showPreview()" class="btn btn-primary text-white mt-3"> Send to patient </button>
             </div>
@@ -675,6 +607,11 @@
                 dismissCountDown: 0,
                 message: '',
                 variant: '',
+
+                payments: [],
+                reason: '',
+                money: 0,
+                signature: null,
                 
                 patients: JSON.parse(this.patientData),
                 user: '', 
@@ -717,69 +654,270 @@
                 advice: '',
                 adviceError: false,
 
-                chemProfOptions: [
-                    { text: 'Panel 1 (Metabolic - Glu, BUN, Create, Na, K, Cl, CO2)', value: 'CP.1' },
-                    { text: 'Panel 2 (Liver - T. Prot, Alb, Alk, Phos, LDH, AST, ALT)', value: 'CP.2' },
-                    { text: 'Panel 3 (Complete Metabolic Panel - metabolic and liver panel)', value: 'CP.3' },
-                    { text: 'Panel 4 (Cardiac - LDH, CK, CK - MB)', value: 'CP.4' },
-                    { text: 'Panel 5 (Lipid - Chol, Trig, HDL, LDL)', value: 'CP.5' },
-                    { text: 'Panel 6 (Lytes - Na, K, Cl, CO2)', value: 'CP.6' },
-                    { text: 'Panel 7 (Urine Lytes, Na, K, Cl, CREA)', value: 'CP.7' },
-                ],
+                labOption: [
+                    {
+                        height: 300,
+                        name: 'bloodChem',
+                        topInfo: 'Blood Chemistry',
+                        options: [
+                            { text: 'FBS', value: 'bloodChem1' },
+                            { text: 'RBS', value: 'bloodChem2' },
+                            { text: '2°PPBS', value: 'bloodChem3' },
+                            { text: 'OGCT', value: 'bloodChem4' },
+                            { text: 'HBA1c', value: 'bloodChem5' },
+                            { text: 'BUN', value: 'bloodChem6' },
+                            { text: 'Creatinine', value: 'bloodChem7'},
+                            { text: 'Uric Acid', value: 'bloodChem8' },
+                            { text: 'Sodium (Na)', value: 'bloodChem9' },
+                            { text: 'Potassium (K)', value: 'bloodChem10' },
+                            { text: 'Calcium (Ca)', value: 'bloodChem11' },
+                            { text: 'Ionized Calcium (iCa)', value: 'bloodChem12' },
+                            { text: 'Magnesium (Mg)', value: 'bloodChem13' },
+                            { text: 'Inorganic Phosphorus', value: 'bloodChem14' },
+                            { text: 'Chloride (Cl)', value: 'bloodChem15' },
+                            { text: 'Lipid Profile (Chole, Trig, HDL, LDL)' , value: 'bloodChem16' },
+                            { text: 'Cholesterol', value: 'bloodChem17' },
+                            { text: 'Triglyceride', value: 'bloodChem18' },
+                            { text: 'SGOT', value: 'bloodChem19' },
+                            { text: 'SGPT', value: 'bloodChem20' },
+                            { text: 'Alk, Phosphatase', value: 'bloodChem21' },
+                            { text: 'Protein (Total)', value: 'bloodChem22' },
+                            { text: 'Albumin', value: 'bloodChem23' },
+                            { text: 'HDL Direct', value: 'bloodChem124' },
+                            { text: 'TPAG/A/G Ratio', value: 'bloodChem25' },
+                            { text: 'Bilirubin (TB, B1, B2)', value: 'bloodChem26' },
+                            { text: 'Amylase', value: 'bloodChem27' },
+                            { text: 'Lipase', value: 'bloodChem28' },
+                            { text: 'CPK Total', value: 'bloodChem29' },
+                            { text: 'CPK MB', value: 'bloodChem30' },
+                            { text: 'LDH', value: 'bloodChem31' },
+                        ],
+                    },
 
-                chemOptions: [
-                    { text: 'Glucose', value: 'C.1' },
-                    { text: 'Acetone', value: 'C.2' },
-                    { text: 'BUN', value: 'C.3' },
-                    { text: 'Creatinine', value: 'C.4' },
-                    { text: 'Uric Acid', value: 'C.5' },
-                    { text: 'Potassium', value: 'C.6' },
-                    { text: 'Calcium', value: 'C.7' },
-                    { text: 'Phosphorus', value: 'C.8' },
-                    { text: 'Magnesium', value: 'C.9' },
-                    { text: 'Bilirubin, Total', value: 'C.10' },
-                    { text: 'Bilirubin, Neonatal', value: 'C.11' },
-                ],
-                
-                hemaOptions: [
-                    { text: 'FDP/FSP (Contact Lab for Special Tube)', value: 'H.1' },
-                    { text: 'Reticulocyte Count', value: 'H.2' },
-                    { text: 'Sedimentation Rate', value: 'H.3' },
-                    { text: 'Fibrinogen', value: 'H.4' },
-                    { text: 'CBC', value: 'H.5' },
-                    { text: 'Differential', value: 'H.6' },
-                    { text: 'Hct/Hgb', value: 'H.7' },
-                    { text: 'G.6-PD', value: 'H.8' },
-                    { text: 'D-Dimmer', value: 'H.9' },
-                    { text: 'PT/INR', value: 'H.10' },
-                ],
+                    {
+                        height: 150,
+                        name: 'urineFecal',
+                        topInfo: 'Urinalysis and Fecalysis',
+                        options: [
+                            { text: 'Routine Urinalysis' },
+                            { text: 'Pregnancy Test' },
+                            { text: 'Micral Test' },
+                            { text: 'Acetone/Ketone' },
+                            { text: 'Pregnancy Test' },
+                            { text: 'Urine Total Protein / Creatinine-Ratio' },
+                            { text: 'Urine Creatinine Clearance (24h)' },
+                            { text: 'Urine Total Protein (24h)' },
+                            { text: 'Microalburnin Creatinine Ratio' },
+                            { text: 'Routine Fecalysis' },
+                            { text: 'Occult Blood' },
+                        ],
+                    },
+                    
+                    {
+                        height: 325,
+                        name: 'hemaImmu',
+                        topInfo: 'HEMATOLOGY, IMMUNOLOGY, and TUMOR MARKERS',
+                        options: [
+                            { text: 'CBC' },
+                            { text: 'Platelet Count' },
+                            { text: 'Blood Typing w/RH' },
+                            { text: 'Prothrombin Time' },
+                            { text: 'APTT' },
+                            { text: 'Clotting Time' },
+                            { text: 'Bleeding Time' },
+                            { text: 'ESR' },
+                            { text: 'Hemoglobin & Hematocrit' },
+                            { text: 'ASO Titer' },
+                            { text: 'CRP Screening' },
+                            { text: 'CRP Quantitative' },
+                            { text: 'FT2' },
+                            { text: 'FT4' },
+                            { text: 'TSH' },
+                            { text: 'T3' },
+                            { text: 'T4' },
+                            { text: 'HbsAg Screening' },
+                            { text: 'HbsAgTiter' },
+                            { text: 'Anti-HCV' },
+                            { text: 'Anti-Hbs' },
+                            { text: 'Anti-Hbc IgG (Total)' },
+                            { text: 'Anti-Hbc IgM' },
+                            { text: 'Anti-HAV IgG' },
+                            { text: 'Anti-HAV IgM' },
+                            { text: 'HbeAg' },
+                            { text: 'Ferrin' },
+                            { text: 'Hepa A, B, C' },
+                            { text: 'Hepa B Profile' },
+                            { text: 'PSA' },
+                            { text: 'CEA' },
+                            { text: 'CA-125' },
+                            { text: 'CA-19-9' },
+                            { text: 'CA-15-3' },
+                        ],
+                    },
 
-                glucoseOptions: [
-                    { text: '2 HR PP', value: 'G.1' },
-                    { text: '1 HR Screen (OB)', value: 'G.2' },
-                ],
+                    {
+                        height: 65,
+                        name: 'microBiology',
+                        topInfo: 'Microbiology',
+                        options: [
+                            { text: 'Gramstain' },
+                            { text: 'Specimen' },
+                            { text: 'Culture & Sensitivity' },
+                        ],
+                    },
+                    
+                    {
+                        height: 220,
+                        name: 'cardioVal',
+                        topInfo: 'Cardiovascular Examintation',
+                        options: [
+                            { text: '2D ECHO PLAIN (2DE)' },
+                            { text: '2D ECHO DOPPLER (2DE)' },
+                            { text: '2D ECHO DOPPLER + SALINE CONTRAST (2DED + SC)' },
+                            { text: 'STRESS ECHOCARDIOGRAPHY' },
+                            { text: 'TREADMILL EXCERCISE TEST' },
+                            { text: 'ECG' },
+                            { text: 'RENAL DUPLEX SCAN' },
+                            { text: 'CAROTID DUPLEX SCAN' },
+                            { text: 'VENOUS DUPLEX SCAN' },
+                            { text: 'ARTERIAL DUPLEX SCAN' },
+                            { text: '24 HOUR HOLTER MONITORING' },
+                            { text: '24 HOUR AMBULATORY BP' },
+                            { text: 'ANKLE BRACHIAL INDEX' },
+                            { text: 'DVT Screening' },
+                            { text: 'ABDOMINAL AORTA DUPLEX SCAN' },
+                        ],
+                    },
+                    
+                    {
+                        height: 100,
+                        name: 'stressProto',
+                        topInfo: 'stress protocol',
+                        options: [
+                            { text: 'KATTUS' },
+                            { text: 'MOD. KATTUS' },
+                            { text: 'NEPTET' },
+                            { text: 'MOD. NEPTET' },
+                            { text: 'BRUCE' },
+                            { text: 'MOD. BRUCE' },
+                        ],
+                    },
+                     {
+                        height: 100,
+                        name: 'ultraSound',
+                        topInfo: 'Ultrasound',
+                        options: [
+                            { text: 'WHOLE ABDOMEN' },
+                            { text: 'KUB' },
+                            { text: 'KUB W/ PROSTATE' },
+                            { text: 'THYROID' },
+                            { text: 'HEPATO-BILLARY TREE' },
 
-                urineOptions:[
-                    { text: 'Routine Urinalysis', value: 'U.1' },
-                    { text: 'Microscopic', value: 'U.2' },
-                    { text: 'Semen Analysis', value: 'U.3' },
-                    { text: 'Glucose', value: 'U.4' },
-                    { text: 'Specific Gravity', value: 'U.5' },
-                    { text: 'Post Vas', value: 'U.6' },
+                        ],
+                    },
+                     {
+                        height: 80,
+                        name: 'pulmoNary',
+                        topInfo: 'Pulmonary Examintation',
+                        options: [
+                            { text: 'PFT with Bronchodillator Challenge' },
+                            { text: 'PFT PLAIN' },
+                            { text: 'Sleep Study Screening' },
+                        ],
+                    },
+                     {
+                        height: 88,
+                        name: 'xRay',
+                        topInfo: 'x-ray',
+                        options: [
+                            { text: 'Chest PA'},
+                            { text: 'Chest LAT'},
+                            { text: 'Chest PA/LAT'},
+                            { text: 'Extrerrities'},
+                            { text: 'Thoracolumbar Spine'},
+                            { text: 'Lumboscaral Spine'},
+                            { text: 'Apicolordotic View'},
+                        ],
+                    },
                 ],
-                
-                bodyFluidsOptions: [
-                    { text: 'Glucose', value: 'BF.1' },
-                    { text: 'Protein', value: 'BF.2' },
-                    { text: 'LDH', value: 'BF.3' },
-                    { text: 'Cell Count and Differential', value: 'BF.4' },
-                ],
-                
                 labform: [],
+
+                checkedLab: {
+                    bloodChem: [],
+                    urineFecal: [],
+                    hemaImmu:[],
+                    microBiology:[],
+                    cardioVal:[],
+                    stressProto: [],
+                    ultraSound: [],
+                    pulmoNary: [],
+                    xRay: [],
+                },
             }
         },
 
         methods: {
+
+            getInd(){
+
+            },
+            toggleCheckedLab(text, name){
+                let ind = this.checkedLab[name].indexOf(text)
+
+                if(ind > -1) this.checkedLab[name].splice(ind, 1)
+                else this.checkedLab[name].push(text)
+
+                console.log(this.checkedLab)
+            },
+
+            triggerSignature(){
+                this.signature = this.$refs['formFile'].files[0]
+            },
+            
+            changeSignature(){
+                if(this.signature == null){
+                    Swal({
+                        title: 'Error!',
+                        text: 'Please Fill up the Form!.',
+                        icon: 'error'
+                    })
+                }
+                else{
+                    let self = this
+                    this.openLoading()
+                    
+                    const form = new FormData()
+                    form.append('signature', this.signature)
+
+                    axios.post('/inquiry/signature', form)
+                    .then( function (response){
+                        let data = response.data
+                        
+                        if(data.hasError){
+                            Swal({
+                                title: 'Error!',
+                                text: 'Please refresh the page.',
+                                icon: 'error'
+                            })
+                            self.closeLoading()
+                        }
+                        else{
+                            Swal({
+                                title: 'Success!',
+                                text: 'Signature has been change!',
+                                icon: 'success'
+                            })
+
+                            self.user.signature = data.signature
+                            self.closeLoading()
+                            self.$refs["change-signature"].hide()
+                        }
+                    })
+                    .catch( function (error){
+                        console.log(error);
+                    });
+                }
+            },
 
             addMedicine(){
                 let error = {
@@ -821,8 +959,35 @@
 
             },
 
+            addPayment(type){
+
+                if( this.reason == '' || this.money == 0){
+                    Swal({
+                        title: 'Error!',
+                        text: 'Please Fill up the Form!.',
+                        icon: 'error'
+                    })
+                }
+                else{
+                    if( type == -1 && this.money > 0)
+                        this.money = this.money * type
+                    else if( type == 1 && this.money < 0)
+                        this.money = this.money * -1
+                    this.payments.push(
+                        this.reason.trim() + " - " + this.money
+                    )
+                    
+                    this.reason = ''
+                    this.money = 0
+                }
+            },
+
             deleteMedicine(ind){
                 this.medicine.splice(ind, 1)
+            },
+
+            deletePayment(ind){
+                this.payments.splice(ind, 1)
             },
 
             changeContent(bool){
@@ -830,20 +995,27 @@
             },
 
             prescribed(){
-                this.openLoading()
+                // this.openLoading()
                 let self = this
-                
+
+                this.payments.push('Total Payment - ' + this.totalPayment)
+
                 axios.post('/inquiry/prescribe', {
                     medicine: this.medicine,
                     actualProblem: this.patientProblem,
                     rx: this.rX,
                     advice: this.advice,
                     id: this.patient_id,
+                    payments: this.payments,
+                    appointState: this.patient.appointState,
+                    patient: this.patient,
                 })
                 .then( function (response){
                     let data = response.data
                     
                     if(data.hasError){
+                        self.payments.pop()
+
                         Swal({
                             title: 'Error!',
                             text: 'Please refresh the page.',
@@ -853,7 +1025,7 @@
                     }
                     else{
                         self.removeList()
-
+                        
                         Swal({
                             title: 'Success!',
                             text: 'Prescription has been sent to the user.',
@@ -870,21 +1042,13 @@
             },
 
             labForm(){
-                this.openLoading()
+                // this.openLoading()
                 let self = this
                 
                 axios.post('/inquiry/send', {
                     patient: JSON.stringify(self.patient),
                     now: self.now,
-                    chemProfOptions: JSON.stringify(self.chemProfOptions),
-                    chemOptions: JSON.stringify(self.chemOptions),
-                    glucoseOptions: JSON.stringify(self.glucoseOptions),
-
-                    hemaOptions: JSON.stringify(self.hemaOptions),
-                    urineOptions: JSON.stringify(self.urineOptions),
-                    bodyFluidsOptions: JSON.stringify(self.bodyFluidsOptions),
-
-                    labform: JSON.stringify(self.labform),
+                    checkedLab: JSON.stringify(self.checkedLab),
                 })
                 .then( function (response){
                     let data = response.data
@@ -916,11 +1080,14 @@
             },
 
             removeList(){
-                let length = this.patients.length
 
+                let length = this.patients.length
+                
                 for(let i = 0; i < length; i++){
+                    
                     if(this.patients[i].id == this.patient_id){
                         this.patients.splice(i, 1)
+                        break;
                     }
                 } 
 
@@ -930,6 +1097,9 @@
                 this.rx = ''
                 this.advice = '',
                 this.patientProblem = ''
+                this.payments = []
+                this.patient = ''
+                this.name = '<Select a Patient>'
 
                 this.neutralizeMedForm()
 
@@ -939,23 +1109,27 @@
                 
                 this.patient = this.items[ind]
 
-                console.log(this.patient)
-
                 if(this.patient.photoUrl != null && this.patient.photoUrl != ''){
                     let sub = this.patient.pPhotoUrl.substring(0, 5).toLowerCase()
 
                     if(sub != 'https'){
-                        this.toLinkImage(this.patient.pPhotoUrl, true)
+                        this.toLinkImage(this.patient.pPhotoUrl, true, false)
                     }
                 }
 
                 this.name = this.patient.name
                 this.patient_id = this.patient.id
 
+                this.payments = []
+                
+                let def = this.patient.appointState == 'Teleconsultation' ? "TeleConsultation Fee - " + this.user.teleconsultFee: "Consultation Fee - " + this.user.consultFee
+
+                this.payments.push(def)
+
                 this.toggleDropdown()
             },
 
-            toLinkImage(image, isPatient){
+            toLinkImage(image, isPatient, isSign){
                 let self = this
                 
                 axios.post('/inquiry/image', {
@@ -972,6 +1146,8 @@
                     else{
                         if(isPatient)
                             self.patient.imageUrl = data.image
+                        else if (isSign)
+                            self.user.signature = data.image
                         else
                             self.user.photoUrl = data.image
                     }
@@ -1000,6 +1176,10 @@
                         text += '- State the problem of the patient\n'
                         go = false
                     }
+                    if(this.totalPayment < 0){
+                        text += '- Fix the Total Payment\n'
+                        go = false
+                    }
                 }
                 else{
                     if(!this.labform.length){
@@ -1012,6 +1192,11 @@
                     text += '- Pick a patient!'
                     go = false
                 }
+                if(this.user.signature == '' || this.user.signature == null){
+                    text += '- Add your Signature!\n'
+                    go = false
+                }
+
                 if(go)
                     this.$refs['preview-modal'].show()
                 else{
@@ -1055,6 +1240,9 @@
 
                 closeLoading(){ this.$refs['loading-modal'].hide() },
             // END
+
+            openSignature(){ this.$refs['change-signature'].show() },
+            closeSignature(){ this.$refs['change-signature'].show() },
         },
 
         computed:{
@@ -1064,6 +1252,22 @@
                         item => item.name.toLowerCase().includes(this.keyword.toLowerCase()) 
                     )
                     : this.patients
+            },
+            
+            totalPayment(){
+                let total = 0
+                let length = this.payments.length
+                
+                for(let i = 0; i < length ; i++){
+                    let payment = this.payments[i]
+                    let num = payment.substring( payment.indexOf('-')+1).trim()
+                    console.log(num)
+                    num = parseFloat(num)
+
+                    total += num
+                }
+
+                return total
             },
         },
 
@@ -1076,7 +1280,14 @@
                 let sub = this.user.photoUrl.substring(0, 5).toLowerCase()
 
                 if(sub != 'https')
-                    this.toLinkImage(this.user.photoUrl, false)
+                    this.toLinkImage(this.user.photoUrl, false, false)
+            }
+
+            if(this.user.signature != null && this.user.signature != ''){
+                let sub = this.user.signature.substring(0, 5).toLowerCase()
+
+                if(sub != 'https')
+                    this.toLinkImage(this.user.signature, false, true)
             }
 
         }

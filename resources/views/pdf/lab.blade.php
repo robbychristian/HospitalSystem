@@ -8,6 +8,7 @@
 
          .lab-form .header .d-flex{
             display: flex !important;
+            display: inline-block;
             justify-content: center;
             margin-bottom: 0px
         }
@@ -46,13 +47,14 @@
             display: flex !important;
         }
         .lab-form .body .content-box {
-            width: 50%;
+            width: 100%;
             display: inline-flex !important;
 
         }
         .lab-form .body .content-box .top-info {
+            text-transform: uppercase;
             width: 100%;
-            padding: 0.25rem !important;
+            /* padding: 0.25rem !important; */
         }
         .lab-form .body .content-box .top-info h6, .lab-form .body .content-box .top-info .h6 {
             margin-bottom: 0px !important;
@@ -63,8 +65,8 @@
             padding: 0.25rem;
         }
         .lab-form .body .content-box .info-content .box {
-            width: 13px;
-            height: 13px;
+            width: 10px;
+            height: 10px;
             background-color: white;
             margin-right: 0.25rem;
             border: #000 1px solid;
@@ -121,7 +123,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex" style="margin-top: 0px; padding: 0px;">
+                <div class="d-flex" style="margin-top: 0px; padding: 0px; margin-bottom: 0px">
                     <div class="patient-box" style="width: 140px;  margin-right: 0px !important; margin-left: 0px !important;">
                         <h6>Date of Birth: </h6>
                         <p>{{ $patient->pBirthdate }}</p>
@@ -132,9 +134,9 @@
                         <p>{{ $patient->pGender }}</p>
                     </div>
 
-                    <div class="patient-box" style="width: 312px;  margin-right: 0px !important; margin-left: 0px !important;"></div>
+                    <div class="patient-box" style="width: 325px;  margin-right: 0px !important; margin-left: 0px !important;"></div>
 
-                    <div class="patient-box" style="max-width: 140px;">
+                    <div class="patient-box" style="max-width: 200px;">
                         <h6>Today's Date: </h6>
                         <p>{{ $now }}</p>
                     </div>
@@ -142,8 +144,54 @@
             </div>
             
             <div class="body" style="position: relative; width: 100%;">
+                
+                @php
+                    $names =[
+                        'Blood Chemistry',
+                        'Urinalysis and Fecalysis',
+                        'HEMATOLOGY, IMMUNOLOGY, and TUMOR MARKERS',
+                        'Microbiology',
+                        'Cardiovascular Examintation',
+                        'stress protocol',
+                        'Ultrasound',
+                        'Pulmonary Examintation',
+                        'x-ray',
+                    ];
+                @endphp
 
-                <div class="content-box" style="max-width: 341px; position: absolute; top: -19px;">
+                @foreach ($checkedLab as $information)
+
+                @if (  count($information) > 0)
+
+                    <div class="content-box" style="width: 692px; margin-bottom: 5px; padding: 0px; margin-right: 0px; margin-top: 0px">
+                        <div class="top-info">
+                            <h6 style="margin-top: 0px"> {{$names[$loop->index]}}</h6>
+                        </div>
+
+                        <div class="info-content" style="display: inline-flex;">
+                            @foreach ($information as $text)
+
+                                @if (  $loop->index % 2 == 0)
+                                    <div class="d-flex" style="display: inline-block; margin: 0px">
+                                @endif
+
+                                    <div class="d-flex" style="width: 325px; display: inline-block;">
+                                        <div class="checked box "></div>
+                                        <p style="font-size: 12px">{{ $text }}</p>
+                                    </div>
+
+                                @if (  ($loop->index + 1) % 2 == 0 && $loop->index > 0 || $loop->last)
+                                    </div>
+                                @endif
+                            
+                            @endforeach
+                        </div>
+                    </div>
+
+                @endif
+                    
+                @endforeach
+                {{-- <div class="content-box">
 
                     <div class="top-info">
                         <h6> CHEMISTRY PROFILE</h6>
@@ -163,148 +211,31 @@
                             </div>
                         
                         @endforeach
-                    </div>
+                    </div> --}}
                         
-
-                    <div class="top-info">
-                        <h6> CHEMISTRY</h6>
-                    </div>
-                    
-                    <div class="info-content">
-                        @foreach ($chemOptions as $data)
-                        
-                            @if ( strcasecmp($data->text, 'Uric Acid') == 0)
-                                @break
-                            @endif
-                            <div class="d-flex">
-                                @if (in_array( $data->value, $labform))
-                                    <div class="checked box"></div>
-                                @else
-                                    <div class="box"></div>
-                                @endif
-                                <p>{{ $data->text }}</p>
-                            </div>
-                        
-                        @endforeach
-                    </div>
 
                 </div>
 
-                <div class="content-box page-break"  style="max-width: 341px; position: absolute; left: 351px; top: -19px;">
-                    
-                    <div class="top-info">
-                        <h6> BODY FLUIDS</h6>
-                    </div>
-                    
-                    <div class="info-content">
-                        @foreach ($bodyFluidsOptions as $data)
-                        
-                            <div class="d-flex">
-                                
-                                @if (in_array( $data->value, $labform))
-                                    <div class="checked box "></div>
-                                @else
-                                    <div class="box"></div>
-                                @endif
-                                <p>{{ $data->text }}</p>
-                            </div>
-                        
-                        @endforeach
-                    </div>
-                    
-                    <div class="top-info">
-                        <h6> HEMATOLOGY/COAGULATION</h6>
-                    </div>
-                    
-                    <div class="info-content">
-                        @foreach ($hemaOptions as $data)
-                        
-                            <div class="d-flex">
-                                
-                                @if (in_array( $data->value, $labform))
-                                    <div class="checked box "></div>
-                                @else
-                                    <div class="box"></div>
-                                @endif
-                                <p>{{ $data->text }}</p>
-                            </div>
-                        @endforeach
-                        <div style="height: 9px; width: 98px;"></div>
-                    </div>
-                </div>
-                
-                <div class="content-box " style="max-width: 341px; position: absolute; top: 0px;">
-                    <div class="info-content">
-                        @foreach ($chemOptions as $data)
-                        
-                            @if ( $loop->index > 4)
-                                <div class="d-flex">
-                                    @if (in_array( $data->value, $labform))
-                                        <div class="checked box"></div>
-                                    @else
-                                        <div class="box"></div>
-                                    @endif
-                                    <p>{{ $data->text }}</p>
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div class="top-info">
-                        <h6> GLUCOSE TOLERANT TEST</h6>
-                    </div>
-
-                    <div class="info-content">
-                        @foreach ($glucoseOptions as $data)
-                        
-                            <div class="d-flex">
-                                
-                                @if (in_array( $data->value, $labform))
-                                    <div class="checked box"></div>
-                                @else
-                                    <div class="box"></div>
-                                @endif
-                                <p>{{ $data->text }}</p>
-                            </div>
-                        
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="content-box" style="max-width: 341px; position: absolute; top: 0px;  left: 351px;">
-                    
-                    <div class="top-info">
-                        <h6> URINALYSIS</h6>
-                    </div>
-    
-                    <div class="info-content">
-                        @foreach ($urineOptions as $data)
-                        
-                            <div class="d-flex">
-                                
-                                @if (in_array( $data->value, $labform))
-                                    <div class="checked box "></div>
-                                @else
-                                    <div class="box"></div>
-                                @endif
-                                <p>{{ $data->text }}</p>
-                                
-                            </div>
-                        
-                        @endforeach
-
-                        @for ($i = 0; $i < 2; $i++)
-                            <div class="d-flex" style="visibility: hidden; height: 40px;">
-                                <div class="box"></div>
-                                <p>{{ $data->text }}</p>
-                            </div>
-                        @endfor
-                    </div>
-                </div>
-                
-                
             </div>
 
+            <div style=" padding: 5px;">
+
+                <div >
+
+                    <div style="display: inline-block; float: left">
+                        <h6> LIC: &nbsp; <u>{{$lic}}</u></h6>
+                        <h6> PTR: &nbsp; <u>{{$ptr}}</u></h6>
+                        <h6> S2: &nbsp; <u> {{$s2}}</u></h6>
+                    </div>
+
+                    <div style="display: inline-block; float: right">
+                        <img src="{{public_path( '/pdf' . $signature )}}" alt="" width="200" height="100">
+
+                        <h6 style="margin-bottom: 0px"> Signature: &nbsp; <u> {{$patient->drfName}} {{$patient->drlName}} MD. </u></h6>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
     </body>

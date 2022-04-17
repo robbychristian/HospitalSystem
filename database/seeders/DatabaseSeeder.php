@@ -55,6 +55,10 @@ class DatabaseSeeder extends Seeder
             'totalEarnings' => $user['totalEarnings'] == '' ? 0 : $user['totalEarnings'],
             'provideTeleService' => $user['provideTeleService'],
             'password' => Hash::make($user['password']),
+
+            'lic' => $user['lic'],
+            'ptr' => $user['ptr'],
+            's2' => $user['s2'],
         ]);
     }
 }

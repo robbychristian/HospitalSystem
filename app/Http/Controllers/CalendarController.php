@@ -164,7 +164,7 @@ class CalendarController extends Controller
             'appointState' => $request->appointState,
             'appointStatus' => 'Pending',
             'appointTime' => '',
-            'bookingDate' => Carbon::parse($request->date)->format('m/d/Y'),
+            'bookingDate' => now()->format('m/d/Y'),
             'bookingSchedule' => $request->timeSlot,
 
             'drId' => $doctor['id'],
@@ -207,9 +207,15 @@ class CalendarController extends Controller
             'teleconsultFee' => '',
             'timeStamp' => '',
             'advice' => null,
+<<<<<<< Updated upstream
 
             //NEW
             'status' => 'Pending'
+=======
+            'lic' => $doctor['lic'],
+            's2' => $doctor['s2'],
+            'ptr' => $doctor['ptr'],
+>>>>>>> Stashed changes
         ]);
 
         //GET ALL EVENTS
