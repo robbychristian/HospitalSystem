@@ -335,9 +335,29 @@ class CalendarController extends Controller
     {
         try {
             $appointment = $this->firestore->database()->collection('AppointmentList')->document($id);
+            $data = $appointment->snapshot()->data();
+            $currQueue = $data['prescribeNo'];
+
+            $appointDate = $data['appointDate'];
+            $drId = $data['drId'];
+
+            $appointments =  $this->firestore->database()->collection('AppointmentList')->where('drId', '==', $drId)->documents()->rows();
+            
+            foreach($appointments as $appoint){
+                $appointData = $appoint->data();
+
+                if($appointData['appointDate'] == $appointDate && $appointData['appointState'] == 'Hospital' && $appointData['appointStatus'] == 'Approved' && $appointData['prescribeNo'] == $currQueue + 1){
+                    $this->firestore->database()->collection('AppointmentList')->document($appoint->id())->update([
+                        ['path' => 'prescribeNo', 'value' => (string)$currQueue],
+                    ]);
+                }
+            }
+
             $appointment->update([
-                ['path' => 'status', 'value' => 'Finished Late'],
+                ['path' => 'status', 'value' => 'Pending'],
+                ['path' => 'prescribeNo', 'value' => (string)($currQueue + 1)],
             ]);
+
         } catch (\Exception $e) {
             return $e;
         }

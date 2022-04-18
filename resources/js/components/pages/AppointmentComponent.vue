@@ -92,23 +92,18 @@
                         {{ data.bookingSchedule }}
                     </p>
                     <p>
-                        Appointment Loc:
-                        {{
-                            data.appointState == "Hospital"
-                                ? data.hospitalName
-                                : data.appointState
-                        }}
-                    </p>
-                    <p>
                         Payment:
                         {{
-                            data.proofOfPay ? "Online Payment" : "Cash on Hand"
+                            data.proofOfPay
+                                ? "Online Payment"
+                                : "Cash on Hand"
                         }}
                     </p>
                     <p class="text-danger">Reason: {{ data.pProblem }}</p>
                     <button
                         v-if="
-                            data.appointStatus == 'Pending' && data.proofOfPay
+                            data.appointStatus == 'Pending' &&
+                            data.proofOfPay
                         "
                         @click="showPayment(data.pName, data.proofOfPay)"
                         class="btn btn-sm p-1 btn-info w-100 text-center text-white"
@@ -116,106 +111,80 @@
                         Show Payment
                     </button>
 
-                    <div class="appointment-info">
-                        <p>
-                            Schedule: {{ data.bookingDate }}
-                            {{ data.bookingSchedule }}
-                        </p>
-                        <p>
-                            Payment:
-                            {{
-                                data.proofOfPay
-                                    ? "Online Payment"
-                                    : "Cash on Hand"
-                            }}
-                        </p>
-                        <p class="text-danger">Reason: {{ data.pProblem }}</p>
+                    <div
+                        v-if="data.appointStatus == 'Pending'"
+                        class="d-flex px-3 py-1 mt-3 justify-content-between"
+                        style="background-color: #ececec"
+                    >
                         <button
-                            v-if="
-                                data.appointStatus == 'Pending' &&
-                                data.proofOfPay
+                            @click="
+                                updateAppointment(data.id, 'Rejected', ind)
                             "
-                            @click="showPayment(data.pName, data.proofOfPay)"
-                            class="btn btn-sm p-1 btn-info w-100 text-center text-white"
+                            class="btn btn-sm p-1 btn-danger flex-grow-1"
                         >
-                            Show Payment
+                            Reject
                         </button>
-
-                        <div
-                            v-if="data.appointStatus == 'Pending'"
-                            class="d-flex px-3 py-1 mt-3 justify-content-between"
-                            style="background-color: #ececec"
+                        <button
+                            @click="
+                                updateAppointment(data.id, 'Approved', ind)
+                            "
+                            class="btn btn-sm p-1 btn-success flex-grow-1"
                         >
-                            <button
-                                @click="
-                                    updateAppointment(data.id, 'Rejected', ind)
-                                "
-                                class="btn btn-sm p-1 btn-danger flex-grow-1"
-                            >
-                                Reject
-                            </button>
-                            <button
-                                @click="
-                                    updateAppointment(data.id, 'Approved', ind)
-                                "
-                                class="btn btn-sm p-1 btn-success flex-grow-1"
-                            >
-                                Accept
-                            </button>
-                        </div>
+                            Accept
+                        </button>
+                    </div>
 
-                        <div
-                            v-else-if="data.appointStatus == 'Pending payment'"
-                            class="d-flex px-3 py-1 mt-3 justify-content-between"
-                            style="background-color: #ececec"
+                    <div
+                        v-else-if="data.appointStatus == 'Pending payment'"
+                        class="d-flex px-3 py-1 mt-3 justify-content-between"
+                        style="background-color: #ececec"
+                    >
+                        <button
+                            @click="
+                                updateAppointment(data.id, 'Rejected', ind)
+                            "
+                            class="btn btn-sm p-1 btn-danger flex-grow-1"
                         >
-                            <button
-                                @click="
-                                    updateAppointment(data.id, 'Rejected', ind)
-                                "
-                                class="btn btn-sm p-1 btn-danger flex-grow-1"
-                            >
-                                Reject
-                            </button>
-                        </div>
+                            Reject
+                        </button>
+                    </div>
 
-                        <div
-                            v-else-if="data.appointStatus == 'Approved'"
-                            class="d-flex px-3 py-1 mt-3 justify-content-between"
-                            style="background-color: #ececec"
+                    <div
+                        v-else-if="data.appointStatus == 'Approved'"
+                        class="d-flex px-3 py-1 mt-3 justify-content-between"
+                        style="background-color: #ececec"
+                    >
+                        <button
+                            @click="
+                                removeLab(
+                                    data.id,
+                                    ind,
+                                    data.labRequest == '1' ? '0' : '1'
+                                )
+                            "
+                            :class="[
+                                data.labRequest == '1'
+                                    ? 'bg-primary'
+                                    : 'bg-secondary',
+                                'btn btn-sm p-1  flex-grow-1 text-white btn-lab',
+                            ]"
+                            :disabled="data.labRequest == '2'"
                         >
-                            <button
-                                @click="
-                                    removeLab(
-                                        data.id,
-                                        ind,
-                                        data.labRequest == '1' ? '0' : '1'
-                                    )
-                                "
-                                :class="[
-                                    data.labRequest == '1'
-                                        ? 'bg-primary'
-                                        : 'bg-secondary',
-                                    'btn btn-sm p-1  flex-grow-1 text-white btn-lab',
-                                ]"
-                                :disabled="data.labRequest == '2'"
-                            >
-                                Lab request
-                                {{
-                                    data.labRequest == 1
-                                        ? "unessential"
-                                        : "essential"
-                                }}
-                            </button>
-                            <button
-                                @click="
-                                    updateAppointment(data.id, 'Cancelled', ind)
-                                "
-                                class="btn btn-sm p-1 btn-danger flex-grow-1"
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                            Lab request
+                            {{
+                                data.labRequest == 1
+                                    ? "unessential"
+                                    : "essential"
+                            }}
+                        </button>
+                        <button
+                            @click="
+                                updateAppointment(data.id, 'Cancelled', ind)
+                            "
+                            class="btn btn-sm p-1 btn-danger flex-grow-1"
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>

@@ -87,6 +87,7 @@ class AppointmentController extends Controller
                 ['path' => 'appointStatus', 'value' => $request->status],
             ]);
             
+            
             $data = $appointment->snapshot()->data();
 
             if($data['appointState'] == 'Hospital'){
@@ -99,7 +100,7 @@ class AppointmentController extends Controller
                 foreach($appointments as $appoint){
                     $appointData = $appoint->data();
 
-                    if($appointData['appointDate'] == $appointDate && $appointData['appointState'] == 'Hospital'){
+                    if($appointData['appointDate'] == $appointDate && $appointData['appointState'] == 'Hospital' && $appoint->id() != $data['id'] && $appointData['appointStatus'] == 'Approved'){
                         $count = $count + 1;
                     }
                 }
