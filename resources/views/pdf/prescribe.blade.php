@@ -169,8 +169,8 @@
                 <div class="doctor-details">
                     
                     <img class="img" src="{{  $patient['drPhotoUrl'] }}" alt="Logo" width="90" height="115">
-
-                    <h4 class="mb-0 fw-bold" style="display: inline-block"> Dr. {{$patient['name']}}</h4>
+                
+                    <h4 class="mb-0 fw-bold" style="display: inline-block"> Dr. {{$patient['drfName']}} {{$patient['drlName']}}</h4>
                 </div>
 
                 <h6 class="fw-normal">{{$patient['drDegree']}}</h6>

@@ -44,7 +44,7 @@
 
             <div v-else class="appointment-box mx-auto" v-for="(data, ind) in items" :key="'A'+ind">
                 <div :class="[ 
-                    data.appointStatus , 'status',  data.appointStatus == 'Pending' ? (conflicts(ind, data.drId) ? 'bg-danger' : '') : ''
+                    data.appointStatus , 'status',  data.appointStatus == 'Pending' ? (conflicts(ind, data.drId) || queueCheck(ind, data.drId) ? 'bg-danger' : '') : ''
                 ]"> {{data.appointStatus}} </div>
 
                 <div class="patient-info">
@@ -60,6 +60,7 @@
                 
                 <div class="appointment-info">
                     <p> Schedule: {{data.bookingDate}} {{data.bookingSchedule}}</p>
+                    <p> Appointment Loc: {{data.appointState == 'Hospital' ? data.hospitalName : data.appointState}}</p>
                     <p> Payment: {{data.proofOfPay ? "Online Payment" : "Cash on Hand"}}</p>
                     <p class="text-danger"> Reason: {{data.pProblem}}</p>
                     <button v-if="data.appointStatus == 'Pending' && data.proofOfPay" @click="showPayment(data.pName, data.proofOfPay)" class="btn btn-sm p-1 btn-info w-100 text-center text-white"> Show Payment</button>
@@ -94,7 +95,7 @@ import { extendMoment } from 'moment-range';
 const moment = extendMoment(Moment)
 
 export default {
-    props: ["appointmentData", "isAdmin"],
+    props: ["appointmentData", "isAdmin", 'hospitalData'],
 
 
     data() {
@@ -108,6 +109,7 @@ export default {
                 {text: "Doctor Degree", value: 'drDegree', show: this.isAdmin == 0 ? false : true},
             ],
             appointments: JSON.parse(this.appointmentData),
+            hospitals: JSON.parse(this.hospitalData),
         };
     },
 
@@ -117,44 +119,93 @@ export default {
 
     methods: {
 
-        conflicts(ind, id){
-            
-            let length = this.appointments.length
-            let appointDate = this.appointments[ind].appointDate
-            
-            let sched = this.appointments[ind].bookingSchedule.substr( this.appointments[ind].bookingSchedule.indexOf(' ') + 1 )
-            sched = sched.trim()
-            let time1s = sched.substr( 0, sched.indexOf(' ') )
-            let time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
-            var date1 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
-            var range  = moment.range(date1);
+        selectedHospital(name){
+            let length = this.hospitals.length
 
             for(let i = 0; i < length; i++){
+                if(name == this.hospitals[i].hospitalName){
+                    return this.hospitals[i]
+                }
+            }
 
-                if(ind != i){
-                    
-                    if( id == this.appointments[i].drId ){
+            return null
+        },
 
-                        if( appointDate == this.appointments[i].appointDate ){
-                            
-                            if( this.appointments[i].appointStatus == "Approved"){
-                                
-                                sched = this.appointments[i].bookingSchedule.substr( this.appointments[i].bookingSchedule.indexOf(' ') + 1 )
-                                sched = sched.trim()
-                                time1s = sched.substr( 0, sched.indexOf(' ') )
-                                time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
+        queueCheck(ind, id){
+            
+            if( this.appointments[ind].appointState == "Hospital"){
+                let length = this.appointments.length
+                let appointDate = this.appointments[ind].appointDate
+                
+                let day = [
+                    "sun",
+                    "mon",
+                    "tue",
+                    "wed",
+                    "thu",
+                    "fri",
+                    "sat",
+                ]
+                let hospital = this.selectedHospital(this.appointments[ind].hospitalName);
+                let maxQueue = hospital == null ? 0 : parseInt(hospital[day[moment(appointDate).day()]][2])
+                let count = 0
 
-                                var date2 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
-                                var range2 = moment.range(date2);
-
-                                if(range.overlaps(range2)){
-                                    return true
-                                }
-                            }
-
+                for(let i = 0; i < length; i++){
+                    if (appointDate == this.appointments[i].appointDate) {
+                        if (id == this.appointments[i].drId) {
+                            if( 'Hospital' == this.appointments[i].appointState)
+                                count++;
                         }
                     }
                 }
+
+                if(count < maxQueue ) return false
+                else return true
+            }
+
+            return false
+        },
+
+        conflicts(ind, id){
+            
+            if( this.appointments[ind].appointState != "Hospital"){
+                let length = this.appointments.length
+                let appointDate = this.appointments[ind].appointDate
+                let sched = this.appointments[ind].bookingSchedule.substr( this.appointments[ind].bookingSchedule.indexOf(' ') + 1 )
+                sched = sched.trim()
+                let time1s = sched.substr( 0, sched.indexOf(' ') )
+                let time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
+                var date1 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
+                var range  = moment.range(date1);
+
+                for(let i = 0; i < length; i++){
+
+                    if(ind != i){
+                        
+                        if( id == this.appointments[i].drId ){
+
+                            if( appointDate == this.appointments[i].appointDate ){
+                                
+                                if( this.appointments[i].appointStatus == "Approved"){
+                                    
+                                    sched = this.appointments[i].bookingSchedule.substr( this.appointments[i].bookingSchedule.indexOf(' ') + 1 )
+                                    sched = sched.trim()
+                                    time1s = sched.substr( 0, sched.indexOf(' ') )
+                                    time1e = sched.substr( sched.lastIndexOf(' ') + 1 )
+
+                                    var date2 = [moment(appointDate + " " + time1s), moment(appointDate + " " + time1e)];
+                                    var range2 = moment.range(date2);
+
+                                    if(range.overlaps(range2)){
+                                        return true
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            
             }
             
             return false

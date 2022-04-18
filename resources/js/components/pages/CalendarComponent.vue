@@ -90,6 +90,53 @@
                         ></b-form-select>
                     </b-col>
                 </b-row>
+                
+                <b-row>
+                    <b-col sm="4"><label>Appointment State: </label></b-col>
+                    <b-col sm="8">
+                        <input
+                            type="radio"
+                            id="one"
+                            value="Teleconsultation"
+                            :disabled="
+                                user.provideTeleService == 0 ? true : false
+                            "
+                            @change="changeDate(false)"
+                            v-model="appointState"
+                        />
+                        <label for="one">Teleconsultation</label>
+
+                        <br />
+
+                        <input
+                            type="radio"
+                            id="two"
+                            value="Hospital"
+                            :disabled="user != null && user != '' ? user.hospital.length <= 0 : true"
+                            v-model="appointState"
+                            @change="changeDate(true)"
+                        />
+                        <label for="two">Hospital</label>
+
+                        <input
+                            type="hidden"
+                            name="appointState"
+                            :value="appointState"
+                        />
+                    </b-col>
+                </b-row>
+
+                <b-row v-if="appointState == 'Hospital'">
+                    <b-col sm="2"><label>Hospital: </label></b-col>
+                    <b-col sm="10">
+                        <b-form-select
+                            v-model="selectedHospital"
+                            :options="optHos"
+                            name="hospital"
+                            @input="updateHospital()"
+                        ></b-form-select>
+                    </b-col>
+                </b-row>
 
                 <b-row>
                     <b-col sm="2"><label>Date: </label></b-col>
@@ -100,13 +147,13 @@
                             name="date"
                             :date-disabled-fn="dateDisabled"
                             :min="min"
-                            @input="updateSlots()"
-                            :disabled="user.length == 0"
+                            @input="updateSlotsOrQueue()"
+                            :disabled="user.length == 0 || appointState == '' || (appointState == 'Hospital' && selectedHospital == '') "
                         ></b-form-datepicker>
                     </b-col>
                 </b-row>
 
-                <b-row>
+                <b-row v-if="appointState == 'Teleconsultation'">
                     <b-col sm="2"><label>Slot: </label></b-col>
                     <b-col sm="10">
                         <b-form-select
@@ -125,6 +172,21 @@
                             </template>
                         </b-form-select>
                     </b-col>
+                </b-row>
+
+                <b-row v-else-if="appointState == 'Hospital'">
+                    <b-col sm="2"><label>Queue: </label></b-col>
+                    <b-col sm="10"><label> {{queue}} </label></b-col>
+                    <input
+                        type="hidden"
+                        name="hospitalName"
+                        :value="selectedHospital == '' || selectedHospital == null ? '' : selectedHospital.hospitalName"
+                    />
+                    <input
+                        type="hidden"
+                        name="hospitalAddress"
+                        :value="selectedHospital == '' || selectedHospital == null ? '' : selectedHospital.hospitalAddress"
+                    />
                 </b-row>
 
                 <b-row>
@@ -152,38 +214,6 @@
                     </b-col>
                 </b-row>
 
-                <b-row>
-                    <b-col sm="3"><label>Appointment State: </label></b-col>
-                    <b-col sm="9">
-                        <input
-                            type="radio"
-                            id="one"
-                            value="Teleconsultation"
-                            :disabled="
-                                user.provideTeleService == 0 ? true : false
-                            "
-                            v-model="appointState"
-                        />
-                        <label for="one">Teleconsultation</label>
-
-                        <br />
-
-                        <input
-                            type="radio"
-                            id="two"
-                            value="Hospital"
-                            :disabled="user.hospital <= 0 ? true : false"
-                            v-model="appointState"
-                        />
-                        <label for="two">Hospital</label>
-
-                        <input
-                            type="hidden"
-                            name="appointState"
-                            :value="appointState"
-                        />
-                    </b-col>
-                </b-row>
             </form>
         </b-modal>
         <!-- MODAL FOR ADD APPOINTMENT -->
@@ -215,6 +245,7 @@ export default {
     ],
 
     mounted() {
+        console.log(this.user);
         let data = JSON.parse(this.patients);
 
         data.forEach(this.toItems);
@@ -241,7 +272,7 @@ export default {
             };
             this.appointmentModalData.push(newObject);
         }
-        this.populateWeekdays();
+        // this.populateWeekdays();
     },
 
     components: {
@@ -265,8 +296,10 @@ export default {
             description: "",
             selectedPatient: "",
             selectedDoctor: "",
+            selectedHospital: "",
             options: [],
             optDoc: [],
+            optHos: [],
             modalShow: "addCalendar",
             appointState: "",
 
@@ -277,6 +310,7 @@ export default {
             //FOR SHOW APPOINTMENTS MODAL
             fields: ["Patient", "Date", "Time", "Status", "Action"],
             appointmentModalData: [],
+            queue: '',
 
             // Sunday = 0, Saturday 6
             weekdays: {
@@ -312,6 +346,29 @@ export default {
         };
     },
     methods: {
+        updateSlotsOrQueue(){
+            if(this.appointState == 'Hospital'){
+                this.updateQueue()
+            }
+            else{
+                this.updateSlots()
+            }
+        },
+        
+        changeDate(isHospital){
+            this.timeSlot = null
+            this.selectedHospital = ''
+            this.date = ''
+            this.queue = ''
+
+            if(isHospital){
+                this.pupulateOptHos()
+            }
+            else{
+                this.populateWeekdays();
+            }
+        },
+
         chooseDoctor(ind) {
             this.doctor = this.doctors[ind];
             this.doctorName = this.doctor.fname + " " + this.doctor.lname;
@@ -342,7 +399,29 @@ export default {
                     text: "Some input fields are empty!",
                     icon: "error",
                 });
-            } else {
+            } 
+            else if(this.appointState == 'Hospital' && (this.selectedHospital == '')){
+                swal({
+                    title: "Error",
+                    text: "Some input fields are empty!",
+                    icon: "error",
+                });
+            }
+            else if(this.appointState == 'Teleconsultation' && (this.timeSlot == null)){
+                swal({
+                    title: "Error",
+                    text: "Some input fields are empty!",
+                    icon: "error",
+                });
+            }
+            else if(this.appointState == 'Hospital' && (this.queue == 'FULL')){
+                swal({
+                    title: "Error",
+                    text: "Queue is Already Full!",
+                    icon: "error",
+                });
+            }
+            else {
                 swal({
                     title: "Appointment Added",
                     text: "Your new appointment for teleconsultation has been added!",
@@ -405,6 +484,21 @@ export default {
             else {
                 if (item.isAdmin == 0) this.optDoc.push(data);
             }
+        },
+
+        pupulateOptHos(){
+            this.optHos = [];
+            let length = this.user.hospital.length
+
+            for(let i = 0; i < length; i++){
+                let data = {
+                    value: this.user.hospital[i],
+                    text: this.user.hospital[i].hospitalName,
+                };
+
+                this.optHos.push(data);
+            }
+            
         },
 
         toEvents(item) {
@@ -496,6 +590,11 @@ export default {
             }
         },
 
+        updateHospital(){
+            this.date = ''
+            this.populateWeekdays();
+        },
+
         updateUser() {
             let length = this.doctors.length;
 
@@ -504,9 +603,42 @@ export default {
                     this.user = this.doctors[i];
             }
 
-            console.log(this.user);
+            // console.log(this.user);
+            this.appointState = ''
 
-            this.populateWeekdays();
+            // this.populateWeekdays();
+        },
+
+        updateQueue(){
+            let appointDate = moment(this.date).format("L");
+            let length = this.appointmentss.length
+            let day = [
+                "sun",
+                "mon",
+                "tue",
+                "wed",
+                "thu",
+                "fri",
+                "sat",
+            ]
+            let id = this.user.id
+
+            let maxQueue = parseInt(this.selectedHospital[day[moment(this.date).day()]][2])
+            let count = 0
+
+            for(let i = 0; i < length; i++){
+                if (appointDate == this.appointmentss[i].appointDate) {
+                    if (id == this.appointmentss[i].drId) {
+                        if( 'Hospital' == this.appointmentss[i].appointState)
+                            count++;
+                    }
+                }
+            }
+
+            if( count < maxQueue) this.queue = 'NOT FULL'
+            else this.queue = 'FULL'
+            
+
         },
 
         conflicts(slot) {
@@ -528,22 +660,25 @@ export default {
             for (let i = 0; i < length; i++) {
                 if (appointDate == this.appointmentss[i].appointDate) {
                     if (id == this.appointmentss[i].drId) {
-                        sched = this.appointmentss[i].bookingSchedule.substr(
-                            this.appointmentss[i].bookingSchedule.indexOf(" ") +
-                                1
-                        );
-                        sched = sched.trim();
-                        time1s = sched.substr(0, sched.indexOf(" "));
-                        time1e = sched.substr(sched.lastIndexOf(" ") + 1);
+                        
+                        if( 'Hospital' != this.appointmentss[i].appointState){
+                            sched = this.appointmentss[i].bookingSchedule.substr(
+                                this.appointmentss[i].bookingSchedule.indexOf(" ") +
+                                    1
+                            );
+                            sched = sched.trim();
+                            time1s = sched.substr(0, sched.indexOf(" "));
+                            time1e = sched.substr(sched.lastIndexOf(" ") + 1);
 
-                        var date2 = [
-                            moment(appointDate + " " + time1s),
-                            moment(appointDate + " " + time1e),
-                        ];
-                        var range2 = moment.range(date2);
+                            var date2 = [
+                                moment(appointDate + " " + time1s),
+                                moment(appointDate + " " + time1e),
+                            ];
+                            var range2 = moment.range(date2);
 
-                        if (range.overlaps(range2)) {
-                            return true;
+                            if (range.overlaps(range2)) {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -566,6 +701,19 @@ export default {
                     { day: "fri", field: "teleFri" },
                     { day: "sat", field: "teleSat" },
                 ];
+                if( this.appointState == 'Hospital'){
+                    drData = this.selectedHospital
+
+                    days = [
+                        { day: "sun", field: "sun" },
+                        { day: "mon", field: "mon" },
+                        { day: "tue", field: "tue" },
+                        { day: "wed", field: "wed" },
+                        { day: "thurs", field: "thu" },
+                        { day: "fri", field: "fri" },
+                        { day: "sat", field: "sat" },
+                    ];
+                }
 
                 for (let i = 0; i < 7; i++) {
                     let day = days[i];

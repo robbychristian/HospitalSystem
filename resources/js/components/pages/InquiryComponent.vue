@@ -995,7 +995,7 @@
             },
 
             prescribed(){
-                // this.openLoading()
+                this.openLoading()
                 let self = this
 
                 this.payments.push('Total Payment - ' + this.totalPayment)
@@ -1094,7 +1094,7 @@
                 this.patient_id = -1
                 this.patient = ''
                 this.medicine = []
-                this.rx = ''
+                this.rX = ''
                 this.advice = '',
                 this.patientProblem = ''
                 this.payments = []

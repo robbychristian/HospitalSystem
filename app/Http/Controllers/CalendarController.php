@@ -63,7 +63,19 @@ class CalendarController extends Controller
             foreach ($allDoctors as $doctor) {
                 $data = $doctor->data();
                 $data['id'] = $doctor->id();
-                $data['hospital'] = count($this->firestore->database()->collection("Hospitals")->where('doctorId', '==', $data['id'])->documents()->rows());
+
+                $hospitals = $this->firestore->database()->collection("Hospitals")->where('doctorId', '==', $data['id'])->documents()->rows();
+                $data['hospital'] = [];
+                
+                foreach($hospitals as $hospital){
+                    $hospitalData = $hospital->data();
+                    $hospitalData['id'] = $hospital->id();
+
+                    array_push(
+                        $data['hospital'],
+                        $hospitalData
+                    );
+                }
 
                 array_push(
                     $doctors,
@@ -79,7 +91,19 @@ class CalendarController extends Controller
             // $getDrData = $drQuery->documents();
 
             $user = $this->firestore->database()->collection("Doctors")->document(Auth::user()->id_fb)->snapshot()->data();
-            $user['hospital'] = count($this->firestore->database()->collection("Hospitals")->where('doctorId', '==', Auth::user()->id_fb)->documents()->rows());
+
+            $hospitals = $this->firestore->database()->collection("Hospitals")->where('doctorId', '==', Auth::user()->id_fb)->documents()->rows();
+            $user['hospital'] = [];
+            
+            foreach($hospitals as $hospital){
+                $hospitalData = $hospital->data();
+                $hospitalData['id'] = $hospital->id();
+
+                array_push(
+                    $user['hospital'],
+                    $hospitalData
+                );
+            }
 
             $appointments = [];
             // $doctorsDatas = [];
@@ -156,7 +180,6 @@ class CalendarController extends Controller
 
         //MAKE NEW APPOINTMENT
         $newAppointment = $this->firestore->database()->collection("AppointmentList")->newDocument();
-
         $newAppointment->set([
             'id' => $newAppointment->id(),
             'actualProblem' => $request->problem,
@@ -178,8 +201,8 @@ class CalendarController extends Controller
             'specialization' => $doctor['specialization'],
             'drlName' => $doctor['lname'],
 
-            'hospitalAddress' => '',
-            'hospitalName' => '',
+            'hospitalAddress' => $request->hospitalAddress,
+            'hospitalName' => $request->hospitalName,
             'labRequest' => '1',
 
             'medicines' => '',
