@@ -66,8 +66,8 @@ class CalendarController extends Controller
 
                 $hospitals = $this->firestore->database()->collection("Hospitals")->where('doctorId', '==', $data['id'])->documents()->rows();
                 $data['hospital'] = [];
-                
-                foreach($hospitals as $hospital){
+
+                foreach ($hospitals as $hospital) {
                     $hospitalData = $hospital->data();
                     $hospitalData['id'] = $hospital->id();
 
@@ -94,8 +94,8 @@ class CalendarController extends Controller
 
             $hospitals = $this->firestore->database()->collection("Hospitals")->where('doctorId', '==', Auth::user()->id_fb)->documents()->rows();
             $user['hospital'] = [];
-            
-            foreach($hospitals as $hospital){
+
+            foreach ($hospitals as $hospital) {
                 $hospitalData = $hospital->data();
                 $hospitalData['id'] = $hospital->id();
 
@@ -354,6 +354,20 @@ class CalendarController extends Controller
         } catch (\Exception $e) {
             return $e;
         }
+        return redirect('/calendar');
+    }
+
+    public function cancel($id)
+    {
+        try {
+            $appointment = $this->firestore->database()->collection("AppointmentList")->document($id);
+            $appointment->update([
+                ['path' => 'appointStatus', 'value' => 'Cancelled'],
+            ]);
+        } catch (\Exception $e) {
+            return $e;
+        }
+
         return redirect('/calendar');
     }
 }

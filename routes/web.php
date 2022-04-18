@@ -79,6 +79,7 @@ Route::prefix('calendar')->name('calendar.')->group(function () {
     Route::get('/setongoing/{id}', [CalendarController::class, 'setOnGoing']);
     Route::get('/setlate/{id}', [CalendarController::class, 'setLate']);
     Route::get('/setearly/{id}', [CalendarController::class, 'setEarly']);
+    Route::get('/cancel/{id}', [CalendarController::class, 'cancel']);
 });
 
 Route::prefix('inquiry')->name('inquiry.')->group(function () {

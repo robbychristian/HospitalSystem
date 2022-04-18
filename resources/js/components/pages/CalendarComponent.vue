@@ -30,7 +30,7 @@
                     @click="showAppointments"
                     class="btn"
                     style="background-color: #14679b"
-                    ><i class="fas fa-list"></i> Show Appointments</b-button
+                    ><i class="fas fa-list"></i> Hospital Appointments</b-button
                 >
             </div>
 
@@ -50,7 +50,7 @@
         <b-modal
             id="modal-tall"
             centered
-            title="Show Appointments"
+            title="Hospital Appointments"
             ref="showAppointments"
             size="xl"
             :fields="this.fields"
@@ -90,7 +90,7 @@
                         ></b-form-select>
                     </b-col>
                 </b-row>
-                
+
                 <b-row>
                     <b-col sm="4"><label>Appointment State: </label></b-col>
                     <b-col sm="8">
@@ -112,7 +112,11 @@
                             type="radio"
                             id="two"
                             value="Hospital"
-                            :disabled="user != null && user != '' ? user.hospital.length <= 0 : true"
+                            :disabled="
+                                user != null && user != ''
+                                    ? user.hospital.length <= 0
+                                    : true
+                            "
                             v-model="appointState"
                             @change="changeDate(true)"
                         />
@@ -148,7 +152,12 @@
                             :date-disabled-fn="dateDisabled"
                             :min="min"
                             @input="updateSlotsOrQueue()"
-                            :disabled="user.length == 0 || appointState == '' || (appointState == 'Hospital' && selectedHospital == '') "
+                            :disabled="
+                                user.length == 0 ||
+                                appointState == '' ||
+                                (appointState == 'Hospital' &&
+                                    selectedHospital == '')
+                            "
                         ></b-form-datepicker>
                     </b-col>
                 </b-row>
@@ -176,16 +185,26 @@
 
                 <b-row v-else-if="appointState == 'Hospital'">
                     <b-col sm="2"><label>Queue: </label></b-col>
-                    <b-col sm="10"><label> {{queue}} </label></b-col>
+                    <b-col sm="10"
+                        ><label> {{ queue }} </label></b-col
+                    >
                     <input
                         type="hidden"
                         name="hospitalName"
-                        :value="selectedHospital == '' || selectedHospital == null ? '' : selectedHospital.hospitalName"
+                        :value="
+                            selectedHospital == '' || selectedHospital == null
+                                ? ''
+                                : selectedHospital.hospitalName
+                        "
                     />
                     <input
                         type="hidden"
                         name="hospitalAddress"
-                        :value="selectedHospital == '' || selectedHospital == null ? '' : selectedHospital.hospitalAddress"
+                        :value="
+                            selectedHospital == '' || selectedHospital == null
+                                ? ''
+                                : selectedHospital.hospitalAddress
+                        "
                     />
                 </b-row>
 
@@ -213,7 +232,6 @@
                         ></b-form-select>
                     </b-col>
                 </b-row>
-
             </form>
         </b-modal>
         <!-- MODAL FOR ADD APPOINTMENT -->
@@ -257,20 +275,42 @@ export default {
         let allAppointments = this.appointmentss;
 
         allAppointments.forEach(this.toEvents);
+        const arr = [4, 3, 6, 8, 1, 2, 0];
         //FOR MODAL
         const appointmentModal = JSON.parse(this.appointments);
         for (let i = 0; i < appointmentModal.length; i++) {
-            const newObject = {
-                Patient:
-                    appointmentModal[i].pfName +
-                    " " +
-                    appointmentModal[i].plName,
-                Date: appointmentModal[i].bookingDate,
-                Time: appointmentModal[i].bookingSchedule,
-                Status: appointmentModal[i].status,
-                Actions: `<div class="d-flex justify-content-space"><div class="px-1"><a href="calendar/setongoing/${appointmentModal[i].id}" class="btn btn-warning"><i class="fas fa-history"></i></a></div><div class="px-1"><a href="calendar/setlate/${appointmentModal[i].id}" class="btn btn-danger"><i class="fa-solid fa-user-clock"></i></a></div><div class="px-1"><a href="calendar/setearly/${appointmentModal[i].id}" class="btn btn-success mr-2"><i class="fas fa-user-check"></i></a></div></div>`,
-            };
-            this.appointmentModalData.push(newObject);
+            if (
+                appointmentModal[i].appointDate == moment().format("MM/DD/y") &&
+                appointmentModal[i].appointState == "Hospital"
+            ) {
+                console.log(moment(appointmentModal[i].bookingSchedule));
+                console.log(moment().format("MM/DD/y"));
+                const newObject = {
+                    Queue: appointmentModal[i].prescribeNo,
+                    Patient:
+                        appointmentModal[i].pfName +
+                        " " +
+                        appointmentModal[i].plName,
+                    Date: appointmentModal[i].appointDate,
+                    Status: appointmentModal[i].status,
+                    Actions: `<div class="d-flex justify-content-space"><div class="px-1"><a href="calendar/setongoing/${appointmentModal[i].id}" class="btn btn-primary"><i class="fas fa-history"></i></a></div><div class="px-1"><a href="calendar/setlate/${appointmentModal[i].id}" class="btn btn-warning"><i class="fa-solid fa-user-clock text-white"></i></a></div><div class="px-1"><a href="calendar/setearly/${appointmentModal[i].id}" class="btn btn-success mr-2"><i class="fas fa-user-check"></i></a></div><div class="px-1"><a href="calendar/cancel/${appointmentModal[i].id}" class="btn btn-danger mr-2">Cancel</a></div></div>`,
+                };
+                this.appointmentModalData.push(newObject);
+                //SORTING DEPENDE SA QUEUE
+                this.appointmentModalData = this.appointmentModalData.sort(
+                    (a, b) => {
+                        if (a.Queue < b.Queue) {
+                            return -1;
+                        }
+                        if (a.Queue > b.Queue) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                );
+            } else {
+                console.log("Nothing here");
+            }
         }
         // this.populateWeekdays();
     },
@@ -310,7 +350,7 @@ export default {
             //FOR SHOW APPOINTMENTS MODAL
             fields: ["Patient", "Date", "Time", "Status", "Action"],
             appointmentModalData: [],
-            queue: '',
+            queue: "",
 
             // Sunday = 0, Saturday 6
             weekdays: {
@@ -346,25 +386,23 @@ export default {
         };
     },
     methods: {
-        updateSlotsOrQueue(){
-            if(this.appointState == 'Hospital'){
-                this.updateQueue()
-            }
-            else{
-                this.updateSlots()
+        updateSlotsOrQueue() {
+            if (this.appointState == "Hospital") {
+                this.updateQueue();
+            } else {
+                this.updateSlots();
             }
         },
-        
-        changeDate(isHospital){
-            this.timeSlot = null
-            this.selectedHospital = ''
-            this.date = ''
-            this.queue = ''
 
-            if(isHospital){
-                this.pupulateOptHos()
-            }
-            else{
+        changeDate(isHospital) {
+            this.timeSlot = null;
+            this.selectedHospital = "";
+            this.date = "";
+            this.queue = "";
+
+            if (isHospital) {
+                this.pupulateOptHos();
+            } else {
                 this.populateWeekdays();
             }
         },
@@ -399,29 +437,34 @@ export default {
                     text: "Some input fields are empty!",
                     icon: "error",
                 });
-            } 
-            else if(this.appointState == 'Hospital' && (this.selectedHospital == '')){
+            } else if (
+                this.appointState == "Hospital" &&
+                this.selectedHospital == ""
+            ) {
                 swal({
                     title: "Error",
                     text: "Some input fields are empty!",
                     icon: "error",
                 });
-            }
-            else if(this.appointState == 'Teleconsultation' && (this.timeSlot == null)){
+            } else if (
+                this.appointState == "Teleconsultation" &&
+                this.timeSlot == null
+            ) {
                 swal({
                     title: "Error",
                     text: "Some input fields are empty!",
                     icon: "error",
                 });
-            }
-            else if(this.appointState == 'Hospital' && (this.queue == 'FULL')){
+            } else if (
+                this.appointState == "Hospital" &&
+                this.queue == "FULL"
+            ) {
                 swal({
                     title: "Error",
                     text: "Queue is Already Full!",
                     icon: "error",
                 });
-            }
-            else {
+            } else {
                 swal({
                     title: "Appointment Added",
                     text: "Your new appointment for teleconsultation has been added!",
@@ -486,11 +529,11 @@ export default {
             }
         },
 
-        pupulateOptHos(){
+        pupulateOptHos() {
             this.optHos = [];
-            let length = this.user.hospital.length
+            let length = this.user.hospital.length;
 
-            for(let i = 0; i < length; i++){
+            for (let i = 0; i < length; i++) {
                 let data = {
                     value: this.user.hospital[i],
                     text: this.user.hospital[i].hospitalName,
@@ -498,17 +541,22 @@ export default {
 
                 this.optHos.push(data);
             }
-            
         },
 
         toEvents(item) {
             let date = item.appointDate;
             let schedule = item.bookingSchedule;
-            let start = schedule.substring(
-                schedule.indexOf(" ") + 1,
-                schedule.lastIndexOf("-") - 1
-            );
-            let end = schedule.substring(schedule.lastIndexOf(" ") + 1);
+            let start =
+                schedule == "" || schedule == null
+                    ? ""
+                    : schedule.substring(
+                          schedule.indexOf(" ") + 1,
+                          schedule.lastIndexOf("-") - 1
+                      );
+            let end =
+                schedule == "" || schedule == null
+                    ? ""
+                    : schedule.substring(schedule.lastIndexOf(" ") + 1);
             let name = item.pfName + " " + item.plName;
 
             let data = {
@@ -590,8 +638,8 @@ export default {
             }
         },
 
-        updateHospital(){
-            this.date = ''
+        updateHospital() {
+            this.date = "";
             this.populateWeekdays();
         },
 
@@ -604,41 +652,33 @@ export default {
             }
 
             // console.log(this.user);
-            this.appointState = ''
+            this.appointState = "";
 
             // this.populateWeekdays();
         },
 
-        updateQueue(){
+        updateQueue() {
             let appointDate = moment(this.date).format("L");
-            let length = this.appointmentss.length
-            let day = [
-                "sun",
-                "mon",
-                "tue",
-                "wed",
-                "thu",
-                "fri",
-                "sat",
-            ]
-            let id = this.user.id
+            let length = this.appointmentss.length;
+            let day = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+            let id = this.user.id;
 
-            let maxQueue = parseInt(this.selectedHospital[day[moment(this.date).day()]][2])
-            let count = 0
+            let maxQueue = parseInt(
+                this.selectedHospital[day[moment(this.date).day()]][2]
+            );
+            let count = 0;
 
-            for(let i = 0; i < length; i++){
+            for (let i = 0; i < length; i++) {
                 if (appointDate == this.appointmentss[i].appointDate) {
                     if (id == this.appointmentss[i].drId) {
-                        if( 'Hospital' == this.appointmentss[i].appointState)
+                        if ("Hospital" == this.appointmentss[i].appointState)
                             count++;
                     }
                 }
             }
 
-            if( count < maxQueue) this.queue = 'NOT FULL'
-            else this.queue = 'FULL'
-            
-
+            if (count < maxQueue) this.queue = "NOT FULL";
+            else this.queue = "FULL";
         },
 
         conflicts(slot) {
@@ -660,11 +700,13 @@ export default {
             for (let i = 0; i < length; i++) {
                 if (appointDate == this.appointmentss[i].appointDate) {
                     if (id == this.appointmentss[i].drId) {
-                        
-                        if( 'Hospital' != this.appointmentss[i].appointState){
-                            sched = this.appointmentss[i].bookingSchedule.substr(
-                                this.appointmentss[i].bookingSchedule.indexOf(" ") +
-                                    1
+                        if ("Hospital" != this.appointmentss[i].appointState) {
+                            sched = this.appointmentss[
+                                i
+                            ].bookingSchedule.substr(
+                                this.appointmentss[i].bookingSchedule.indexOf(
+                                    " "
+                                ) + 1
                             );
                             sched = sched.trim();
                             time1s = sched.substr(0, sched.indexOf(" "));
@@ -701,8 +743,8 @@ export default {
                     { day: "fri", field: "teleFri" },
                     { day: "sat", field: "teleSat" },
                 ];
-                if( this.appointState == 'Hospital'){
-                    drData = this.selectedHospital
+                if (this.appointState == "Hospital") {
+                    drData = this.selectedHospital;
 
                     days = [
                         { day: "sun", field: "sun" },
