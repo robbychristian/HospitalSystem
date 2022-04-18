@@ -191,7 +191,7 @@ class CalendarController extends Controller
             'bookingSchedule' => $request->timeSlot,
 
             'drId' => $doctor['id'],
-            'consultFee' => $doctor['consultFee'],
+            'consultFee' => $request->appointState == 'Hospital' ? [$doctor['consultFee']] : [] ,
             'drClinic' => $doctor['clinicAddress'],
             'drDegree' => $doctor['degree'],
             'drEmail' => $doctor['email'],
@@ -200,6 +200,7 @@ class CalendarController extends Controller
             'drfName' => $doctor['fname'],
             'specialization' => $doctor['specialization'],
             'drlName' => $doctor['lname'],
+            'signature' => $doctor['signature'],
 
             'hospitalAddress' => $request->hospitalAddress,
             'hospitalName' => $request->hospitalName,
@@ -227,7 +228,7 @@ class CalendarController extends Controller
             'reviewDate' => '',
             'reviewStar' => '',
             'reviewTimeStamp' => '',
-            'teleconsultFee' => '',
+            'teleconsultFee' => $request->appointState == 'Hospital' ? [] : [$doctor['teleconsultFee']],
             'timeStamp' => '',
             'advice' => null,
 

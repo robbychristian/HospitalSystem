@@ -86,6 +86,29 @@ class AppointmentController extends Controller
             $appointment->update([
                 ['path' => 'appointStatus', 'value' => $request->status],
             ]);
+            
+            $data = $appointment->snapshot()->data();
+
+            if($data['appointState'] == 'Hospital'){
+                $appointDate = $data['appointDate'];
+                $drId = $data['drId'];
+                $count = 0;
+
+                $appointments =  $this->firestore->database()->collection('AppointmentList')->where('drId', '==', $drId)->documents()->rows();
+                
+                foreach($appointments as $appoint){
+                    $appointData = $appoint->data();
+
+                    if($appointData['appointDate'] == $appointDate && $appointData['appointState'] == 'Hospital'){
+                        $count = $count + 1;
+                    }
+                }
+
+                $appointment->update([
+                    ['path' => 'prescribeNo', 'value' => (string)($count + 1)],
+                ]);
+            }
+            
         } catch (\Exception $e) {
             return ['hasError' => true];
         }
