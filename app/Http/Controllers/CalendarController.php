@@ -177,14 +177,7 @@ class CalendarController extends Controller
 
         $startTime = Carbon::create($startDate)->isoFormat("hh:mm");
         $endTime = Carbon::create($endDate)->isoFormat("hh:mm");
-        //GET LAST QUEUE + 1
-        $doctorLastQueue = $this->firestore->database()->collection("AppointmentList")->where("drId", '==', Auth::user()->id_fb)->documents();
-        $lastNo = 0;
-        foreach ($doctorLastQueue as $lastQueue) {
-            if ($lastQueue->data()['queue'] > $lastNo) {
-                $lastNo = $lastQueue->data()['queue'] + 1;
-            }
-        }
+
         //MAKE NEW APPOINTMENT
         $newAppointment = $this->firestore->database()->collection("AppointmentList")->newDocument();
         $newAppointment->set([
@@ -360,6 +353,20 @@ class CalendarController extends Controller
         } catch (\Exception $e) {
             return $e;
         }
+        return redirect('/calendar');
+    }
+
+    public function cancel($id)
+    {
+        try {
+            $appointment = $this->firestore->database()->collection("AppointmentList")->document($id);
+            $appointment->update([
+                ['path' => 'appointStatus', 'value' => 'Cancelled'],
+            ]);
+        } catch (\Exception $e) {
+            return $e;
+        }
+
         return redirect('/calendar');
     }
 }

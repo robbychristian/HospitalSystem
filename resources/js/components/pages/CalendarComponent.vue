@@ -286,14 +286,14 @@ export default {
                 console.log(moment(appointmentModal[i].bookingSchedule));
                 console.log(moment().format("MM/DD/y"));
                 const newObject = {
-                    Queue: appointmentModal[i].queue,
+                    Queue: appointmentModal[i].prescribeNo,
                     Patient:
                         appointmentModal[i].pfName +
                         " " +
                         appointmentModal[i].plName,
                     Date: appointmentModal[i].appointDate,
                     Status: appointmentModal[i].status,
-                    Actions: `<div class="d-flex justify-content-space"><div class="px-1"><a href="calendar/setongoing/${appointmentModal[i].id}" class="btn btn-warning"><i class="fas fa-history"></i></a></div><div class="px-1"><a href="calendar/setlate/${appointmentModal[i].id}" class="btn btn-danger"><i class="fa-solid fa-user-clock"></i></a></div><div class="px-1"><a href="calendar/setearly/${appointmentModal[i].id}" class="btn btn-success mr-2"><i class="fas fa-user-check"></i></a></div></div>`,
+                    Actions: `<div class="d-flex justify-content-space"><div class="px-1"><a href="calendar/setongoing/${appointmentModal[i].id}" class="btn btn-primary"><i class="fas fa-history"></i></a></div><div class="px-1"><a href="calendar/setlate/${appointmentModal[i].id}" class="btn btn-warning"><i class="fa-solid fa-user-clock text-white"></i></a></div><div class="px-1"><a href="calendar/setearly/${appointmentModal[i].id}" class="btn btn-success mr-2"><i class="fas fa-user-check"></i></a></div><div class="px-1"><a href="calendar/cancel/${appointmentModal[i].id}" class="btn btn-danger mr-2">Cancel</a></div></div>`,
                 };
                 this.appointmentModalData.push(newObject);
                 //SORTING DEPENDE SA QUEUE
@@ -546,11 +546,17 @@ export default {
         toEvents(item) {
             let date = item.appointDate;
             let schedule = item.bookingSchedule;
-            let start = schedule.substring(
-                schedule.indexOf(" ") + 1,
-                schedule.lastIndexOf("-") - 1
-            );
-            let end = schedule.substring(schedule.lastIndexOf(" ") + 1);
+            let start =
+                schedule == "" || schedule == null
+                    ? ""
+                    : schedule.substring(
+                          schedule.indexOf(" ") + 1,
+                          schedule.lastIndexOf("-") - 1
+                      );
+            let end =
+                schedule == "" || schedule == null
+                    ? ""
+                    : schedule.substring(schedule.lastIndexOf(" ") + 1);
             let name = item.pfName + " " + item.plName;
 
             let data = {
