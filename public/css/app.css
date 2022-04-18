@@ -25157,65 +25157,6 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-.lab-form {
-  padding: 0.5rem;
-  width: 100%;
-}
-.lab-form .top-info {
-  background-color: #C0504D;
-  color: white;
-  text-align: center;
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px black solid;
-}
-.lab-form .top-info p {
-  margin-bottom: 0px;
-}
-.lab-form .header .patient-box {
-  display: flex;
-  flex-direction: column;
-  border: 1px black solid;
-  padding: 0.35rem;
-  flex-grow: 1;
-}
-.lab-form .header .patient-box p {
-  margin-bottom: 0px;
-}
-.lab-form .header .patient-box h6, .lab-form .header .patient-box .h6 {
-  margin-bottom: 0.25rem;
-}
-.lab-form .body {
-  display: flex;
-}
-.lab-form .body .content-box {
-  width: 50%;
-}
-.lab-form .body .content-box .top-info {
-  padding: 0.25rem !important;
-}
-.lab-form .body .content-box .top-info h6, .lab-form .body .content-box .top-info .h6 {
-  margin-bottom: 0px !important;
-}
-.lab-form .body .content-box .info-content {
-  border: 1px black solid;
-  padding: 0.25rem;
-}
-.lab-form .body .content-box .info-content .box {
-  width: 13px;
-  height: 13px;
-  background-color: white;
-  margin-right: 0.25rem;
-  border: #000 1px solid;
-  border-radius: 2px;
-}
-.lab-form .body .content-box .info-content .checked {
-  background-color: #000 !important;
-}
-.lab-form .body .content-box .info-content p {
-  margin-bottom: 0px;
-}
-
 .topbar {
   width: 100%;
   background-color: white;
@@ -25460,7 +25401,7 @@ textarea.form-control-lg {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 .preview-details .prescribe-form {
   width: 100%;
@@ -25579,6 +25520,26 @@ textarea.form-control-lg {
   align-items: center;
   margin-top: 0.5rem;
 }
+.preview-details .prescribe-form .footer .payment {
+  background-color: #D9D9D9;
+}
+.preview-details .prescribe-form .footer .payment h5, .preview-details .prescribe-form .footer .payment .h5 {
+  margin-top: 1.5rem;
+  color: #14679B;
+  text-align: start !important;
+  width: 815px;
+}
+.preview-details .prescribe-form .footer .payment .signature {
+  position: relative;
+}
+.preview-details .prescribe-form .footer .payment .signature .img {
+  margin-bottom: 0.5rem;
+  max-width: 100px;
+  max-height: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .preview-details .lab-form {
   width: 100%;
   max-width: 1000px;
@@ -25608,13 +25569,11 @@ textarea.form-control-lg {
 .preview-details .lab-form .header .patient-box h6, .preview-details .lab-form .header .patient-box .h6 {
   margin-bottom: 0.25rem;
 }
-.preview-details .lab-form .body {
-  display: flex;
-}
 .preview-details .lab-form .body .content-box {
-  width: 50%;
+  width: 100%;
 }
 .preview-details .lab-form .body .content-box .top-info {
+  text-transform: uppercase;
   padding: 0.25rem !important;
 }
 .preview-details .lab-form .body .content-box .top-info h6, .preview-details .lab-form .body .content-box .top-info .h6 {
@@ -25623,10 +25582,12 @@ textarea.form-control-lg {
 .preview-details .lab-form .body .content-box .info-content {
   border: 1px black solid;
   padding: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
 }
 .preview-details .lab-form .body .content-box .info-content .box {
-  width: 13px;
-  height: 13px;
+  width: 13px !important;
+  height: 13px !important;
   background-color: white;
   margin-right: 0.25rem;
   border: #000 1px solid;
@@ -25804,19 +25765,20 @@ textarea.form-control-lg {
 .inquiry-page .inquiry-content .form-box .form-body .lab-form .header .patient-box h6, .inquiry-page .inquiry-content .form-box .form-body .lab-form .header .patient-box .h6 {
   margin-bottom: 0.25rem;
 }
-.inquiry-page .inquiry-content .form-box .form-body .lab-form .body {
-  display: flex;
-}
 .inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box {
-  width: 50%;
+  width: 100%;
 }
 .inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .top-info {
   padding: 0.25rem !important;
+  text-transform: uppercase;
 }
 .inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .top-info h6, .inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .top-info .h6 {
   margin-bottom: 0px !important;
 }
 .inquiry-page .inquiry-content .form-box .form-body .lab-form .body .content-box .info-content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   border: 1px black solid;
   padding: 0.25rem;
 }
@@ -25931,6 +25893,26 @@ textarea.form-control-lg {
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .footer .payment {
+  background-color: #D9D9D9;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .footer .payment h5, .inquiry-page .inquiry-content .form-box .form-body .prescribe-form .footer .payment .h5 {
+  margin-top: 1.5rem;
+  color: #14679B;
+  text-align: start !important;
+  width: 815px;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .footer .payment .signature {
+  position: relative;
+}
+.inquiry-page .inquiry-content .form-box .form-body .prescribe-form .footer .payment .signature .img {
+  margin-bottom: 0.5rem;
+  width: 100px;
+  height: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .dashboard-page {

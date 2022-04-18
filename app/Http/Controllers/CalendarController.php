@@ -63,7 +63,19 @@ class CalendarController extends Controller
             foreach ($allDoctors as $doctor) {
                 $data = $doctor->data();
                 $data['id'] = $doctor->id();
-                $data['hospital'] = count($this->firestore->database()->collection("Hospitals")->where('doctorId', '==', $data['id'])->documents()->rows());
+
+                $hospitals = $this->firestore->database()->collection("Hospitals")->where('doctorId', '==', $data['id'])->documents()->rows();
+                $data['hospital'] = [];
+
+                foreach ($hospitals as $hospital) {
+                    $hospitalData = $hospital->data();
+                    $hospitalData['id'] = $hospital->id();
+
+                    array_push(
+                        $data['hospital'],
+                        $hospitalData
+                    );
+                }
 
                 array_push(
                     $doctors,
@@ -79,7 +91,19 @@ class CalendarController extends Controller
             // $getDrData = $drQuery->documents();
 
             $user = $this->firestore->database()->collection("Doctors")->document(Auth::user()->id_fb)->snapshot()->data();
-            $user['hospital'] = count($this->firestore->database()->collection("Hospitals")->where('doctorId', '==', Auth::user()->id_fb)->documents()->rows());
+
+            $hospitals = $this->firestore->database()->collection("Hospitals")->where('doctorId', '==', Auth::user()->id_fb)->documents()->rows();
+            $user['hospital'] = [];
+
+            foreach ($hospitals as $hospital) {
+                $hospitalData = $hospital->data();
+                $hospitalData['id'] = $hospital->id();
+
+                array_push(
+                    $user['hospital'],
+                    $hospitalData
+                );
+            }
 
             $appointments = [];
             // $doctorsDatas = [];
@@ -163,119 +187,63 @@ class CalendarController extends Controller
         }
         //MAKE NEW APPOINTMENT
         $newAppointment = $this->firestore->database()->collection("AppointmentList")->newDocument();
+        $newAppointment->set([
+            'id' => $newAppointment->id(),
+            'actualProblem' => $request->problem,
+            'appointDate' => Carbon::parse($request->date)->format('m/d/Y'),
+            'appointState' => $request->appointState,
+            'appointStatus' => 'Pending',
+            'appointTime' => '',
+            'bookingDate' => now()->format('m/d/Y'),
+            'bookingSchedule' => $request->timeSlot,
 
-        if ($request->appointState == 'Hospital') {
-            $newAppointment->set([
-                'id' => $newAppointment->id(),
-                'actualProblem' => $request->problem,
-                'appointDate' => Carbon::parse($request->date)->format('m/d/Y'),
-                'appointState' => $request->appointState,
-                'appointStatus' => 'Pending',
-                'appointTime' => '',
-                'bookingDate' => Carbon::now()->format('m/d/Y'),
-                'bookingSchedule' => $request->timeSlot,
+            'drId' => $doctor['id'],
+            'consultFee' => $doctor['consultFee'],
+            'drClinic' => $doctor['clinicAddress'],
+            'drDegree' => $doctor['degree'],
+            'drEmail' => $doctor['email'],
+            'drPhone' => $doctor['phone'],
+            'drPhotoUrl' => $doctor['photoUrl'],
+            'drfName' => $doctor['fname'],
+            'specialization' => $doctor['specialization'],
+            'drlName' => $doctor['lname'],
 
-                'drId' => $doctor['id'],
-                'consultFee' => $doctor['consultFee'],
-                'drClinic' => $doctor['clinicAddress'],
-                'drDegree' => $doctor['degree'],
-                'drEmail' => $doctor['email'],
-                'drPhone' => $doctor['phone'],
-                'drPhotoUrl' => $doctor['photoUrl'],
-                'drfName' => $doctor['fname'],
-                'specialization' => $doctor['specialization'],
-                'drlName' => $doctor['lname'],
+            'hospitalAddress' => $request->hospitalAddress,
+            'hospitalName' => $request->hospitalName,
+            'labRequest' => '1',
 
-                'hospitalAddress' => '',
-                'hospitalName' => '',
-                'labRequest' => '1',
+            'medicines' => '',
+            'nextVisit' => '',
 
-                'medicines' => '',
-                'nextVisit' => '',
+            'pAddress' => $patient['address'],
+            'pBirthdate' => $patient['birthdate'],
+            'pGender' => $patient['gender'],
+            'pPhone' => $patient['phone'],
+            'pPhotoUrl' => $patient['imageUrl'], //change to imageUrl in PRODUCTION //change to photoUrl in DEVELOPMENT
+            'pfName' => $patient['fname'],
+            'plName' => $patient['lname'],
+            'pProblem' => $request->problem,
+            'pId' => $request->patient,
 
-                'pAddress' => $patient['address'],
-                'pBirthdate' => $patient['birthdate'],
-                'pGender' => $patient['gender'],
-                'pPhone' => $patient['phone'],
-                'pPhotoUrl' => $patient['photoUrl'], //change to imageUrl in PRODUCTION //change to photoUrl in DEVELOPMENT
-                'pfName' => $patient['fname'],
-                'plName' => $patient['lname'],
-                'pProblem' => $request->problem,
-                'pId' => $request->patient,
+            'prescribeDate' => '',
+            'prescribeNo' => '',
+            'prescribeState' => 'no',
+            'rx' => '',
 
-                'prescribeDate' => '',
-                'prescribeNo' => '',
-                'prescribeState' => 'no',
-                'rx' => '',
+            'reviewComment' => '',
+            'reviewDate' => '',
+            'reviewStar' => '',
+            'reviewTimeStamp' => '',
+            'teleconsultFee' => '',
+            'timeStamp' => '',
+            'advice' => null,
 
-                'reviewComment' => '',
-                'reviewDate' => '',
-                'reviewStar' => '',
-                'reviewTimeStamp' => '',
-                'teleconsultFee' => '',
-                'timeStamp' => '',
-                'advice' => null,
-
-                //NEW
-                'status' => 'Pending',
-                'queue' => $lastNo
-            ]);
-        } else {
-            $newAppointment->set([
-                'id' => $newAppointment->id(),
-                'actualProblem' => $request->problem,
-                'appointDate' => Carbon::parse($request->date)->format('m/d/Y'),
-                'appointState' => $request->appointState,
-                'appointStatus' => 'Pending',
-                'appointTime' => '',
-                'bookingDate' => Carbon::now()->format('m/d/Y'),
-                'bookingSchedule' => $request->timeSlot,
-
-                'drId' => $doctor['id'],
-                'consultFee' => $doctor['consultFee'],
-                'drClinic' => $doctor['clinicAddress'],
-                'drDegree' => $doctor['degree'],
-                'drEmail' => $doctor['email'],
-                'drPhone' => $doctor['phone'],
-                'drPhotoUrl' => $doctor['photoUrl'],
-                'drfName' => $doctor['fname'],
-                'specialization' => $doctor['specialization'],
-                'drlName' => $doctor['lname'],
-
-                'hospitalAddress' => '',
-                'hospitalName' => '',
-                'labRequest' => '1',
-
-                'medicines' => '',
-                'nextVisit' => '',
-
-                'pAddress' => $patient['address'],
-                'pBirthdate' => $patient['birthdate'],
-                'pGender' => $patient['gender'],
-                'pPhone' => $patient['phone'],
-                'pPhotoUrl' => $patient['photoUrl'], //change to imageUrl in PRODUCTION //change to photoUrl in DEVELOPMENT
-                'pfName' => $patient['fname'],
-                'plName' => $patient['lname'],
-                'pProblem' => $request->problem,
-                'pId' => $request->patient,
-
-                'prescribeDate' => '',
-                'prescribeNo' => '',
-                'prescribeState' => 'no',
-                'rx' => '',
-
-                'reviewComment' => '',
-                'reviewDate' => '',
-                'reviewStar' => '',
-                'reviewTimeStamp' => '',
-                'teleconsultFee' => '',
-                'timeStamp' => '',
-                'advice' => null,
-
-                //NEW
-                'status' => ''
-            ]);
-        }
+            //NEW
+            'status' => 'Pending',
+            'lic' => $doctor['lic'],
+            's2' => $doctor['s2'],
+            'ptr' => $doctor['ptr'],
+        ]);
 
         //GET ALL EVENTS
         $allAppointments = $this->firestore->database()->collection("AppointmentList")->documents()->rows();

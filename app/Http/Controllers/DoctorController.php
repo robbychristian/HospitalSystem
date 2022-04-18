@@ -59,6 +59,7 @@ class DoctorController extends Controller
             'provideTeleService' => true,
             'teleconsultFee' => '0',
             'otherSpecialization' => null,
+            'signature' => null,
             'teleMon' => null,
             'teleSat' => null,
             'teleSun' => null,
@@ -66,6 +67,9 @@ class DoctorController extends Controller
             'teleTue' => null,
             'teleWed' => null,
             'teleFri' => null,
+            'lic' => $data['lic'],
+            'ptr' => $data['ptr'],
+            's2' => $data['s2'],
         ]);
 
         $userProperties = [
@@ -92,6 +96,10 @@ class DoctorController extends Controller
             'degree' => $data['degree'],
             'password' => Hash::make($data['password']),
             'joinDate' => $data['joindate'],
+            'lic' => $data['lic'],
+            'ptr' => $data['ptr'],
+            's2' => $data['s2'],
+            'signature' => null,
         ]);
 
         return $userModel;
@@ -101,7 +109,7 @@ class DoctorController extends Controller
         if($withEmail){
             return Validator::make($data, [
                 'clinicAddress' => ['required', 'string', 'max:255'],
-                'consultFee' => ['required', 'integer',],
+                'consultFee' => ['required', 'numeric', 'gt:0'],
                 'specialization' => ['required', 'string', 'max:255', ],
                 'firstName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255', ],
                 'lastName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255', ],
@@ -109,6 +117,9 @@ class DoctorController extends Controller
                 'degree' => ['required', 'string', 'max:255', ],
                 'photo' => ['nullable ', 'image', 'mimes:jpg,png,jpeg', ],
                 'phone' => ['required', 'numeric', 'digits_between:9,11', ],
+                'lic' => ['required', 'string', 'max:255', ],
+                'ptr' => ['required', 'string', 'max:255', ],
+                's2' => ['nullable ', 'string', 'max:255', ],
                 // 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
         }
@@ -122,7 +133,10 @@ class DoctorController extends Controller
             'degree' => ['required', 'string', 'max:255', ],
             'photo' => ['nullable ', 'image', 'mimes:jpg,png,jpeg', ],
             'phone' => ['required', 'numeric', 'digits_between:9,11', ],
-            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
+
+            'lic' => ['required', 'string', 'max:255', ],
+            'ptr' => ['required', 'string', 'max:255', ],
+            's2' => ['nullable ', 'string', 'max:255', ],
         ]);
     }
 
@@ -165,8 +179,11 @@ class DoctorController extends Controller
             ['path' => 'photoUrl', 'value' => $data['photo'] ],
             ['path' => 'degree', 'value' =>  $data['degree']],
             ['path' => 'name', 'value' => $name],
+            ['path' => 'lic', 'value' => $data['lic']],
+            ['path' => 'ptr', 'value' => $data['ptr']],
+            ['path' => 's2', 'value' => $data['s2']],
         ];
-        
+
         if($data['withEmail']){ 
             $doctor->isVerified = false;
             array_push($updateArray, ['path' => 'isVerified', 'value' => 'NO']);
@@ -186,6 +203,9 @@ class DoctorController extends Controller
         $doctor->degree = $data['degree'];
         $doctor->consultFee = $data['consultFee'];
         $doctor->photoUrl = $data['photo'];
+        $doctor->lic = $data['lic'];
+        $doctor->ptr = $data['ptr'];
+        $doctor->s2 = $data['s2'];
 
         $doctor->save();
 

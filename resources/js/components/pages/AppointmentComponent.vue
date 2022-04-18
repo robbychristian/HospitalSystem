@@ -63,7 +63,8 @@
                         data.appointStatus,
                         'status',
                         data.appointStatus == 'Pending'
-                            ? conflicts(ind, data.drId)
+                            ? conflicts(ind, data.drId) ||
+                              queueCheck(ind, data.drId)
                                 ? 'bg-danger'
                                 : ''
                             : '',
@@ -91,6 +92,14 @@
                         {{ data.bookingSchedule }}
                     </p>
                     <p>
+                        Appointment Loc:
+                        {{
+                            data.appointState == "Hospital"
+                                ? data.hospitalName
+                                : data.appointState
+                        }}
+                    </p>
+                    <p>
                         Payment:
                         {{
                             data.proofOfPay ? "Online Payment" : "Cash on Hand"
@@ -107,74 +116,106 @@
                         Show Payment
                     </button>
 
-                    <div
-                        v-if="data.appointStatus == 'Pending'"
-                        class="d-flex px-3 py-1 mt-3 justify-content-between"
-                        style="background-color: #ececec"
-                    >
-                        <button
-                            @click="updateAppointment(data.id, 'Rejected', ind)"
-                            class="btn btn-sm p-1 btn-danger flex-grow-1"
-                        >
-                            Reject
-                        </button>
-                        <button
-                            @click="updateAppointment(data.id, 'Approved', ind)"
-                            class="btn btn-sm p-1 btn-success flex-grow-1"
-                        >
-                            Accept
-                        </button>
-                    </div>
-
-                    <div
-                        v-else-if="data.appointStatus == 'Pending payment'"
-                        class="d-flex px-3 py-1 mt-3 justify-content-between"
-                        style="background-color: #ececec"
-                    >
-                        <button
-                            @click="updateAppointment(data.id, 'Rejected', ind)"
-                            class="btn btn-sm p-1 btn-danger flex-grow-1"
-                        >
-                            Reject
-                        </button>
-                    </div>
-
-                    <div
-                        v-else-if="data.appointStatus == 'Approved'"
-                        class="d-flex px-3 py-1 mt-3 justify-content-between"
-                        style="background-color: #ececec"
-                    >
-                        <button
-                            @click="
-                                removeLab(
-                                    data.id,
-                                    ind,
-                                    data.labRequest == '1' ? '0' : '1'
-                                )
-                            "
-                            :class="[
-                                data.labRequest == '1'
-                                    ? 'bg-primary'
-                                    : 'bg-secondary',
-                                'btn btn-sm p-1  flex-grow-1 text-white btn-lab',
-                            ]"
-                            :disabled="data.labRequest == '2'"
-                        >
-                            Lab request
+                    <div class="appointment-info">
+                        <p>
+                            Schedule: {{ data.bookingDate }}
+                            {{ data.bookingSchedule }}
+                        </p>
+                        <p>
+                            Payment:
                             {{
-                                data.labRequest == 1
-                                    ? "unessential"
-                                    : "essential"
+                                data.proofOfPay
+                                    ? "Online Payment"
+                                    : "Cash on Hand"
                             }}
-                        </button>
+                        </p>
+                        <p class="text-danger">Reason: {{ data.pProblem }}</p>
                         <button
-                            @click="
-                                updateAppointment(data.id, 'Cancelled', ind)
+                            v-if="
+                                data.appointStatus == 'Pending' &&
+                                data.proofOfPay
                             "
-                            class="btn btn-sm p-1 btn-danger flex-grow-1"
+                            @click="showPayment(data.pName, data.proofOfPay)"
+                            class="btn btn-sm p-1 btn-info w-100 text-center text-white"
                         >
-                            Cancel
+                            Show Payment
                         </button>
+
+                        <div
+                            v-if="data.appointStatus == 'Pending'"
+                            class="d-flex px-3 py-1 mt-3 justify-content-between"
+                            style="background-color: #ececec"
+                        >
+                            <button
+                                @click="
+                                    updateAppointment(data.id, 'Rejected', ind)
+                                "
+                                class="btn btn-sm p-1 btn-danger flex-grow-1"
+                            >
+                                Reject
+                            </button>
+                            <button
+                                @click="
+                                    updateAppointment(data.id, 'Approved', ind)
+                                "
+                                class="btn btn-sm p-1 btn-success flex-grow-1"
+                            >
+                                Accept
+                            </button>
+                        </div>
+
+                        <div
+                            v-else-if="data.appointStatus == 'Pending payment'"
+                            class="d-flex px-3 py-1 mt-3 justify-content-between"
+                            style="background-color: #ececec"
+                        >
+                            <button
+                                @click="
+                                    updateAppointment(data.id, 'Rejected', ind)
+                                "
+                                class="btn btn-sm p-1 btn-danger flex-grow-1"
+                            >
+                                Reject
+                            </button>
+                        </div>
+
+                        <div
+                            v-else-if="data.appointStatus == 'Approved'"
+                            class="d-flex px-3 py-1 mt-3 justify-content-between"
+                            style="background-color: #ececec"
+                        >
+                            <button
+                                @click="
+                                    removeLab(
+                                        data.id,
+                                        ind,
+                                        data.labRequest == '1' ? '0' : '1'
+                                    )
+                                "
+                                :class="[
+                                    data.labRequest == '1'
+                                        ? 'bg-primary'
+                                        : 'bg-secondary',
+                                    'btn btn-sm p-1  flex-grow-1 text-white btn-lab',
+                                ]"
+                                :disabled="data.labRequest == '2'"
+                            >
+                                Lab request
+                                {{
+                                    data.labRequest == 1
+                                        ? "unessential"
+                                        : "essential"
+                                }}
+                            </button>
+                            <button
+                                @click="
+                                    updateAppointment(data.id, 'Cancelled', ind)
+                                "
+                                class="btn btn-sm p-1 btn-danger flex-grow-1"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,7 +231,7 @@ import { extendMoment } from "moment-range";
 const moment = extendMoment(Moment);
 
 export default {
-    props: ["appointmentData", "isAdmin"],
+    props: ["appointmentData", "isAdmin", "hospitalData"],
 
     data() {
         return {
@@ -211,6 +252,7 @@ export default {
                 },
             ],
             appointments: JSON.parse(this.appointmentData),
+            hospitals: JSON.parse(this.hospitalData),
         };
     },
 
@@ -219,50 +261,100 @@ export default {
     // },
 
     methods: {
-        conflicts(ind, id) {
-            let length = this.appointments.length;
-            let appointDate = this.appointments[ind].appointDate;
-
-            let sched = this.appointments[ind].bookingSchedule.substr(
-                this.appointments[ind].bookingSchedule.indexOf(" ") + 1
-            );
-            sched = sched.trim();
-            let time1s = sched.substr(0, sched.indexOf(" "));
-            let time1e = sched.substr(sched.lastIndexOf(" ") + 1);
-            var date1 = [
-                moment(appointDate + " " + time1s),
-                moment(appointDate + " " + time1e),
-            ];
-            var range = moment.range(date1);
+        selectedHospital(name) {
+            let length = this.hospitals.length;
 
             for (let i = 0; i < length; i++) {
-                if (ind != i) {
-                    if (id == this.appointments[i].drId) {
-                        if (appointDate == this.appointments[i].appointDate) {
+                if (name == this.hospitals[i].hospitalName) {
+                    return this.hospitals[i];
+                }
+            }
+
+            return null;
+        },
+
+        queueCheck(ind, id) {
+            if (this.appointments[ind].appointState == "Hospital") {
+                let length = this.appointments.length;
+                let appointDate = this.appointments[ind].appointDate;
+
+                let day = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+                let hospital = this.selectedHospital(
+                    this.appointments[ind].hospitalName
+                );
+                let maxQueue =
+                    hospital == null
+                        ? 0
+                        : parseInt(hospital[day[moment(appointDate).day()]][2]);
+                let count = 0;
+
+                for (let i = 0; i < length; i++) {
+                    if (appointDate == this.appointments[i].appointDate) {
+                        if (id == this.appointments[i].drId) {
+                            if ("Hospital" == this.appointments[i].appointState)
+                                count++;
+                        }
+                    }
+                }
+
+                if (count < maxQueue) return false;
+                else return true;
+            }
+
+            return false;
+        },
+
+        conflicts(ind, id) {
+            if (this.appointments[ind].appointState != "Hospital") {
+                let length = this.appointments.length;
+                let appointDate = this.appointments[ind].appointDate;
+                let sched = this.appointments[ind].bookingSchedule.substr(
+                    this.appointments[ind].bookingSchedule.indexOf(" ") + 1
+                );
+                sched = sched.trim();
+                let time1s = sched.substr(0, sched.indexOf(" "));
+                let time1e = sched.substr(sched.lastIndexOf(" ") + 1);
+                var date1 = [
+                    moment(appointDate + " " + time1s),
+                    moment(appointDate + " " + time1e),
+                ];
+                var range = moment.range(date1);
+
+                for (let i = 0; i < length; i++) {
+                    if (ind != i) {
+                        if (id == this.appointments[i].drId) {
                             if (
-                                this.appointments[i].appointStatus == "Approved"
+                                appointDate == this.appointments[i].appointDate
                             ) {
-                                sched = this.appointments[
-                                    i
-                                ].bookingSchedule.substr(
-                                    this.appointments[
+                                if (
+                                    this.appointments[i].appointStatus ==
+                                    "Approved"
+                                ) {
+                                    sched = this.appointments[
                                         i
-                                    ].bookingSchedule.indexOf(" ") + 1
-                                );
-                                sched = sched.trim();
-                                time1s = sched.substr(0, sched.indexOf(" "));
-                                time1e = sched.substr(
-                                    sched.lastIndexOf(" ") + 1
-                                );
+                                    ].bookingSchedule.substr(
+                                        this.appointments[
+                                            i
+                                        ].bookingSchedule.indexOf(" ") + 1
+                                    );
+                                    sched = sched.trim();
+                                    time1s = sched.substr(
+                                        0,
+                                        sched.indexOf(" ")
+                                    );
+                                    time1e = sched.substr(
+                                        sched.lastIndexOf(" ") + 1
+                                    );
 
-                                var date2 = [
-                                    moment(appointDate + " " + time1s),
-                                    moment(appointDate + " " + time1e),
-                                ];
-                                var range2 = moment.range(date2);
+                                    var date2 = [
+                                        moment(appointDate + " " + time1s),
+                                        moment(appointDate + " " + time1e),
+                                    ];
+                                    var range2 = moment.range(date2);
 
-                                if (range.overlaps(range2)) {
-                                    return true;
+                                    if (range.overlaps(range2)) {
+                                        return true;
+                                    }
                                 }
                             }
                         }

@@ -105,7 +105,7 @@ class ProfileController extends Controller
     public function validateClinic(array $data){
         return Validator::make($data, [
             'clinicAddress' => ['required', 'string', 'max:255'],
-            'consultFee' => ['required', 'integer',],
+            'consultFee' => ['required', 'numeric', 'gt:0'],
             'teleconsultFee' => ['required', 'integer',],
         ]);
     }

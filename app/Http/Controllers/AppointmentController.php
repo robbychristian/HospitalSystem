@@ -56,11 +56,26 @@ class AppointmentController extends Controller
                 }
             }
         }
+        
+        $documents = $this->firestore->database()->collection('Hospitals')->documents()->rows();
+
+        $hospitals = [];
+
+        foreach ($documents as $document) {
+            $data = $document->data();
+            $data['id'] = $document->id();
+            
+            array_push(
+                $hospitals,
+                $data
+            );
+        }
 
         $appointment = json_encode($appointment);
+        $hospitals = json_encode($hospitals);
 
 
-        return view('pages.appointment')->with('page', $page)->with('active', $active)->with('appointment', $appointment);
+        return view('pages.appointment')->with('page', $page)->with('active', $active)->with('appointment', $appointment)->with('hospitals', $hospitals);
     }
 
     public function status(Request $request)

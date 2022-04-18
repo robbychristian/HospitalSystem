@@ -41,6 +41,10 @@ class User extends Authenticatable
         'provideTeleService',
         'isAdmin',
         'name',
+        'lic',
+        'ptr',
+        's2',
+        'signature',
     ];
 
     /**

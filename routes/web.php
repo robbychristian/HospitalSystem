@@ -86,6 +86,7 @@ Route::prefix('inquiry')->name('inquiry.')->group(function () {
     Route::post('/image', [InquiryController::class, 'signedUrl']);
     Route::post('/prescribe', [InquiryController::class, 'prescribe']);
     Route::post('/send', [InquiryController::class, 'send']);
+    Route::post('/signature', [InquiryController::class, 'changeSignature']);
 });
 
 Route::prefix('profile')->name('profile.')->group(function () {

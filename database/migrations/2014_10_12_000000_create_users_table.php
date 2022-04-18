@@ -36,8 +36,11 @@ class CreateUsersTable extends Migration
             $table->boolean('provideTeleService')->default(true);
             $table->boolean('isAdmin')->default(false);
             $table->string('password');
+            $table->string('lic')->nullable();
+            $table->string('signature')->nullable();
+            $table->string('ptr')->nullable();
+            $table->string('s2')->nullable();
             $table->rememberToken();
-            // $table->timestamps();
         });
     }
 

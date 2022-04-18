@@ -117,15 +117,18 @@
                     </div>
                 </div>
 
-                <!-- <h6>Doctor's Password: </h6>
+                <div class="form-box">
+                    <h6>Prescription Info: </h6>
 
-                <p class="text-danger" v-for="error in doctorFormError.password"> {{error}}</p>
-                <p class="text-danger" v-for="error in doctorFormError.password_confirmation"> {{error}}</p>
+                    <p class="text-danger" v-for="(error, ind) in doctorFormError.lic" :key="ind+'lic'"> {{error}}</p>
+                    <p class="text-danger" v-for="(error, ind) in doctorFormError.ptr" :key="ind+'ptr'"> {{error}}</p>
 
-                <div class="form-input">
-                    <input :class="[{ 'error': doctorFormError.password != '' }]" type="password" placeholder="Password" v-model="doctorForm.password">
-                    <input :class="[{ 'error': doctorFormError.password_confirmation != '' }, 'mt-2']" type="password" placeholder="Confirm Password" v-model="doctorForm.password_confirmation">
-                </div> -->
+                    <div class="form-input flex-wrap">
+                        <input :class="[{ 'error': doctorFormError.lic}]" type="text" placeholder="Lic No." v-model="doctorForm.lic">
+                        <input :class="[{ 'error': doctorFormError.ptr },]" type="text" placeholder="PTR No." v-model="doctorForm.ptr">
+                        <input type="text" placeholder="S2 No. (Optional)" v-model="doctorForm.s2">
+                    </div>
+                </div>
                 
                 <div class="form-box">
                     <h6> About</h6>
@@ -268,15 +271,18 @@
                     </div>
                 </div>
 
-                <!-- <h6>Doctor's Password: </h6>
+                <div class="form-box">
+                    <h6>Prescription Info: </h6>
 
-                <p class="text-danger" v-for="error in doctorFormError.password"> {{error}}</p>
-                <p class="text-danger" v-for="error in doctorFormError.password_confirmation"> {{error}}</p>
+                    <p class="text-danger" v-for="(error, ind) in doctorFormError.lic" :key="ind+'lic'"> {{error}}</p>
+                    <p class="text-danger" v-for="(error, ind) in doctorFormError.ptr" :key="ind+'ptr'"> {{error}}</p>
 
-                <div class="form-input">
-                    <input :class="[{ 'error': doctorFormError.password != '' }]" type="password" placeholder="Password" v-model="doctorForm.password">
-                    <input :class="[{ 'error': doctorFormError.password_confirmation != '' }, 'mt-2']" type="password" placeholder="Confirm Password" v-model="doctorForm.password_confirmation">
-                </div> -->
+                    <div class="form-input flex-wrap">
+                        <input :class="[{ 'error': doctorFormError.lic}]" type="text" placeholder="Lic No." v-model="doctorForm.lic">
+                        <input :class="[{ 'error': doctorFormError.ptr },]" type="text" placeholder="PTR No." v-model="doctorForm.ptr">
+                        <input type="text" placeholder="S2 No. (Optional)" v-model="doctorForm.s2">
+                    </div>
+                </div>
                 
                 <div class="form-box">
                     <h6> About</h6>
@@ -420,8 +426,9 @@
                     about: '',
                     id: '',
                     id_fb: '',
-                    // password: '',
-                    // password_confirmation: '',
+                    lic: '',
+                    ptr: '',
+                    s2: '',
                 },
 
                 doctorFormError: {
@@ -434,8 +441,8 @@
                     email: '',
                     degree: '',
                     photo: '',
-                    // password: '',
-                    // password_confirmation: '',
+                    lic: '',
+                    ptr: '',
                 },
 
                 chartOptions: {
@@ -491,8 +498,8 @@
                 this.doctorFormError.email = data.email
                 this.doctorFormError.degree = data.degree
                 this.doctorFormError.photo = data.photo
-                // this.doctorFormError.password = data.password
-                // this.doctorFormError.password_confirmation = data.password_confirmation
+                this.doctorFormError.lic = data.lic
+                this.doctorFormError.ptr = data.ptr
             },
 
             neutralizeDoctorForm(){
@@ -510,8 +517,9 @@
                     about: '',
                     id: '',
                     id_fb: '',
-                    // password: '',
-                    // password_confirmation: '',
+                    lic: '',
+                    ptr: '',
+                    s2: '',
                 }
 
                 this.doctorFormError =  {
@@ -524,8 +532,8 @@
                     email: '',
                     degree: '',
                     photo: '',
-                    // password: '',
-                    // password_confirmation: '',
+                    lic: '',
+                    ptr: '',
                 }
             },
 
@@ -551,6 +559,9 @@
                 this.doctorForm.id = id
                 this.doctorForm.id_fb = data.id_fb
                 this.doctorForm.degree = data.degree
+                this.doctorForm.lic = data.lic
+                this.doctorForm.ptr = data.ptr
+                this.doctorForm.s2 = data.s2
                 
             },
 
@@ -570,7 +581,6 @@
                 this.alertBackground = "success"
                 this.showAlert()
                 
-                
             },
 
             showModal(operation, id){
@@ -584,7 +594,6 @@
                 this.modal.operation = operation
 
                 if( operation == "Show"){
-                    console.log(this.doctorForm)
                     this.$refs['doctor-show'].show()
                 }
                 else{
