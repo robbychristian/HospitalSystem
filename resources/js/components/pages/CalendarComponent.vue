@@ -30,7 +30,7 @@
                     @click="showAppointments"
                     class="btn"
                     style="background-color: #14679b"
-                    ><i class="fas fa-list"></i> Show Appointments</b-button
+                    ><i class="fas fa-list"></i> Hospital Appointments</b-button
                 >
             </div>
 
@@ -50,7 +50,7 @@
         <b-modal
             id="modal-tall"
             centered
-            title="Show Appointments"
+            title="Hospital Appointments"
             ref="showAppointments"
             size="xl"
             :fields="this.fields"
@@ -167,12 +167,12 @@
                         <label for="one">Teleconsultation</label>
 
                         <br />
-
+                        <!-- :disabled="user.hospital <= 0 ? true : false"  -->
                         <input
                             type="radio"
                             id="two"
                             value="Hospital"
-                            :disabled="user.hospital <= 0 ? true : false"
+                            :disabled="false"
                             v-model="appointState"
                         />
                         <label for="two">Hospital</label>
@@ -226,20 +226,42 @@ export default {
         let allAppointments = this.appointmentss;
 
         allAppointments.forEach(this.toEvents);
+        const arr = [4, 3, 6, 8, 1, 2, 0];
         //FOR MODAL
         const appointmentModal = JSON.parse(this.appointments);
         for (let i = 0; i < appointmentModal.length; i++) {
-            const newObject = {
-                Patient:
-                    appointmentModal[i].pfName +
-                    " " +
-                    appointmentModal[i].plName,
-                Date: appointmentModal[i].bookingDate,
-                Time: appointmentModal[i].bookingSchedule,
-                Status: appointmentModal[i].status,
-                Actions: `<div class="d-flex justify-content-space"><div class="px-1"><a href="calendar/setongoing/${appointmentModal[i].id}" class="btn btn-warning"><i class="fas fa-history"></i></a></div><div class="px-1"><a href="calendar/setlate/${appointmentModal[i].id}" class="btn btn-danger"><i class="fa-solid fa-user-clock"></i></a></div><div class="px-1"><a href="calendar/setearly/${appointmentModal[i].id}" class="btn btn-success mr-2"><i class="fas fa-user-check"></i></a></div></div>`,
-            };
-            this.appointmentModalData.push(newObject);
+            if (
+                appointmentModal[i].appointDate == moment().format("MM/DD/y") &&
+                appointmentModal[i].appointState == "Hospital"
+            ) {
+                console.log(moment(appointmentModal[i].bookingSchedule));
+                console.log(moment().format("MM/DD/y"));
+                const newObject = {
+                    Queue: appointmentModal[i].queue,
+                    Patient:
+                        appointmentModal[i].pfName +
+                        " " +
+                        appointmentModal[i].plName,
+                    Date: appointmentModal[i].appointDate,
+                    Status: appointmentModal[i].status,
+                    Actions: `<div class="d-flex justify-content-space"><div class="px-1"><a href="calendar/setongoing/${appointmentModal[i].id}" class="btn btn-warning"><i class="fas fa-history"></i></a></div><div class="px-1"><a href="calendar/setlate/${appointmentModal[i].id}" class="btn btn-danger"><i class="fa-solid fa-user-clock"></i></a></div><div class="px-1"><a href="calendar/setearly/${appointmentModal[i].id}" class="btn btn-success mr-2"><i class="fas fa-user-check"></i></a></div></div>`,
+                };
+                this.appointmentModalData.push(newObject);
+                //SORTING DEPENDE SA QUEUE
+                this.appointmentModalData = this.appointmentModalData.sort(
+                    (a, b) => {
+                        if (a.Queue < b.Queue) {
+                            return -1;
+                        }
+                        if (a.Queue > b.Queue) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                );
+            } else {
+                console.log("Nothing here");
+            }
         }
         this.populateWeekdays();
     },
